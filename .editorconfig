@@ -1,0 +1,27 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# WordPress PHP convention: real tabs, 4-column display width
+[*.php]
+indent_style = tab
+indent_size = 4
+
+# JS / TS / JSON / CSS / YAML: 2-space
+[*.{js,jsx,ts,tsx,json,jsonc,css,scss,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Markdown: preserve trailing whitespace (two spaces = line break)
+[*.md]
+trim_trailing_whitespace = false
+indent_style = space
+indent_size = 2
+
+# Composer / pnpm lock files — don't reformat
+[{composer.lock,pnpm-lock.yaml}]
+insert_final_newline = false

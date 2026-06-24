@@ -1,0 +1,43 @@
+# === PHP ===
+vendor/
+composer.lock
+
+# === JS / TS ===
+node_modules/
+dist/
+build/
+.pnpm-store/
+pnpm-lock.yaml
+
+# === Environment ===
+.env
+.env.*
+!.env.example
+
+# === Coverage & reports ===
+coverage/
+.phpunit.result.cache
+.phpstan/
+
+# === WordPress build artefacts ===
+*.zip
+
+# === macOS ===
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# === Windows ===
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === Editor / IDE ===
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+nbproject/
