@@ -129,6 +129,15 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
+      - name: Setup PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+
+      - name: Install Composer dependencies
+        working-directory: plugin
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
       - name: Copy .env for Docker
         run: cp .env.example .env
 
