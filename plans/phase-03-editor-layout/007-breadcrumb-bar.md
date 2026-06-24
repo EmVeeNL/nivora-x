@@ -2,14 +2,14 @@
 task: 007
 phase: 03
 title: Bottom Breadcrumb Bar (Static)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002]
 retry_count: 0
 ---
 
 # Task 007 — Bottom Breadcrumb Bar (Static)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002
 > **Retry count:** 0
 
@@ -33,10 +33,10 @@ reference and the region is reserved.
 
 ## Acceptance Criteria
 
-- [ ] Bottom breadcrumb bar with a static placeholder path matching the reference.
-- [ ] Any reference indicators present as placeholders.
-- [ ] Correctly positioned in the layout region from task 002.
-- [ ] Vitest smoke test; lint/format/typecheck pass.
+- [x] Bottom breadcrumb bar with a static placeholder path matching the reference.
+- [x] Any reference indicators present as placeholders.
+- [x] Correctly positioned in the layout region from task 002.
+- [x] Vitest smoke test; lint/format/typecheck pass.
 
 ## Files to Create
 

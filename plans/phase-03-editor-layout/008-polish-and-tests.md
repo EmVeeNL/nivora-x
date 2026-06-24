@@ -2,14 +2,14 @@
 task: 008
 phase: 03
 title: Visual Polish Pass & Component Tests
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [003, 004, 005, 006, 007]
 retry_count: 0
 ---
 
 # Task 008 — Visual Polish Pass & Component Tests
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 003, 004, 005, 006, 007
 > **Retry count:** 0
 
@@ -36,10 +36,10 @@ interaction states to the reference, and ensures the shell behaviors are well te
 
 ## Acceptance Criteria
 
-- [ ] Shell closely matches the reference (documented review checklist completed).
-- [ ] Spacing/color/typography/borders/interaction states tuned to the reference.
-- [ ] Component tests cover all shell behaviors from tasks 003–007.
-- [ ] All JS gates green (lint/format/typecheck/build/test).
+- [x] Shell closely matches the reference (documented review checklist completed).
+- [x] Spacing/color/typography/borders/interaction states tuned to the reference.
+- [x] Component tests cover all shell behaviors from tasks 003–007.
+- [x] All JS gates green (lint/format/typecheck/build/test).
 
 ## Files to Create
 

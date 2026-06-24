@@ -2,14 +2,14 @@
 task: 005
 phase: 03
 title: Center iframe Canvas Scaffold
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002, 003]
 retry_count: 0
 ---
 
 # Task 005 — Center iframe Canvas Scaffold
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002, 003
 > **Retry count:** 0
 
@@ -35,11 +35,11 @@ in Phase 05.
 
 ## Acceptance Criteria
 
-- [ ] Isolated iframe canvas with a placeholder.
-- [ ] Frame width bound to the active breakpoint (preset widths), centered with chrome.
-- [ ] Verified style isolation from the editor chrome.
-- [ ] A documented seam for injecting content/styles later (Phase 05).
-- [ ] Vitest covers width-binding; lint/format/typecheck pass.
+- [x] Isolated iframe canvas with a placeholder.
+- [x] Frame width bound to the active breakpoint (preset widths), centered with chrome.
+- [x] Verified style isolation from the editor chrome.
+- [x] A documented seam for injecting content/styles later (Phase 05).
+- [x] Vitest covers width-binding; lint/format/typecheck pass.
 
 ## Files to Create
 
