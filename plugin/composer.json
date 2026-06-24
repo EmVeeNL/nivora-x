@@ -6,23 +6,44 @@
   "require": {
     "php": ">=8.5"
   },
-  "require-dev": {},
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.10",
+    "wp-coding-standards/wpcs": "^3.1",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpstan/phpstan": "^1.12",
+    "szepeviktor/phpstan-wordpress": "^0.10",
+    "pestphp/pest": "^3.0",
+    "brain/monkey": "^2.6",
+    "mockery/mockery": "^1.6"
+  },
   "autoload": {
     "psr-4": {
       "NivoraX\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "NivoraX\\Tests\\": "tests/"
     }
   },
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
     "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "pestphp/pest-plugin": true
     }
   },
   "scripts": {
-    "lint":    "phpcs",
-    "lint:fix": "phpcbf",
-    "analyse": "phpstan analyse",
-    "test":    "pest"
+    "lint":          "phpcs --standard=phpcs.xml.dist",
+    "lint:fix":      "phpcbf --standard=phpcs.xml.dist",
+    "analyse":       "phpstan analyse --configuration=phpstan.neon.dist --no-progress",
+    "test":          "pest --configuration=phpunit.xml.dist",
+    "test:coverage": "pest --configuration=phpunit.xml.dist --coverage",
+    "qa":            [
+      "@lint",
+      "@analyse",
+      "@test"
+    ]
   }
 }
