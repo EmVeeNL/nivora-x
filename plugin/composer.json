@@ -37,7 +37,7 @@
   "scripts": {
     "lint":          "phpcs --standard=phpcs.xml.dist",
     "lint:fix":      "phpcbf --standard=phpcs.xml.dist",
-    "analyse":       "phpstan analyse --configuration=phpstan.neon.dist --no-progress --memory-limit=256M",
+    "analyse":       "phpstan analyse --configuration=phpstan.neon.dist --no-progress --memory-limit=1G",
     "test":          "pest --configuration=phpunit.xml.dist",
     "test:coverage": "pest --configuration=phpunit.xml.dist --coverage",
     "qa":            [
