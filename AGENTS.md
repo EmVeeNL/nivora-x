@@ -122,12 +122,19 @@ Phases are defined collaboratively, ~one batch ahead; task files are written onl
 
 ## Common Commands
 
-> Fill in as the toolchain is built (Phase 01).
-
-- Setup: _TBD_
-- Up / down: _TBD_
-- Test (PHP / JS / E2E): _TBD_
-- Lint / format: _TBD_
+- **Setup:** `./bin/setup.sh` (idempotent; `--fresh` to wipe + re-provision)
+- **Up / down:** `docker compose up -d` / `docker compose down`
+- **Dev server (HMR):** `pnpm dev` (set `NIVORAX_VITE_DEV=true` in wp-config / .env)
+- **Production build:** `pnpm build`
+- **JS tests (unit):** `pnpm test:unit` | watch: `pnpm test:unit:watch`
+- **E2E tests:** `pnpm test:e2e` (stack must be up + provisioned)
+- **PHP tests:** `cd plugin && composer test`
+- **PHP coverage:** `XDEBUG_MODE=coverage composer test:coverage` (inside container)
+- **JS lint:** `pnpm lint` / `pnpm lint:fix`
+- **PHP lint:** `cd plugin && composer lint` / `composer lint:fix`
+- **JS typecheck:** `pnpm typecheck`
+- **PHP static analysis:** `cd plugin && composer analyse`
+- **Full PHP gate:** `cd plugin && composer qa` (lint + analyse + test)
 
 ## Open Decisions
 
