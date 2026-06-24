@@ -6,8 +6,8 @@ composer.lock
 node_modules/
 dist/
 build/
+plugin/build/
 .pnpm-store/
-pnpm-lock.yaml
 
 # === Environment ===
 .env

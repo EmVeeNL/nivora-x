@@ -22,7 +22,8 @@ final class Plugin {
 		}
 		self::$booted = true;
 
-		// Placeholder for phase hooks — wired up in later phases.
+		Assets\AssetManager::register();
+		Admin\EditorPage::register();
 	}
 
 	public static function activate(): void {
