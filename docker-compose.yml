@@ -1,0 +1,64 @@
+services:
+
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE:      ${DB_NAME}
+      MYSQL_USER:          ${DB_USER}
+      MYSQL_PASSWORD:      ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - nivorax
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  wordpress:
+    build:
+      context: docker/wordpress
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${WP_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST:     db
+      WORDPRESS_DB_NAME:     ${DB_NAME}
+      WORDPRESS_DB_USER:     ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: ${WP_TABLE_PREFIX:-wp_}
+      XDEBUG_MODE:           ${XDEBUG_MODE:-off}
+    volumes:
+      # WordPress core + uploads in a named volume (survives rebuilds)
+      - wp_core:/var/www/html
+      # Plugin source bind-mounted live
+      - ./plugin:/var/www/html/wp-content/plugins/nivorax
+    extra_hosts:
+      # Xdebug needs to reach the IDE on the host
+      - "host.docker.internal:host-gateway"
+    networks:
+      - nivorax
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    restart: unless-stopped
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"
+      - "${MAILHOG_UI_PORT:-8025}:8025"
+    networks:
+      - nivorax
+
+volumes:
+  db_data:
+  wp_core:
+
+networks:
+  nivorax:
+    driver: bridge

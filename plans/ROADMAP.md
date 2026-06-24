@@ -12,7 +12,7 @@
 
 | #   | Phase                | Definition | Status      |
 | --- | -------------------- | ---------- | ----------- |
-| 01  | Technical Structure  | Defined    | Not Started |
+| 01  | Technical Structure  | Defined    | In Progress |
 | 02  | Plugin Foundation    | Defined    | Not Started |
 | 03  | Editor Layout        | Defined    | Not Started |
 

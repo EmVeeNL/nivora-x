@@ -3,14 +3,14 @@ phase: 01
 slug: technical-structure
 title: Technical Structure
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Progress # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 01 — Technical Structure
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** In Progress <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -69,8 +69,8 @@ plugin installed and all quality gates green — without writing any product cod
 
 | Task | Description                                                        | Depends On | Status      |
 | ---- | ------------------------------------------------------------------ | ---------- | ----------- |
-| 001  | Repository & Git foundation (Gitflow, gitignore, editorconfig, nvmrc, LICENSE, README skeleton) | —          | Not Started |
-| 002  | Docker environment (custom WP Dockerfile + Xdebug/WP-CLI, MariaDB, Mailhog, compose, .env) | 001        | Not Started |
+| 001  | Repository & Git foundation (Gitflow, gitignore, editorconfig, nvmrc, LICENSE, README skeleton) | —          | Done        |
+| 002  | Docker environment (custom WP Dockerfile + Xdebug/WP-CLI, MariaDB, Mailhog, compose, .env) | 001        | Done        |
 | 003  | WordPress provisioning via WP-CLI (idempotent setup script, Mailhog SMTP, Query Monitor) | 002        | Not Started |
 | 004  | Minimal plugin skeleton (main file, header, Composer PSR-4 autoload, activation hooks) | 001        | Not Started |
 | 005  | PHP quality tooling (Composer scripts, PHPCS WordPress standard, PHPStan)             | 004        | Not Started |
