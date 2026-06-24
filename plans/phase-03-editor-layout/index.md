@@ -3,14 +3,14 @@ phase: 03
 slug: editor-layout
 title: Editor Layout
 created: 2026-06-24
-status: In Progress # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 03 — Editor Layout
 
 > **Created:** 2026-06-24
-> **Status:** In Progress <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Draft — captured from decisions on 2026-06-24, awaiting review.
 
 ## Objective
@@ -81,7 +81,7 @@ rendering, and no drag-and-drop — those arrive in later feature phases.
 | 005  | Center iframe canvas scaffold; width bound to the active breakpoint | 002, 003 | Done |
 | 006  | Right inspector panel: tabs + collapsible sections + placeholder controls | 002 | Done |
 | 007  | Bottom breadcrumb bar (static placeholder) | 002 | Done |
-| 008  | Visual polish pass to match the reference + component tests | 003, 004, 005, 006, 007 | Not Started |
+| 008  | Visual polish pass to match the reference + component tests | 003, 004, 005, 006, 007 | Done |
 
 ## Architectural Notes
 

@@ -2,6 +2,12 @@ import { useRef, useEffect } from 'react'
 import { useUiStore, BREAKPOINT_WIDTHS } from '@/state/uiStore'
 import { bootstrapIframe } from './iframe'
 
+const BREAKPOINT_LABEL: Record<string, string> = {
+  desktop: 'Desktop',
+  tablet: 'Tablet',
+  mobile: 'Mobile',
+}
+
 export function CanvasFrame() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const activeBreakpoint = useUiStore((s) => s.activeBreakpoint)
@@ -14,18 +20,24 @@ export function CanvasFrame() {
   return (
     <div
       data-testid="canvas-chrome"
-      className="flex h-full w-full items-start justify-center overflow-auto py-6"
+      className="flex h-full w-full flex-col items-center overflow-auto pt-4"
     >
+      {/* Breakpoint label */}
+      <p
+        data-testid="canvas-breakpoint-label"
+        className="mb-3 shrink-0 text-xs text-muted-foreground/70"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {BREAKPOINT_LABEL[activeBreakpoint]} · {frameWidth}px
+      </p>
+
       <iframe
         ref={iframeRef}
         data-testid="canvas-iframe"
         title="NivoraX canvas"
-        /* Width is driven by the active breakpoint; transitions make device
-           switching feel smooth. Max-width prevents overflow on small viewports. */
         style={{ width: `${String(frameWidth)}px`, maxWidth: '100%' }}
-        className="min-h-[640px] border-0 bg-white shadow-2xl"
-        /* allow-same-origin lets Phase 05 access contentDocument;
-           scripts and other privileges are withheld until needed. */
+        className="min-h-[640px] shrink-0 border-0 bg-white shadow-2xl"
         sandbox="allow-same-origin"
       />
     </div>

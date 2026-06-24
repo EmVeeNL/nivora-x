@@ -2,10 +2,9 @@ import { Icon } from '@iconify/react'
 import { cn } from '@/lib/utils'
 import { useUiStore } from '@/state/uiStore'
 import { InspectorTabs } from './InspectorTabs'
-import { InspectorSection, ControlRow } from './InspectorSection'
+import { InspectorSection, ControlRow, ButtonGroupRow } from './InspectorSection'
 
-const SECTIONS = [
-  { id: 'layout', title: 'Layout', controls: ['Display', 'Direction', 'Align', 'Justify'] },
+const PILL_SECTIONS = [
   { id: 'spacing', title: 'Spacing', controls: ['Margin', 'Padding'] },
   { id: 'size', title: 'Size', controls: ['Width', 'Height', 'Min Width', 'Max Width'] },
   {
@@ -64,7 +63,16 @@ export function RightPanel() {
       {/* Tab content */}
       {activeTab === 'style' ? (
         <div className="flex-1 overflow-y-auto">
-          {SECTIONS.map((section) => (
+          {/* Layout section: button-group controls for display/direction/align/justify */}
+          <InspectorSection id="layout" title="Layout">
+            <ButtonGroupRow label="Display" count={3} />
+            <ButtonGroupRow label="Direction" count={4} />
+            <ButtonGroupRow label="Align" count={4} />
+            <ButtonGroupRow label="Justify" count={5} />
+          </InspectorSection>
+
+          {/* Remaining sections: pill-style placeholders */}
+          {PILL_SECTIONS.map((section) => (
             <InspectorSection key={section.id} id={section.id} title={section.title}>
               {section.controls.map((ctrl) => (
                 <ControlRow key={ctrl} label={ctrl} />

@@ -18,6 +18,20 @@ export function ControlRow({ label }: { label: string }) {
   )
 }
 
+/** A row of small toggle-button placeholders (e.g. flex-direction, align). */
+export function ButtonGroupRow({ label, count }: { label: string; count: number }) {
+  return (
+    <div className="flex items-center justify-between py-1">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <div className="flex gap-0.5" aria-hidden="true">
+        {Array.from({ length: count }).map((_, i) => (
+          <div key={i} className="h-6 w-6 rounded border border-border bg-input" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function InspectorSection({ id, title, children }: InspectorSectionProps) {
   const isOpen = useUiStore((s) => s.openSections[id] ?? false)
 

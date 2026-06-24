@@ -14,7 +14,7 @@
 | --- | -------------------- | ---------- | ----------- |
 | 01  | Technical Structure  | Defined    | Done        |
 | 02  | Plugin Foundation    | Defined    | Done        |
-| 03  | Editor Layout        | Defined    | In Progress |
+| 03  | Editor Layout        | Defined    | Done        |
 
 ## Editor batch (functional editor — defining together now)
 
