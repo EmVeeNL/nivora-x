@@ -2,11 +2,12 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { EditorLayout } from '@/shell/EditorLayout'
 import { useUiStore, type Breakpoint } from '@/state/uiStore'
+import '@/lib/icons'
 
 // Reset store to initial values before each test.
 beforeEach(() => {
   useUiStore.setState({
-    leftPanelOpen: true,
+    activeLeftPanel: 'navigator',
     rightPanelOpen: true,
     activeBreakpoint: 'desktop',
     activeInspectorTab: 'style',
@@ -23,21 +24,22 @@ beforeEach(() => {
 })
 
 // ---------------------------------------------------------------------------
-// EditorLayout — five regions
+// EditorLayout — shell regions
 // ---------------------------------------------------------------------------
 describe('EditorLayout', () => {
-  it('renders all five regions', () => {
+  it('renders all shell regions', () => {
     render(<EditorLayout />)
     expect(screen.getByTestId('region-toolbar')).toBeInTheDocument()
+    expect(screen.getByTestId('region-activity-bar')).toBeInTheDocument()
     expect(screen.getByTestId('region-left')).toBeInTheDocument()
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
     expect(screen.getByTestId('region-right')).toBeInTheDocument()
     expect(screen.getByTestId('region-breadcrumb')).toBeInTheDocument()
   })
 
-  it('left panel is open (w-60) by default', () => {
+  it('left panel is open (w-52) by default', () => {
     render(<EditorLayout />)
-    expect(screen.getByTestId('region-left').className).toContain('w-60')
+    expect(screen.getByTestId('region-left').className).toContain('w-52')
   })
 
   it('right panel is open (w-72) by default', () => {
@@ -45,20 +47,20 @@ describe('EditorLayout', () => {
     expect(screen.getByTestId('region-right').className).toContain('w-72')
   })
 
-  it('left panel collapses to w-10 (showing re-expand button) when leftPanelOpen is false', () => {
-    useUiStore.setState({ leftPanelOpen: false })
+  it('left panel collapses to w-0 when activeLeftPanel is null', () => {
+    useUiStore.setState({ activeLeftPanel: null })
     render(<EditorLayout />)
-    expect(screen.getByTestId('region-left').className).toContain('w-10')
+    expect(screen.getByTestId('region-left').className).toContain('w-0')
   })
 
-  it('right panel collapses to w-10 (showing re-expand button) when rightPanelOpen is false', () => {
+  it('right panel collapses to w-10 when rightPanelOpen is false', () => {
     useUiStore.setState({ rightPanelOpen: false })
     render(<EditorLayout />)
     expect(screen.getByTestId('region-right').className).toContain('w-10')
   })
 
   it('canvas region always renders regardless of panel state', () => {
-    useUiStore.setState({ leftPanelOpen: false, rightPanelOpen: false })
+    useUiStore.setState({ activeLeftPanel: null, rightPanelOpen: false })
     render(<EditorLayout />)
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
   })
@@ -68,9 +70,9 @@ describe('EditorLayout', () => {
 // uiStore — defaults
 // ---------------------------------------------------------------------------
 describe('uiStore defaults', () => {
-  it('has both panels open', () => {
-    const { leftPanelOpen, rightPanelOpen } = useUiStore.getState()
-    expect(leftPanelOpen).toBe(true)
+  it('has navigator panel active and right panel open', () => {
+    const { activeLeftPanel, rightPanelOpen } = useUiStore.getState()
+    expect(activeLeftPanel).toBe('navigator')
     expect(rightPanelOpen).toBe(true)
   })
 
@@ -99,11 +101,11 @@ describe('uiStore defaults', () => {
 // uiStore — actions
 // ---------------------------------------------------------------------------
 describe('uiStore actions', () => {
-  it('toggleLeftPanel flips panel visibility', () => {
-    useUiStore.getState().toggleLeftPanel()
-    expect(useUiStore.getState().leftPanelOpen).toBe(false)
-    useUiStore.getState().toggleLeftPanel()
-    expect(useUiStore.getState().leftPanelOpen).toBe(true)
+  it('setLeftPanel opens and collapses the panel', () => {
+    useUiStore.getState().setLeftPanel(null)
+    expect(useUiStore.getState().activeLeftPanel).toBeNull()
+    useUiStore.getState().setLeftPanel('navigator')
+    expect(useUiStore.getState().activeLeftPanel).toBe('navigator')
   })
 
   it('toggleRightPanel flips panel visibility', () => {

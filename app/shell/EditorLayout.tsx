@@ -1,12 +1,13 @@
 import { useUiStore } from '@/state/uiStore'
 import { TopToolbar } from './TopToolbar'
+import { ActivityBar } from './ActivityBar'
 import { LeftPanel } from './LeftPanel'
 import { RightPanel } from './RightPanel'
 import { BreadcrumbBar } from './BreadcrumbBar'
 import { CanvasFrame } from '@/canvas/CanvasFrame'
 
 export function EditorLayout() {
-  const leftOpen = useUiStore((s) => s.leftPanelOpen)
+  const activeLeftPanel = useUiStore((s) => s.activeLeftPanel)
   const rightOpen = useUiStore((s) => s.rightPanelOpen)
 
   return (
@@ -19,13 +20,20 @@ export function EditorLayout() {
         <TopToolbar />
       </header>
 
-      {/* Middle row: left panel · canvas · right panel */}
+      {/* Middle row: activity bar · left panel · canvas · right panel */}
       <div className="flex min-h-0 flex-1">
+        <nav
+          data-testid="region-activity-bar"
+          className="flex w-10 shrink-0 flex-col border-r border-border bg-shell-bar py-1"
+        >
+          <ActivityBar />
+        </nav>
+
         <aside
           data-testid="region-left"
           className={[
-            'shrink-0 overflow-hidden border-r border-border bg-background',
-            leftOpen ? 'w-60' : 'w-10',
+            'shrink-0 overflow-hidden border-r border-border bg-background transition-[width]',
+            activeLeftPanel ? 'w-52' : 'w-0',
           ].join(' ')}
         >
           <LeftPanel />

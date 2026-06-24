@@ -10,7 +10,8 @@ export const BREAKPOINT_WIDTHS: Record<Breakpoint, number> = {
 }
 
 interface UiState {
-  leftPanelOpen: boolean
+  /** Which left-panel is open; null = sidebar collapsed. */
+  activeLeftPanel: string | null
   rightPanelOpen: boolean
   activeBreakpoint: Breakpoint
   activeInspectorTab: string
@@ -19,7 +20,8 @@ interface UiState {
 }
 
 interface UiActions {
-  toggleLeftPanel(): void
+  /** Open a specific left panel, or pass null to collapse the sidebar. */
+  setLeftPanel(panel: string | null): void
   toggleRightPanel(): void
   setBreakpoint(bp: Breakpoint): void
   setInspectorTab(tab: string): void
@@ -29,7 +31,7 @@ interface UiActions {
 
 export const useUiStore = create<UiState & UiActions>()((set) => ({
   // ---- state ----
-  leftPanelOpen: true,
+  activeLeftPanel: 'navigator',
   rightPanelOpen: true,
   activeBreakpoint: 'desktop',
   activeInspectorTab: 'style',
@@ -44,7 +46,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   },
 
   // ---- actions ----
-  toggleLeftPanel: () => set((s) => ({ leftPanelOpen: !s.leftPanelOpen })),
+  setLeftPanel: (panel) => set({ activeLeftPanel: panel }),
   toggleRightPanel: () => set((s) => ({ rightPanelOpen: !s.rightPanelOpen })),
   setBreakpoint: (bp) => set({ activeBreakpoint: bp }),
   setInspectorTab: (tab) => set({ activeInspectorTab: tab }),

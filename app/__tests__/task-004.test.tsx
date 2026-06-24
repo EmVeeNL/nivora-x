@@ -1,12 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { LeftPanel } from '@/shell/LeftPanel'
+import { ActivityBar } from '@/shell/ActivityBar'
 import { NavigatorPlaceholder } from '@/shell/NavigatorPlaceholder'
 import { useUiStore } from '@/state/uiStore'
 import '@/lib/icons'
 
 beforeEach(() => {
-  useUiStore.setState({ leftPanelOpen: true })
+  useUiStore.setState({ activeLeftPanel: 'navigator' })
 })
 
 // ---------------------------------------------------------------------------
@@ -35,11 +36,9 @@ describe('NavigatorPlaceholder', () => {
 // ---------------------------------------------------------------------------
 // LeftPanel — open state
 // ---------------------------------------------------------------------------
-describe('LeftPanel (open)', () => {
+describe('LeftPanel (navigator active)', () => {
   it('renders the Navigation panel header label', () => {
     render(<LeftPanel />)
-    // Two elements contain "Navigation": the header label and the tree row —
-    // confirm the header (uppercase, outside the tree) is present.
     const matches = screen.getAllByText('Navigation')
     expect(matches.length).toBeGreaterThanOrEqual(1)
   })
@@ -49,40 +48,62 @@ describe('LeftPanel (open)', () => {
     expect(screen.getByRole('tree')).toBeInTheDocument()
   })
 
-  it('has a collapse button', () => {
+  it('does not have a collapse button (activity bar manages visibility)', () => {
     render(<LeftPanel />)
-    expect(screen.getByRole('button', { name: /collapse navigation/i })).toBeInTheDocument()
-  })
-
-  it('collapse button sets leftPanelOpen to false', () => {
-    render(<LeftPanel />)
-    fireEvent.click(screen.getByRole('button', { name: /collapse navigation/i }))
-    expect(useUiStore.getState().leftPanelOpen).toBe(false)
+    expect(screen.queryByRole('button', { name: /collapse navigation/i })).toBeNull()
   })
 })
 
 // ---------------------------------------------------------------------------
-// LeftPanel — collapsed state (re-expand affordance)
+// LeftPanel — no active panel
 // ---------------------------------------------------------------------------
-describe('LeftPanel (collapsed)', () => {
+describe('LeftPanel (no active panel)', () => {
   beforeEach(() => {
-    useUiStore.setState({ leftPanelOpen: false })
+    useUiStore.setState({ activeLeftPanel: null })
   })
 
-  it('does not render the Navigation header or tree', () => {
-    render(<LeftPanel />)
-    expect(screen.queryByText('Navigation')).toBeNull()
-    expect(screen.queryByRole('tree')).toBeNull()
+  it('renders nothing when no panel is active', () => {
+    const { container } = render(<LeftPanel />)
+    expect(container.firstChild).toBeNull()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// ActivityBar — panel toggle
+// ---------------------------------------------------------------------------
+describe('ActivityBar', () => {
+  it('renders the Navigator icon button', () => {
+    render(<ActivityBar />)
+    expect(screen.getByRole('button', { name: /navigator/i })).toBeInTheDocument()
   })
 
-  it('shows a re-expand affordance button', () => {
-    render(<LeftPanel />)
-    expect(screen.getByRole('button', { name: /expand navigation/i })).toBeInTheDocument()
+  it('navigator button is aria-pressed when navigator panel is active', () => {
+    render(<ActivityBar />)
+    expect(screen.getByRole('button', { name: /navigator/i })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 
-  it('re-expand button sets leftPanelOpen to true', () => {
-    render(<LeftPanel />)
-    fireEvent.click(screen.getByRole('button', { name: /expand navigation/i }))
-    expect(useUiStore.getState().leftPanelOpen).toBe(true)
+  it('navigator button is not aria-pressed when navigator panel is not active', () => {
+    useUiStore.setState({ activeLeftPanel: null })
+    render(<ActivityBar />)
+    expect(screen.getByRole('button', { name: /navigator/i })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+  })
+
+  it('clicking active navigator button collapses the panel', () => {
+    render(<ActivityBar />)
+    fireEvent.click(screen.getByRole('button', { name: /navigator/i }))
+    expect(useUiStore.getState().activeLeftPanel).toBeNull()
+  })
+
+  it('clicking inactive navigator button opens the navigator panel', () => {
+    useUiStore.setState({ activeLeftPanel: null })
+    render(<ActivityBar />)
+    fireEvent.click(screen.getByRole('button', { name: /navigator/i }))
+    expect(useUiStore.getState().activeLeftPanel).toBe('navigator')
   })
 })

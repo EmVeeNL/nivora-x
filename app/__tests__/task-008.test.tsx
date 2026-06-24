@@ -8,7 +8,7 @@ import '@/lib/icons'
 
 beforeEach(() => {
   useUiStore.setState({
-    leftPanelOpen: true,
+    activeLeftPanel: 'navigator',
     rightPanelOpen: true,
     activeBreakpoint: 'desktop',
     activeInspectorTab: 'style',
@@ -28,19 +28,20 @@ beforeEach(() => {
 // Shell integration — all regions assembled
 // ---------------------------------------------------------------------------
 describe('EditorLayout — full shell integration', () => {
-  it('renders all five regions simultaneously', () => {
+  it('renders all shell regions simultaneously', () => {
     render(<EditorLayout />)
     expect(screen.getByTestId('region-toolbar')).toBeInTheDocument()
+    expect(screen.getByTestId('region-activity-bar')).toBeInTheDocument()
     expect(screen.getByTestId('region-left')).toBeInTheDocument()
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
     expect(screen.getByTestId('region-right')).toBeInTheDocument()
     expect(screen.getByTestId('region-breadcrumb')).toBeInTheDocument()
   })
 
-  it('left panel toggle and canvas coexist', () => {
+  it('activity bar navigator button collapses left panel and canvas persists', () => {
     render(<EditorLayout />)
-    fireEvent.click(screen.getByRole('button', { name: /collapse navigation/i }))
-    expect(useUiStore.getState().leftPanelOpen).toBe(false)
+    fireEvent.click(screen.getByRole('button', { name: /navigator/i }))
+    expect(useUiStore.getState().activeLeftPanel).toBeNull()
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
   })
 
