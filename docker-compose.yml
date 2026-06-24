@@ -40,6 +40,8 @@ services:
       - wp_core:/var/www/html
       # Plugin source bind-mounted live
       - ./plugin:/var/www/html/wp-content/plugins/nivorax
+      # Must-use plugins (mailhog-smtp, etc.)
+      - ./docker/wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins
     extra_hosts:
       # Xdebug needs to reach the IDE on the host
       - "host.docker.internal:host-gateway"
