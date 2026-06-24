@@ -26,6 +26,20 @@ final class EditorScreen {
 		add_action( 'admin_menu', [ self::class, 'add_page' ] );
 		// Remove the editor screen from the admin menu (it's a hidden page).
 		add_action( 'admin_head', [ self::class, 'hide_from_menu' ] );
+		// Intercept the editor page request before WordPress outputs admin chrome.
+		add_action( 'admin_init', [ self::class, 'maybe_render_early' ], 1 );
+	}
+
+	/**
+	 * Renders the editor full-page during admin_init so that WordPress's
+	 * admin-header.php (sidebar + admin bar) is never output. Exits immediately.
+	 */
+	public static function maybe_render_early(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		if ( ( $_GET['page'] ?? '' ) !== 'nivorax-editor' ) {
+			return;
+		}
+		self::render();
 	}
 
 	/** Registers the editor as a hidden submenu page. */
@@ -91,18 +105,48 @@ final class EditorScreen {
 		EditorMode::set_nivorax( $post_id );
 		$mode = EditorMode::get( $post_id );
 
-		// Enqueue editor bundle.
+		// Suppress admin bar HTML/CSS entirely — must be called before wp_head().
+		show_admin_bar( false );
+
+		// Enqueue editor bundle (scripts registered in_footer, CSS in head).
 		AssetManager::enqueue_for_editor();
 
-		// Pass bootstrap data to the app.
+		// Pass bootstrap data to the app via window.nivoraxBootstrap.
 		wp_localize_script(
 			'nivorax-editor',
 			'nivoraxBootstrap',
 			Bootstrap::data( $post_id, $mode )
 		);
 
-		// Full-screen takeover: suppress admin chrome.
-		remove_all_actions( 'admin_notices' );
+		// Strip any non-NivoraX styles/scripts that WP may have queued early.
+		// Runs at priority 1 so it fires before WP actually prints the queues.
+		add_action(
+			'wp_head',
+			static function (): void {
+				global $wp_styles;
+				$wp_styles->queue = array_values(
+					array_filter(
+						$wp_styles->queue ?? [],
+						static fn( string $h ): bool => str_starts_with( $h, 'nivorax' )
+					)
+				);
+			},
+			1
+		);
+		add_action(
+			'wp_footer',
+			static function (): void {
+				global $wp_scripts;
+				$wp_scripts->queue = array_values(
+					array_filter(
+						$wp_scripts->queue ?? [],
+						static fn( string $h ): bool => str_starts_with( $h, 'nivorax' )
+					)
+				);
+			},
+			1
+		);
+
 		?>
 		<!DOCTYPE html>
 		<html <?php language_attributes(); ?>>
@@ -110,7 +154,6 @@ final class EditorScreen {
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta name="viewport" content="width=device-width,initial-scale=1">
 			<title><?php echo esc_html( get_the_title( $post_id ) ); ?> — NivoraX</title>
-			<?php do_action( 'admin_enqueue_scripts', 'nivorax-editor' ); ?>
 			<?php wp_head(); ?>
 		</head>
 		<body class="nivorax-editor-body">

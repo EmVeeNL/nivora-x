@@ -16,7 +16,10 @@
     "skipLibCheck":               true,
     "outDir":                     "./plugin/build",
     "rootDir":                    "./app",
-    "baseUrl":                    "."
+    "baseUrl":                    ".",
+    "paths": {
+      "@/*": ["./app/*"]
+    }
   },
   "include": ["app"],
   "exclude": ["node_modules", "plugin/build", "plugin/vendor"]

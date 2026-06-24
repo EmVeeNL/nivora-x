@@ -2,14 +2,14 @@
 task: 002
 phase: 03
 title: Layout Scaffold & Local UI State
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 002 — Layout Scaffold & Local UI State
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -37,12 +37,12 @@ is ephemeral and never persisted to a document.
 
 ## Acceptance Criteria
 
-- [ ] Responsive three-panel grid with toolbar + breadcrumb regions filling the viewport.
-- [ ] Local UI-state store with panel visibility, active breakpoint, active tab, section
+- [x] Responsive three-panel grid with toolbar + breadcrumb regions filling the viewport.
+- [x] Local UI-state store with panel visibility, active breakpoint, active tab, section
       open/closed.
-- [ ] Typed actions/selectors; sensible defaults.
-- [ ] Clearly separated from future document state.
-- [ ] Vitest covers the store; lint/format/typecheck pass.
+- [x] Typed actions/selectors; sensible defaults.
+- [x] Clearly separated from future document state.
+- [x] Vitest covers the store; lint/format/typecheck pass.
 
 ## Files to Create
 

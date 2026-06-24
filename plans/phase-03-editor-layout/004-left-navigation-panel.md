@@ -2,14 +2,14 @@
 task: 004
 phase: 03
 title: Left Navigation Panel (Placeholder) + Collapse
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002]
 retry_count: 0
 ---
 
 # Task 004 — Left Navigation Panel (Placeholder) + Collapse
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002
 > **Retry count:** 0
 
@@ -35,10 +35,10 @@ Phase 06.)
 
 ## Acceptance Criteria
 
-- [ ] Left panel with a placeholder layer-tree matching the reference look.
-- [ ] Collapse/expand bound to UI state; collapsing maximizes the canvas.
-- [ ] Re-expand affordance when collapsed.
-- [ ] Vitest covers collapse behavior; lint/format/typecheck pass.
+- [x] Left panel with a placeholder layer-tree matching the reference look.
+- [x] Collapse/expand bound to UI state; collapsing maximizes the canvas.
+- [x] Re-expand affordance when collapsed.
+- [x] Vitest covers collapse behavior; lint/format/typecheck pass.
 
 ## Files to Create
 
