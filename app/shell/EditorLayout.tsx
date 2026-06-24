@@ -1,5 +1,6 @@
 import { useUiStore } from '@/state/uiStore'
 import { TopToolbar } from './TopToolbar'
+import { LeftPanel } from './LeftPanel'
 
 export function EditorLayout() {
   const leftOpen = useUiStore((s) => s.leftPanelOpen)
@@ -21,10 +22,10 @@ export function EditorLayout() {
           data-testid="region-left"
           className={[
             'shrink-0 overflow-hidden border-r border-border bg-background',
-            leftOpen ? 'w-60' : 'w-0',
+            leftOpen ? 'w-60' : 'w-10',
           ].join(' ')}
         >
-          {/* LeftPanel — task 004 */}
+          <LeftPanel />
         </aside>
 
         <main

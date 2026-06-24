@@ -45,10 +45,10 @@ describe('EditorLayout', () => {
     expect(screen.getByTestId('region-right').className).toContain('w-72')
   })
 
-  it('left panel collapses to w-0 when leftPanelOpen is false', () => {
+  it('left panel collapses to w-10 (showing re-expand button) when leftPanelOpen is false', () => {
     useUiStore.setState({ leftPanelOpen: false })
     render(<EditorLayout />)
-    expect(screen.getByTestId('region-left').className).toContain('w-0')
+    expect(screen.getByTestId('region-left').className).toContain('w-10')
   })
 
   it('right panel collapses to w-0 when rightPanelOpen is false', () => {
