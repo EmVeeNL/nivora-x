@@ -1,6 +1,9 @@
 import { useUiStore } from '@/state/uiStore'
 import { TopToolbar } from './TopToolbar'
 import { LeftPanel } from './LeftPanel'
+import { RightPanel } from './RightPanel'
+import { BreadcrumbBar } from './BreadcrumbBar'
+import { CanvasFrame } from '@/canvas/CanvasFrame'
 
 export function EditorLayout() {
   const leftOpen = useUiStore((s) => s.leftPanelOpen)
@@ -32,17 +35,17 @@ export function EditorLayout() {
           data-testid="region-canvas"
           className="flex min-w-0 flex-1 flex-col overflow-hidden bg-canvas-chrome"
         >
-          {/* CanvasFrame — task 005 */}
+          <CanvasFrame />
         </main>
 
         <aside
           data-testid="region-right"
           className={[
             'shrink-0 overflow-hidden border-l border-border bg-background',
-            rightOpen ? 'w-72' : 'w-0',
+            rightOpen ? 'w-72' : 'w-10',
           ].join(' ')}
         >
-          {/* RightPanel — task 006 */}
+          <RightPanel />
         </aside>
       </div>
 
@@ -51,7 +54,7 @@ export function EditorLayout() {
         data-testid="region-breadcrumb"
         className="flex h-8 shrink-0 items-center border-t border-border bg-shell-bar px-3"
       >
-        {/* BreadcrumbBar — task 007 */}
+        <BreadcrumbBar />
       </footer>
     </div>
   )

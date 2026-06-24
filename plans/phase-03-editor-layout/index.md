@@ -78,9 +78,9 @@ rendering, and no drag-and-drop — those arrive in later feature phases.
 | 002  | Editor layout scaffold (three-panel grid + toolbar/breadcrumb regions) + local UI-state store | 001 | Done |
 | 003  | Top toolbar: title, device/breakpoint switcher (wired to UI state), Preview/Publish (visual) | 002 | Done |
 | 004  | Left Navigation panel (placeholder layer tree) + collapse | 002 | Done |
-| 005  | Center iframe canvas scaffold; width bound to the active breakpoint | 002, 003 | Not Started |
-| 006  | Right inspector panel: tabs + collapsible sections + placeholder controls | 002 | Not Started |
-| 007  | Bottom breadcrumb bar (static placeholder) | 002 | Not Started |
+| 005  | Center iframe canvas scaffold; width bound to the active breakpoint | 002, 003 | Done |
+| 006  | Right inspector panel: tabs + collapsible sections + placeholder controls | 002 | Done |
+| 007  | Bottom breadcrumb bar (static placeholder) | 002 | Done |
 | 008  | Visual polish pass to match the reference + component tests | 003, 004, 005, 006, 007 | Not Started |
 
 ## Architectural Notes

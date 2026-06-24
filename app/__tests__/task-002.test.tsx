@@ -51,10 +51,10 @@ describe('EditorLayout', () => {
     expect(screen.getByTestId('region-left').className).toContain('w-10')
   })
 
-  it('right panel collapses to w-0 when rightPanelOpen is false', () => {
+  it('right panel collapses to w-10 (showing re-expand button) when rightPanelOpen is false', () => {
     useUiStore.setState({ rightPanelOpen: false })
     render(<EditorLayout />)
-    expect(screen.getByTestId('region-right').className).toContain('w-0')
+    expect(screen.getByTestId('region-right').className).toContain('w-10')
   })
 
   it('canvas region always renders regardless of panel state', () => {
