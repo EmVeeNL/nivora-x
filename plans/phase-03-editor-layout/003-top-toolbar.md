@@ -2,14 +2,14 @@
 task: 003
 phase: 03
 title: Top Toolbar
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002]
 retry_count: 0
 ---
 
 # Task 003 — Top Toolbar
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002
 > **Retry count:** 0
 
@@ -37,10 +37,10 @@ controls.
 
 ## Acceptance Criteria
 
-- [ ] Toolbar with the three regions laid out per the reference.
-- [ ] Device/breakpoint switcher bound to UI state (desktop/tablet/mobile presets).
-- [ ] Preview + Publish buttons present, styled, non-functional.
-- [ ] Vitest covers the switcher↔state binding; lint/format/typecheck pass.
+- [x] Toolbar with the three regions laid out per the reference.
+- [x] Device/breakpoint switcher bound to UI state (desktop/tablet/mobile presets).
+- [x] Preview + Publish buttons present, styled, non-functional.
+- [x] Vitest covers the switcher↔state binding; lint/format/typecheck pass.
 
 ## Files to Create
 

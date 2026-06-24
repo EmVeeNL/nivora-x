@@ -1,4 +1,5 @@
 import './styles/theme.css'
+import './lib/icons'
 import { EditorLayout } from './shell/EditorLayout'
 
 export function EditorApp() {

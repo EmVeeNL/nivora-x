@@ -1,4 +1,5 @@
 import { useUiStore } from '@/state/uiStore'
+import { TopToolbar } from './TopToolbar'
 
 export function EditorLayout() {
   const leftOpen = useUiStore((s) => s.leftPanelOpen)
@@ -11,7 +12,7 @@ export function EditorLayout() {
         data-testid="region-toolbar"
         className="flex h-11 shrink-0 items-center border-b border-border bg-shell-bar px-3"
       >
-        {/* TopToolbar — task 003 */}
+        <TopToolbar />
       </header>
 
       {/* Middle row: left panel · canvas · right panel */}
