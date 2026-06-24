@@ -72,7 +72,7 @@ plugin installed and all quality gates green — without writing any product cod
 | 001  | Repository & Git foundation (Gitflow, gitignore, editorconfig, nvmrc, LICENSE, README skeleton) | —          | Done        |
 | 002  | Docker environment (custom WP Dockerfile + Xdebug/WP-CLI, MariaDB, Mailhog, compose, .env) | 001        | Done        |
 | 003  | WordPress provisioning via WP-CLI (idempotent setup script, Mailhog SMTP, Query Monitor) | 002        | Done        |
-| 004  | Minimal plugin skeleton (main file, header, Composer PSR-4 autoload, activation hooks) | 001        | Not Started |
+| 004  | Minimal plugin skeleton (main file, header, Composer PSR-4 autoload, activation hooks) | 001        | Done        |
 | 005  | PHP quality tooling (Composer scripts, PHPCS WordPress standard, PHPStan)             | 004        | Not Started |
 | 006  | PHP testing (Pest/PHPUnit harness, Xdebug coverage, example test)                     | 004, 005   | Not Started |
 | 007  | JS/TS toolchain (pnpm, Vite, TypeScript, ESLint, Prettier)                            | 001        | Not Started |

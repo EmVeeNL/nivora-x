@@ -1,0 +1,28 @@
+{
+  "name": "emveenl/nivorax",
+  "description": "NivoraX WordPress page and layout builder plugin",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.5"
+  },
+  "require-dev": {},
+  "autoload": {
+    "psr-4": {
+      "NivoraX\\": "src/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "scripts": {
+    "lint":    "phpcs",
+    "lint:fix": "phpcbf",
+    "analyse": "phpstan analyse",
+    "test":    "pest"
+  }
+}
