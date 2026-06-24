@@ -12,9 +12,8 @@ parameters:
     excludePaths:
         - vendor
 
-    # WP constants / functions are declared by the phpstan-wordpress extension.
-    # Add any project-level bootstrap globals here as needed.
-    bootstrapFiles: []
+    bootstrapFiles:
+        - phpstan-bootstrap.php
 
-    # Relax rule: WordPress often passes mixed arrays; tighten per-phase.
-    checkMissingIterableValueType: false
+    parallel:
+        maximumNumberOfProcesses: 1

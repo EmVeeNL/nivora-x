@@ -14,10 +14,12 @@ defined( 'ABSPATH' ) || exit;
  */
 final class EditorPage {
 
+	/** Hooks admin_menu to register the editor page. */
 	public static function register(): void {
 		add_action( 'admin_menu', [ self::class, 'add_menu' ] );
 	}
 
+	/** Registers the top-level NivoraX admin menu page. */
 	public static function add_menu(): void {
 		add_menu_page(
 			__( 'NivoraX Editor', 'nivorax' ),
@@ -30,6 +32,7 @@ final class EditorPage {
 		);
 	}
 
+	/** Outputs the editor mount point. */
 	public static function render(): void {
 		echo '<div id="nivorax-editor-root"></div>';
 	}

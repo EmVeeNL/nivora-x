@@ -10,13 +10,19 @@ declare( strict_types=1 );
  * later phases once the plugin has meaningful behaviour to exercise.
  */
 
-it( 'defines all required plugin constants', function (): void {
-	expect( defined( 'NIVORAX_VERSION' ) )->toBeTrue()
+it(
+	'defines all required plugin constants',
+	function (): void {
+		expect( defined( 'NIVORAX_VERSION' ) )->toBeTrue()
 		->and( defined( 'NIVORAX_PLUGIN_FILE' ) )->toBeTrue()
 		->and( defined( 'NIVORAX_PLUGIN_DIR' ) )->toBeTrue()
 		->and( defined( 'NIVORAX_PLUGIN_URL' ) )->toBeTrue();
-} );
+	}
+);
 
-it( 'plugin directory constant points to an existing directory', function (): void {
-	expect( is_dir( NIVORAX_PLUGIN_DIR ) )->toBeTrue();
-} );
+it(
+	'plugin directory constant points to an existing directory',
+	function (): void {
+		expect( is_dir( NIVORAX_PLUGIN_DIR ) )->toBeTrue();
+	}
+);

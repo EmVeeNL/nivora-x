@@ -11,21 +11,20 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }]],
 
   use: {
-    baseURL:      WP_URL,
-    trace:        'on-first-retry',
-    screenshot:   'only-on-failure',
-    storageState: 'e2e/.auth/admin.json',
+    baseURL:    WP_URL,
+    trace:      'on-first-retry',
+    screenshot: 'only-on-failure',
   },
 
   projects: [
-    // Auth setup runs first
+    // Auth setup runs first — no storageState here so setup can CREATE the file
     {
       name: 'setup',
       testMatch: /global\.setup\.ts/,
     },
     {
       name: 'chromium',
-      use:  { ...devices['Desktop Chrome'] },
+      use:  { ...devices['Desktop Chrome'], storageState: 'e2e/.auth/admin.json' },
       dependencies: ['setup'],
     },
   ],

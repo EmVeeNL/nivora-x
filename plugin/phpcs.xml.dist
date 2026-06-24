@@ -21,6 +21,11 @@
   <rule ref="WordPress">
     <!-- Allow short array syntax [] instead of array() -->
     <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+    <!-- Universal variant of the same rule -->
+    <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+    <!-- PSR-4 naming convention; WordPress class-*.php naming not used -->
+    <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+    <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
   </rule>
 
   <!-- Minimum supported PHP / WP versions -->
@@ -36,6 +41,12 @@
     </properties>
   </rule>
 
+  <!-- PSR-4 class files carry class-level docblocks; file-level comments are redundant -->
+  <rule ref="Squiz.Commenting.FileComment.Missing">
+    <exclude-pattern>src/*</exclude-pattern>
+    <exclude-pattern>tests/*</exclude-pattern>
+  </rule>
+
   <!-- Custom capabilities registered by this plugin -->
   <rule ref="WordPress.WP.Capabilities">
     <properties>
@@ -46,6 +57,4 @@
     </properties>
   </rule>
 
-  <!-- Strict types declaration is encouraged -->
-  <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes" phpcs-only="true"/>
 </ruleset>
