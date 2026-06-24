@@ -27,6 +27,9 @@ final class Bootstrap {
 			'restRoot'  => esc_url_raw( rest_url() ),
 			'restNonce' => wp_create_nonce( 'wp_rest' ),
 			'adminUrl'  => admin_url(),
+			'pagesUrl'  => admin_url( 'admin.php?page=' . \NivoraX\Admin\Menu::SLUG_ALL ),
+			'homeUrl'   => home_url( '/' ),
+			'siteName'  => get_bloginfo( 'name' ),
 			'version'   => NIVORAX_VERSION,
 		];
 	}

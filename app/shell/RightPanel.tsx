@@ -43,7 +43,7 @@ export function RightPanel() {
     <div className="flex h-full flex-col overflow-hidden">
       {/* Panel header */}
       <div className="flex h-11 shrink-0 items-center justify-between border-b border-border px-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-label">Body</span>
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-label">Body</span>
         <button
           type="button"
           onClick={() => useUiStore.getState().toggleRightPanel()}

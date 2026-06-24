@@ -44,7 +44,7 @@ export function InspectorSection({ id, title, children }: InspectorSectionProps)
         aria-controls={`section-body-${id}`}
         className={cn(
           'flex h-9 w-full items-center justify-between px-3 transition-colors',
-          'text-xs font-semibold uppercase tracking-wider text-label hover:text-foreground',
+          'text-[10px] font-semibold uppercase tracking-wider text-label hover:text-foreground',
         )}
       >
         {title}

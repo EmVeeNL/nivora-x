@@ -25,7 +25,7 @@ export function LeftPanel() {
     <div className="flex h-full flex-col overflow-hidden">
       {/* Panel header */}
       <div className="flex h-9 shrink-0 items-center justify-between border-b border-border px-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-label">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-label">
           Navigation
         </span>
         <button
