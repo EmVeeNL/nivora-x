@@ -8,9 +8,6 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Main plugin bootstrap.
- *
- * Booted once from nivorax.php after the Composer autoloader is loaded.
- * Activation/deactivation hooks are no-ops until the relevant phases add work.
  */
 final class Plugin {
 
@@ -28,13 +25,22 @@ final class Plugin {
 		}
 		self::$booted = true;
 
+		// Phase 01 — asset pipeline.
 		Assets\AssetManager::register();
-		Admin\EditorPage::register();
+
+		// Phase 02 — plugin foundation.
+		Storage\DocumentStore::register();
+		Editor\EditorMode::register();
+		Admin\Menu::register();
+		Admin\Settings\SettingsPage::register();
+		Admin\Screen\EditorScreen::register();
+		Admin\Screen\AllPagesScreen::register();
+		Integration\PostTypeIntegration::register();
+		FrontEnd\RenderSwitch::register();
 	}
 
 	/** Runs on plugin activation. */
 	public static function activate(): void {
-		// Activation tasks (flush rewrite rules, etc.) wired in later phases.
 		flush_rewrite_rules();
 	}
 

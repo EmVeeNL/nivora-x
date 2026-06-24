@@ -12,6 +12,7 @@ parameters:
     excludePaths:
         - vendor
 
+    # Project-level constants (version, paths) not visible from source alone.
     bootstrapFiles:
         - phpstan-bootstrap.php
 

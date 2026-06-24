@@ -1,7 +1,7 @@
 <?php
-
 /**
- * PHPStan bootstrap — defines plugin constants so analysis doesn't need WordPress loaded.
+ * PHPStan bootstrap — declares plugin-defined constants so static analysis
+ * doesn't report them as undefined.
  *
  * @package NivoraX
  */

@@ -34,7 +34,11 @@ final class AssetManager {
 		if ( ! str_contains( $hook, 'nivorax' ) ) {
 			return;
 		}
+		self::enqueue_for_editor();
+	}
 
+	/** Enqueue editor assets unconditionally (called directly by EditorScreen). */
+	public static function enqueue_for_editor(): void {
 		if ( self::is_dev() ) {
 			self::enqueue_dev();
 		} else {
