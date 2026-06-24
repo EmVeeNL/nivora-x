@@ -1,8 +1,8 @@
 # NivoraX — Phase Roadmap
 
 > Manifest of phases. Each is a folder under `plans/` with an `index.md`.
-> Phases 01–03 are **defined**. Phase 04 is a **draft** under review. The editor batch
-> (04–09) is defined together one phase at a time. Phases 10–20 are **staged** —
+> Phases 01–04 are **defined** and done. The editor batch
+> (05–09) is defined together one phase at a time. Phases 10–20 are **staged** —
 > provisional titles, redefined as we reach them.
 >
 > Status: `Not Started · In Progress · Blocked · In Review · Done`
@@ -20,7 +20,7 @@
 
 | #   | Phase                                      | Definition | Status      |
 | --- | ------------------------------------------ | ---------- | ----------- |
-| 04  | Document Model & State                     | Defined    | Not Started |
+| 04  | Document Model & State                     | Defined    | Done        |
 | 05  | Element System & Canvas Rendering          | Defined    | Not Started |
 | 06  | Element Library, Left Rail & Drag-and-Drop | Defined    | Not Started |
 | 07  | Navigator                                  | Defined    | Not Started |
