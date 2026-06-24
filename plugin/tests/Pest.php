@@ -9,8 +9,12 @@ declare( strict_types=1 );
  * between tests.
  */
 
-uses()->beforeEach( function (): void {
-	Brain\Monkey\setUp();
-} )->afterEach( function (): void {
-	Brain\Monkey\tearDown();
-} )->in( 'Unit' );
+uses()->beforeEach(
+	function (): void {
+		Brain\Monkey\setUp();
+	}
+)->afterEach(
+	function (): void {
+		Brain\Monkey\tearDown();
+	}
+)->in( 'Unit' );

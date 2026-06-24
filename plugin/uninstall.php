@@ -5,6 +5,8 @@
  * WordPress calls this file when the plugin is deleted from the admin.
  * Clean up any plugin data (post meta, options, custom tables) here when those
  * features are implemented in later phases.
+ *
+ * @package NivoraX
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;

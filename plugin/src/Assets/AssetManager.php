@@ -20,16 +20,25 @@ final class AssetManager {
 	private const ENTRY_FILE = 'main.tsx';
 	private const HANDLE     = 'nivorax-editor';
 
+	/** Hooks admin_enqueue_scripts for pages that include 'nivorax' in the hook suffix. */
 	public static function register(): void {
 		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue' ] );
 	}
 
-	/** Enqueue assets only on the NivoraX admin page. */
+	/**
+	 * Enqueue assets only on the NivoraX admin page.
+	 *
+	 * @param string $hook Current admin page hook suffix.
+	 */
 	public static function enqueue( string $hook ): void {
 		if ( ! str_contains( $hook, 'nivorax' ) ) {
 			return;
 		}
+		self::enqueue_for_editor();
+	}
 
+	/** Enqueue editor assets unconditionally (called directly by EditorScreen). */
+	public static function enqueue_for_editor(): void {
 		if ( self::is_dev() ) {
 			self::enqueue_dev();
 		} else {
@@ -37,18 +46,19 @@ final class AssetManager {
 		}
 	}
 
-	// ── Dev mode ──────────────────────────────────────────────────────────────
-
+	/** Whether the Vite dev server is enabled via NIVORAX_VITE_DEV. */
 	private static function is_dev(): bool {
 		return defined( 'NIVORAX_VITE_DEV' ) && NIVORAX_VITE_DEV === true;
 	}
 
+	/** Enqueues the entry point and Vite client from the local dev server. */
 	private static function enqueue_dev(): void {
 		$origin = defined( 'NIVORAX_VITE_ORIGIN' )
 			? (string) NIVORAX_VITE_ORIGIN
 			: 'http://localhost:5173';
 
-		// @vite/client — must load first.
+		// @vite/client — must load first. Dev scripts intentionally use null version.
+		// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_script(
 			self::HANDLE . '-vite-client',
 			$origin . '/@vite/client',
@@ -64,25 +74,29 @@ final class AssetManager {
 			null,
 			[ 'in_footer' => true ]
 		);
+		// phpcs:enable WordPress.WP.EnqueuedResourceParameters.MissingVersion
 
 		self::set_module_type( self::HANDLE . '-vite-client' );
 		self::set_module_type( self::HANDLE );
 	}
 
-	// ── Production mode ───────────────────────────────────────────────────────
-
+	/** Reads the Vite manifest and enqueues the hashed production build. */
 	private static function enqueue_production(): void {
 		if ( ! file_exists( self::MANIFEST ) ) {
-			add_action( 'admin_notices', static function (): void {
-				echo '<div class="notice notice-error"><p>';
-				echo '<strong>NivoraX:</strong> Build assets not found. ';
-				echo 'Run <code>pnpm build</code> to generate them.';
-				echo '</p></div>';
-			} );
+			add_action(
+				'admin_notices',
+				static function (): void {
+					echo '<div class="notice notice-error"><p>';
+					echo '<strong>NivoraX:</strong> Build assets not found. ';
+					echo 'Run <code>pnpm build</code> to generate them.';
+					echo '</p></div>';
+				}
+			);
 			return;
 		}
 
 		$manifest = json_decode(
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			(string) file_get_contents( self::MANIFEST ),
 			true
 		);
@@ -91,9 +105,13 @@ final class AssetManager {
 			return;
 		}
 
-		/** @var array<string, array{file: string, css?: list<string>}> $manifest */
+		/**
+		 * Vite manifest map.
+		 *
+		 * @var array<string, array{file: string, css?: list<string>}> $manifest
+		 */
 		$entry = $manifest[ self::ENTRY_FILE ] ?? null;
-		if ( $entry === null ) {
+		if ( null === $entry ) {
 			return;
 		}
 
@@ -118,7 +136,11 @@ final class AssetManager {
 		self::set_module_type( self::HANDLE );
 	}
 
-	/** Adds type="module" to a script tag. Required for Vite ESM output. */
+	/**
+	 * Adds type="module" to a script tag. Required for Vite ESM output.
+	 *
+	 * @param string $handle Registered script handle.
+	 */
 	private static function set_module_type( string $handle ): void {
 		add_filter(
 			'script_loader_tag',

@@ -12,6 +12,8 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       nivorax
  * Domain Path:       /languages
+ *
+ * @package NivoraX
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -24,12 +26,15 @@ define( 'NIVORAX_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 // Guard against missing Composer autoloader (prevents white-screen on fresh clone).
 $autoloader = __DIR__ . '/vendor/autoload.php';
 if ( ! file_exists( $autoloader ) ) {
-	add_action( 'admin_notices', static function (): void {
-		echo '<div class="notice notice-error"><p>';
-		echo '<strong>NivoraX:</strong> Composer dependencies are missing. ';
-		echo 'Run <code>composer install</code> in the plugin directory.';
-		echo '</p></div>';
-	} );
+	add_action(
+		'admin_notices',
+		static function (): void {
+			echo '<div class="notice notice-error"><p>';
+			echo '<strong>NivoraX:</strong> Composer dependencies are missing. ';
+			echo 'Run <code>composer install</code> in the plugin directory.';
+			echo '</p></div>';
+		}
+	);
 	return;
 }
 require_once $autoloader;
