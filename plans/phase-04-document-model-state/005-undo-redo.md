@@ -2,14 +2,14 @@
 task: 005
 phase: 04
 title: Undo / Redo History
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [004]
 retry_count: 0
 ---
 
 # Task 005 — Undo / Redo History
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 004
 > **Retry count:** 0
 
