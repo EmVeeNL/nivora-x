@@ -1,3 +1,4 @@
+@import '@fontsource-variable/inter';
 @import 'tailwindcss';
 
 /*
@@ -83,6 +84,7 @@
   --radius: 0.25rem;
 
   color-scheme: dark;
+  font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
 }
 
 /*
@@ -90,6 +92,9 @@
  * These become Tailwind utilities: bg-shell-bar, bg-canvas-chrome, etc.
  */
 @theme {
+  /* Default sans-serif font for the editor */
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
   /* Top bar — deepest surface layer */
   --color-shell-bar: oklch(0.11 0.015 254);
 
