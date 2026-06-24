@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path'
 
 // https://vitejs.dev/config/
@@ -10,9 +11,15 @@ export default defineConfig(({ mode }) => {
   const devServerOrigin = env['VITE_ORIGIN'] ?? `http://localhost:${devServerPort}`
 
   return {
-    plugins: [react()],
+    plugins: [tailwindcss(), react()],
 
     root: resolve(__dirname, 'app'),
+
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, 'app'),
+      },
+    },
 
     build: {
       outDir:   resolve(__dirname, 'plugin/build'),

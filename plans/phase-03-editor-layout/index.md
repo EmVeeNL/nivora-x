@@ -3,14 +3,14 @@ phase: 03
 slug: editor-layout
 title: Editor Layout
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Progress # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 03 — Editor Layout
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** In Progress <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Draft — captured from decisions on 2026-06-24, awaiting review.
 
 ## Objective
@@ -74,8 +74,8 @@ rendering, and no drag-and-drop — those arrive in later feature phases.
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Tailwind v4 + ShadCN setup + editor dark-theme tokens; mount shell into the Phase 02 screen | — | Not Started |
-| 002  | Editor layout scaffold (three-panel grid + toolbar/breadcrumb regions) + local UI-state store | 001 | Not Started |
+| 001  | Tailwind v4 + ShadCN setup + editor dark-theme tokens; mount shell into the Phase 02 screen | — | Done |
+| 002  | Editor layout scaffold (three-panel grid + toolbar/breadcrumb regions) + local UI-state store | 001 | Done |
 | 003  | Top toolbar: title, device/breakpoint switcher (wired to UI state), Preview/Publish (visual) | 002 | Not Started |
 | 004  | Left Navigation panel (placeholder layer tree) + collapse | 002 | Not Started |
 | 005  | Center iframe canvas scaffold; width bound to the active breakpoint | 002, 003 | Not Started |

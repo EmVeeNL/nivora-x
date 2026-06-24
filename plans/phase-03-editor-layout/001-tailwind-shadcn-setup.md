@@ -2,14 +2,14 @@
 task: 001
 phase: 03
 title: Tailwind v4 + ShadCN Setup & Editor Theme
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Tailwind v4 + ShadCN Setup & Editor Theme
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 
@@ -38,11 +38,11 @@ Phase 02 `EditorScreen` mount node.
 
 ## Acceptance Criteria
 
-- [ ] Tailwind v4 configured and building within the Vite pipeline.
-- [ ] ShadCN installed with dark-theme tokens approximating the reference palette.
-- [ ] The app mounts into the Phase 02 editor screen and renders a themed root container.
-- [ ] Chrome styles are scoped away from canvas content.
-- [ ] `pnpm lint`, `format:check`, `typecheck`, `build` all pass.
+- [x] Tailwind v4 configured and building within the Vite pipeline.
+- [x] ShadCN installed with dark-theme tokens approximating the reference palette.
+- [x] The app mounts into the Phase 02 editor screen and renders a themed root container.
+- [x] Chrome styles are scoped away from canvas content.
+- [x] `pnpm lint`, `format:check`, `typecheck`, `build` all pass.
 
 ## Files to Create
 
