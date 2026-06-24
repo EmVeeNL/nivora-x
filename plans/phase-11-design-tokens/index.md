@@ -28,6 +28,11 @@ referenced. (Expanding the inspector to the full control set is the separate Pha
   accessor pattern): groups for **Colors**, **Typography** (families + type scale),
   **Spacing** scale, and **Effects** (radii, shadows, borders). Each token: id, group, name,
   value. Seeded with sensible defaults.
+- **Font family source:** available font families for Typography tokens are drawn from two
+  sources in priority order: (1) the **WordPress Font Library** (WP 7.0) — fonts the site
+  owner has installed (including Google Fonts downloaded via the library) via
+  `GET /wp/v2/fonts`; (2) a curated list of **common local/system fonts** as a fallback
+  (e.g. Arial, Helvetica, Georgia, Times New Roman, Verdana, Courier New, `system-ui`).
 - **Token manager UI** (reference screenshot 03): create/edit/delete tokens grouped by
   category.
 - **Token references on node style props** — stored by stable **id** (never the resolved
@@ -76,6 +81,12 @@ referenced. (Expanding the inspector to the full control set is the separate Pha
 
 ## Architectural Notes
 
+- **Font family source:** query `GET /wp/v2/fonts` (WordPress Font Library, WP 7.0) for
+  installed font families (includes Google Fonts the site owner has downloaded). Merge with a
+  static fallback list of common system/local fonts (Arial, Helvetica, Georgia, Times New
+  Roman, Verdana, Courier New, `system-ui`, `sans-serif`, `serif`, `monospace`). Present the
+  combined, de-duplicated list in any font-family picker. No custom downloading logic needed —
+  WP Font Library handles font registration and `@font-face` generation.
 - **CSS custom properties make propagation cheap:** the token set emits a variables block
   (`:root` on the front end; the iframe root in the editor); style rules reference
   `var(--nx-…)`. This is the implementation of the Phase 10 token seam in both generators.
