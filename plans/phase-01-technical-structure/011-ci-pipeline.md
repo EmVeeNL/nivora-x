@@ -2,14 +2,14 @@
 task: 011
 phase: 01
 title: CI Pipeline (GitHub Actions)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [006, 009, 010]
 retry_count: 0
 ---
 
 # Task 011 — CI Pipeline (GitHub Actions)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 006, 009, 010
 > **Retry count:** 0
 

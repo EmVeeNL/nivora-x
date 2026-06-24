@@ -2,14 +2,14 @@
 task: 009
 phase: 01
 title: JS Testing (Vitest + Playwright)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [007, 008]
 retry_count: 0
 ---
 
 # Task 009 — JS Testing (Vitest + Playwright)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 007, 008
 > **Retry count:** 0
 

@@ -2,14 +2,14 @@
 task: 010
 phase: 01
 title: Commit Enforcement (husky, lint-staged, commitlint)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [005, 007]
 retry_count: 0
 ---
 
 # Task 010 — Commit Enforcement (husky, lint-staged, commitlint)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 005, 007
 > **Retry count:** 0
 

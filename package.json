@@ -9,30 +9,57 @@
     "pnpm": ">=9"
   },
   "scripts": {
-    "dev":          "vite",
-    "build":        "vite build",
-    "typecheck":    "tsc --noEmit",
-    "lint":         "eslint app",
-    "lint:fix":     "eslint app --fix",
-    "format":       "prettier --write \"app/**/*.{ts,tsx,css,json}\"",
-    "format:check": "prettier --check \"app/**/*.{ts,tsx,css,json}\""
+    "dev":            "vite",
+    "build":          "vite build",
+    "typecheck":      "tsc --noEmit",
+    "lint":           "eslint app",
+    "lint:fix":       "eslint app --fix",
+    "format":         "prettier --write \"app/**/*.{ts,tsx,css,json}\"",
+    "format:check":   "prettier --check \"app/**/*.{ts,tsx,css,json}\"",
+    "test:unit":      "vitest run",
+    "test:unit:watch":"vitest",
+    "test:unit:cov":  "vitest run --coverage",
+    "test:e2e":       "playwright test",
+    "test":           "pnpm test:unit",
+    "prepare":        "husky"
   },
   "dependencies": {
     "react":     "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react":                   "^18.3.0",
-    "@types/react-dom":               "^18.3.0",
+    "@commitlint/cli":                  "^19.0.0",
+    "@commitlint/config-conventional":  "^19.0.0",
+    "@playwright/test":                 "^1.45.0",
+    "@testing-library/jest-dom":        "^6.4.0",
+    "@testing-library/react":           "^16.0.0",
+    "@testing-library/user-event":      "^14.5.0",
+    "@types/react":                     "^18.3.0",
+    "@types/react-dom":                 "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser":      "^8.0.0",
-    "@vitejs/plugin-react":           "^4.3.0",
-    "eslint":                         "^9.0.0",
-    "eslint-config-prettier":         "^9.1.0",
-    "eslint-plugin-react":            "^7.36.0",
-    "eslint-plugin-react-hooks":      "^5.0.0",
-    "prettier":                       "^3.3.0",
-    "typescript":                     "^5.6.0",
-    "vite":                           "^6.0.0"
+    "@typescript-eslint/parser":        "^8.0.0",
+    "@vitejs/plugin-react":             "^4.3.0",
+    "@vitest/coverage-v8":              "^2.0.0",
+    "eslint":                           "^9.0.0",
+    "eslint-config-prettier":           "^9.1.0",
+    "eslint-plugin-react":              "^7.36.0",
+    "eslint-plugin-react-hooks":        "^5.0.0",
+    "husky":                            "^9.0.0",
+    "jsdom":                            "^24.0.0",
+    "lint-staged":                      "^15.0.0",
+    "prettier":                         "^3.3.0",
+    "typescript":                       "^5.6.0",
+    "vite":                             "^6.0.0",
+    "vitest":                           "^2.0.0"
+  },
+  "lint-staged": {
+    "app/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "plugin/**/*.php": [
+      "docker compose exec -T wordpress bash -c 'cd /var/www/html/wp-content/plugins/nivorax && vendor/bin/phpcbf --standard=phpcs.xml.dist' || true",
+      "docker compose exec -T wordpress bash -c 'cd /var/www/html/wp-content/plugins/nivorax && vendor/bin/phpcs --standard=phpcs.xml.dist'"
+    ]
   }
 }

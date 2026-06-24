@@ -1,0 +1,151 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop, 'feature/**', 'release/**', 'hotfix/**']
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# ── PHP job ──────────────────────────────────────────────────────────────────
+jobs:
+  php:
+    name: PHP lint / analyse / test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: xdebug
+          coverage: xdebug
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: plugin/vendor
+          key: composer-${{ hashFiles('plugin/composer.json') }}
+          restore-keys: composer-
+
+      - name: Install Composer dependencies
+        working-directory: plugin
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run QA (lint + analyse + test)
+        working-directory: plugin
+        run: composer qa
+
+      - name: Upload PHP coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-coverage
+          path: plugin/coverage/
+
+# ── JS job ────────────────────────────────────────────────────────────────────
+  js:
+    name: JS lint / typecheck / build / unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store path
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-${{ runner.os }}-
+
+      - name: Install JS dependencies
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm build
+      - run: pnpm test:unit
+
+# ── E2E job ───────────────────────────────────────────────────────────────────
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    needs: [js]
+
+    env:
+      WP_URL:            http://localhost:8080
+      WP_ADMIN_USER:     admin
+      WP_ADMIN_PASSWORD: admin
+      PLAYWRIGHT_BASE_URL: http://localhost:8080
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store path
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-${{ runner.os }}-
+
+      - name: Install JS dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Copy .env for Docker
+        run: cp .env.example .env
+
+      - name: Build production assets
+        run: pnpm build
+
+      - name: Start Docker stack
+        run: docker compose up -d --build
+
+      - name: Provision WordPress
+        run: ./bin/setup.sh
+
+      - name: Run Playwright E2E
+        run: pnpm test:e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

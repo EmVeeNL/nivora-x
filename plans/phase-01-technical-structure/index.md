@@ -3,14 +3,14 @@ phase: 01
 slug: technical-structure
 title: Technical Structure
 created: 2026-06-24
-status: In Progress # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 01 — Technical Structure
 
 > **Created:** 2026-06-24
-> **Status:** In Progress <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -77,10 +77,10 @@ plugin installed and all quality gates green — without writing any product cod
 | 006  | PHP testing (Pest/PHPUnit harness, Xdebug coverage, example test)                     | 004, 005   | Done        |
 | 007  | JS/TS toolchain (pnpm, Vite, TypeScript, ESLint, Prettier)                            | 001        | Done        |
 | 008  | Vite ↔ WordPress integration (manifest enqueue + dev HMR)                             | 004, 007   | Done        |
-| 009  | JS testing (Vitest unit + Playwright E2E, example tests)                              | 007, 008   | Not Started |
-| 010  | Commit enforcement (husky, lint-staged, commitlint)                                   | 005, 007   | Not Started |
-| 011  | CI pipeline (GitHub Actions: build + lint + static analysis + tests)                  | 006, 009, 010 | Not Started |
-| 012  | README & developer docs (setup, commands, conventions) finalized                      | 011        | Not Started |
+| 009  | JS testing (Vitest unit + Playwright E2E, example tests)                              | 007, 008   | Done        |
+| 010  | Commit enforcement (husky, lint-staged, commitlint)                                   | 005, 007   | Done        |
+| 011  | CI pipeline (GitHub Actions: build + lint + static analysis + tests)                  | 006, 009, 010 | Done     |
+| 012  | README & developer docs (setup, commands, conventions) finalized                      | 011        | Done        |
 
 ## Architectural Notes
 
