@@ -37,7 +37,7 @@ export function ActivityBar() {
             {isActive && (
               <span className="absolute bottom-2 left-0 top-2 w-0.5 rounded-r bg-primary" />
             )}
-            <Icon icon={icon} width={18} height={18} />
+            <Icon icon={icon} width={20} height={20} />
           </button>
         )
       })}

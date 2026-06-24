@@ -71,8 +71,11 @@ export function TopToolbar() {
         <BreakpointSwitcher />
       </div>
 
-      {/* Right — Preview + Publish (visual only this phase) */}
+      {/* Right — Save Draft · Preview · Publish (visual only this phase) */}
       <div className="flex flex-1 items-center justify-end gap-2">
+        <Button variant="ghost" size="sm" aria-label="Save draft">
+          Save Draft
+        </Button>
         <Button variant="ghost" size="sm" aria-label="Preview page">
           Preview
         </Button>
