@@ -1,0 +1,20 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 6
+
+    paths:
+        - nivorax.php
+        - src
+        - uninstall.php
+
+    excludePaths:
+        - vendor
+
+    # Project-level constants (version, paths) not visible from source alone.
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+
+    parallel:
+        maximumNumberOfProcesses: 1

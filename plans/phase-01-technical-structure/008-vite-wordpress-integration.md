@@ -2,14 +2,14 @@
 task: 008
 phase: 01
 title: Vite ↔ WordPress Integration
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [004, 007]
 retry_count: 0
 ---
 
 # Task 008 — Vite ↔ WordPress Integration
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 004, 007
 > **Retry count:** 0
 

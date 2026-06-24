@@ -6,13 +6,18 @@ composer.lock
 node_modules/
 dist/
 build/
+plugin/build/
 .pnpm-store/
-pnpm-lock.yaml
 
 # === Environment ===
 .env
 .env.*
 !.env.example
+
+# === Playwright ===
+e2e/.auth/
+playwright-report/
+test-results/
 
 # === Coverage & reports ===
 coverage/

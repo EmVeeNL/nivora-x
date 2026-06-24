@@ -2,14 +2,14 @@
 task: 007
 phase: 01
 title: JS/TS Toolchain (pnpm, Vite, TypeScript, ESLint, Prettier)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 007 — JS/TS Toolchain (pnpm, Vite, TypeScript, ESLint, Prettier)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
