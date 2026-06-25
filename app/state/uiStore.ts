@@ -61,6 +61,8 @@ interface UiState {
   pendingInsert: PendingInsert | null
   /** Editor chrome theme — persisted in localStorage. */
   editorTheme: EditorTheme
+  /** Search query shared between the TopToolbar (appearance mode) and TokenManagerFull. */
+  tokenSearch: string
 }
 
 interface UiActions {
@@ -82,6 +84,7 @@ interface UiActions {
   setPendingInsert(this: void, info: PendingInsert | null): void
   toggleEditorTheme(this: void): void
   setEditorTheme(this: void, theme: EditorTheme): void
+  setTokenSearch(this: void, q: string): void
 }
 
 const INITIAL_BREAKPOINTS = getBreakpoints()
@@ -104,6 +107,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   pendingDelete: null,
   pendingInsert: null,
   editorTheme: INITIAL_THEME,
+  tokenSearch: '',
   openSections: {
     identity: true,
     layout: true,
@@ -187,4 +191,5 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
     applyThemeToRoot(theme)
     set({ editorTheme: theme })
   },
+  setTokenSearch: (q) => set({ tokenSearch: q }),
 }))

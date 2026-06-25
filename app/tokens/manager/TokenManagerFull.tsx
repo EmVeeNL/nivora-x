@@ -7,6 +7,7 @@ import type { UnitValue } from '@/inspector/controls/types'
 import { CSS_UNITS } from '@/inspector/controls/types'
 import { useTokenStore } from '@/tokens/store'
 import { useDocumentStore } from '@/document/store'
+import { useUiStore } from '@/state/uiStore'
 import { isTokenReferenced } from '@/tokens/integrity'
 import { toCssString } from '@/css/rules'
 import { SYSTEM_FONT_OPTIONS, loadWordPressFontOptions } from '@/inspector/style/fontFamilies'
@@ -106,16 +107,16 @@ function CssLine({ line }: { line: string }) {
   const trim = line.trim()
   if (trim === '') return <span>{'\n'}</span>
 
-  if (trim.startsWith('/*')) return <span className="text-zinc-500">{line}</span>
+  if (trim.startsWith('/*')) return <span className="text-muted-foreground/50">{line}</span>
 
-  if (trim === '}') return <span className="text-zinc-500">{line}</span>
+  if (trim === '}') return <span className="text-muted-foreground/50">{line}</span>
 
   if (trim.endsWith('{')) {
     const brace = line.lastIndexOf('{')
     return (
       <>
-        <span className="text-blue-400">{line.slice(0, brace)}</span>
-        <span className="text-zinc-500">{'{'}</span>
+        <span className="text-sky-500">{line.slice(0, brace)}</span>
+        <span className="text-muted-foreground/50">{'{'}</span>
       </>
     )
   }
@@ -125,21 +126,21 @@ function CssLine({ line }: { line: string }) {
     return (
       <>
         {m[1]}
-        <span className="text-violet-400">{m[2]}</span>
-        <span className="text-zinc-500">{m[3]}</span>
+        <span className="text-violet-500">{m[2]}</span>
+        <span className="text-muted-foreground/50">{m[3]}</span>
         {m[4]}
-        <span className="text-amber-300">{m[5]}</span>
-        <span className="text-zinc-500">{m[6]}</span>
+        <span className="text-amber-500">{m[5]}</span>
+        <span className="text-muted-foreground/50">{m[6]}</span>
       </>
     )
 
-  return <span className="text-zinc-300">{line}</span>
+  return <span className="text-foreground/80">{line}</span>
 }
 
 function CssCodeBlock({ code }: { code: string }) {
   const lines = code.split('\n')
   return (
-    <pre className="overflow-x-auto rounded-md border border-zinc-800 bg-zinc-950 p-3 font-mono text-[10px] leading-5">
+    <pre className="overflow-x-auto rounded-md border border-border bg-muted p-3 font-mono text-[10px] leading-5">
       {lines.map((line, i) => (
         <div key={i}>
           <CssLine line={line} />
@@ -933,12 +934,11 @@ export function TokenManagerFull() {
   const modes = useTokenStore((s) => s.modes)
   const activeMode = useTokenStore((s) => s.activeMode)
   const [activeTab, setActiveTab] = useState('tokens')
-  const [search, setSearch] = useState('')
+  const search = useUiStore((s) => s.tokenSearch)
   const [selectedGroup, setSelectedGroup] = useState<TokenGroup | null>(null)
   const [selectedToken, setSelectedToken] = useState<DesignToken | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [creatingGroup, setCreatingGroup] = useState<TokenGroup>('color')
-  const [isSaving, setIsSaving] = useState(false)
 
   const counts = useMemo(() => {
     const c: Record<TokenGroup, number> = { color: 0, typography: 0, spacing: 0, effect: 0 }
@@ -983,14 +983,6 @@ export function TokenManagerFull() {
     setSelectedToken(null)
   }
 
-  function handleSaveAll() {
-    setIsSaving(true)
-    void useTokenStore
-      .getState()
-      .save()
-      .finally(() => setIsSaving(false))
-  }
-
   function handleCancel() {
     setIsCreating(false)
     setSelectedToken(null)
@@ -998,62 +990,6 @@ export function TokenManagerFull() {
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-background">
-      {/* ── Header bar ── */}
-      <div className="flex shrink-0 items-center gap-4 border-b border-border bg-shell-bar px-5 py-3">
-        <div className="min-w-0 flex-1">
-          <h1 className="text-sm font-semibold text-foreground">Design Tokens Manager</h1>
-          <p className="text-[10px] text-muted-foreground">
-            Load design tokens to update your design system.
-          </p>
-        </div>
-
-        <div className="relative">
-          <Icon
-            icon="tabler:search"
-            width={12}
-            height={12}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/60"
-          />
-          <input
-            type="text"
-            placeholder="Search tokens…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-7 w-44 rounded border border-border bg-background pl-7 pr-2 text-xs text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none"
-          />
-        </div>
-
-        <div className="flex items-center gap-1">
-          {[
-            { icon: 'tabler:upload', title: 'Import' },
-            { icon: 'tabler:download', title: 'Export' },
-          ].map(({ icon, title }) => (
-            <button
-              key={title}
-              type="button"
-              title={title}
-              className="flex h-7 w-7 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-border/80 hover:bg-accent hover:text-foreground"
-            >
-              <Icon icon={icon} width={13} height={13} />
-            </button>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          onClick={handleSaveAll}
-          disabled={isSaving}
-          className="flex h-7 items-center gap-1.5 rounded bg-primary px-3 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
-          {isSaving ? (
-            <Icon icon="tabler:loader-2" width={12} height={12} className="animate-spin" />
-          ) : (
-            <Icon icon="tabler:device-floppy" width={12} height={12} />
-          )}
-          Save Changes
-        </button>
-      </div>
-
       {/* ── Tab bar ── */}
       <div className="flex shrink-0 items-end gap-0 border-b border-border bg-shell-bar px-5">
         {TABS.map(({ id, label, icon, disabled }) => (
