@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace NivoraX\Css;
 
+use NivoraX\Tokens\TokenCss;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -90,11 +92,15 @@ final class CssGenerator {
 	/**
 	 * Generate scoped CSS for a document tree.
 	 *
-	 * @param object                           $tree       Decoded tree ({ rootId, nodes }).
+	 * When $tokens is supplied, a :root{--nx-*} variables block is prepended
+	 * so token references (var(--nx-{id})) cascade correctly.
+	 *
+	 * @param object                           $tree        Decoded tree ({ rootId, nodes }).
 	 * @param array<int, array<string, mixed>> $breakpoints Ordered breakpoint list (desktop first).
+	 * @param array<int, array<string, mixed>> $tokens      Optional token list (from Tokens::all()).
 	 * @return string Complete CSS string.
 	 */
-	public function generate( object $tree, array $breakpoints ): string {
+	public function generate( object $tree, array $breakpoints, array $tokens = [] ): string {
 		$nodes = (array) ( $tree->nodes ?? new \stdClass() );
 
 		if ( empty( $nodes ) ) {
@@ -103,6 +109,14 @@ final class CssGenerator {
 
 		$parts        = [];
 		$media_blocks = [];
+
+		// Prepend token variables block when tokens are supplied.
+		if ( ! empty( $tokens ) ) {
+			$vars = TokenCss::to_css_vars( $tokens );
+			if ( '' !== $vars ) {
+				$parts[] = $vars;
+			}
+		}
 
 		foreach ( $nodes as $node ) {
 			if ( ! is_object( $node ) ) {
@@ -183,7 +197,7 @@ final class CssGenerator {
 		$decls = [];
 		foreach ( self::STYLE_PROP_ORDER as $prop ) {
 			$raw   = $props->$prop ?? null;
-			$value = $this->base_value( $raw );
+			$value = $this->resolve_token_ref( $this->base_value( $raw ) );
 			array_push( $decls, ...$this->prop_to_declarations( $prop, $value ) );
 		}
 		return $decls;
@@ -205,7 +219,7 @@ final class CssGenerator {
 			$raw   = $props->$prop ?? null;
 			$value = $this->override_value( $raw, $bp_id );
 			if ( null !== $value ) {
-				array_push( $decls, ...$this->prop_to_declarations( $prop, $value ) );
+				array_push( $decls, ...$this->prop_to_declarations( $prop, $this->resolve_token_ref( $value ) ) );
 			}
 		}
 
@@ -215,12 +229,37 @@ final class CssGenerator {
 			foreach ( self::STYLE_PROP_ORDER as $prop ) {
 				$value = $bp_overrides->$prop ?? null;
 				if ( null !== $value ) {
-					array_push( $decls, ...$this->prop_to_declarations( $prop, $value ) );
+					array_push( $decls, ...$this->prop_to_declarations( $prop, $this->resolve_token_ref( $value ) ) );
 				}
 			}
 		}
 
 		return $decls;
+	}
+
+	/**
+	 * Detect a token reference: { __token: string }.
+	 *
+	 * @param mixed $value Candidate value.
+	 * @return bool True when the value is a token reference.
+	 */
+	private function is_token_ref( mixed $value ): bool {
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		return is_object( $value ) && isset( $value->__token ) && is_string( $value->__token );
+	}
+
+	/**
+	 * Resolve a token reference to var(--nx-{id}), or return the value unchanged.
+	 *
+	 * @param mixed $value Style prop value (may be a token ref or a raw value).
+	 * @return mixed Resolved value.
+	 */
+	private function resolve_token_ref( mixed $value ): mixed {
+		if ( $this->is_token_ref( $value ) ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			return "var(--nx-{$value->__token})";
+		}
+		return $value;
 	}
 
 	/**
