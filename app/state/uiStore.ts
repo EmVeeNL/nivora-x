@@ -19,9 +19,13 @@ export interface PendingInsert {
   index: number
 }
 
+export type AppearanceView = 'themes' | 'templates' | 'global-styles' | 'tokens' | 'icons'
+
 interface UiState {
   /** Which left-panel is open; null = sidebar collapsed. */
   activeLeftPanel: string | null
+  /** Active sub-view inside the Appearance panel; null when canvas is shown. */
+  appearanceView: AppearanceView | null
   rightPanelOpen: boolean
   previewMode: boolean
   breakpoints: BreakpointConfig[]
@@ -44,6 +48,7 @@ interface UiState {
 interface UiActions {
   /** Open a specific left panel, or pass null to collapse the sidebar. */
   setLeftPanel(this: void, panel: string | null): void
+  setAppearanceView(this: void, view: AppearanceView | null): void
   toggleRightPanel(this: void): void
   setPreviewMode(this: void, previewMode: boolean): void
   togglePreviewMode(this: void): void
@@ -64,6 +69,7 @@ const INITIAL_BREAKPOINTS = getBreakpoints()
 export const useUiStore = create<UiState & UiActions>()((set) => ({
   // ---- state ----
   activeLeftPanel: 'navigator',
+  appearanceView: null,
   rightPanelOpen: true,
   previewMode: false,
   breakpoints: INITIAL_BREAKPOINTS,
@@ -89,7 +95,9 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   },
 
   // ---- actions ----
-  setLeftPanel: (panel) => set({ activeLeftPanel: panel }),
+  setLeftPanel: (panel) =>
+    set({ activeLeftPanel: panel, appearanceView: panel === 'appearance' ? 'tokens' : null }),
+  setAppearanceView: (view) => set({ appearanceView: view }),
   toggleRightPanel: () => set((s) => ({ rightPanelOpen: !s.rightPanelOpen })),
   setPreviewMode: (previewMode) =>
     set({
