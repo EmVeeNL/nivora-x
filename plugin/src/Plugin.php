@@ -41,6 +41,9 @@ final class Plugin {
 		Admin\Screen\AllPagesScreen::register();
 		Integration\PostTypeIntegration::register();
 		FrontEnd\RenderSwitch::register();
+
+		// Phase 10 — CSS pipeline.
+		( new Css\CssPipeline( new Css\CssGenerator(), new Css\CssStore() ) )->register();
 	}
 
 	/** Runs on plugin activation. */
