@@ -72,7 +72,7 @@ describe('TopToolbar save and publish', () => {
     await waitFor(() => expect(saveDraft).toHaveBeenCalledTimes(1))
     expect(publishDocument).not.toHaveBeenCalled()
     expect(useDocumentStore.getState().isDirty).toBe(false)
-    expect(screen.getByText('Draft saved')).toBeInTheDocument()
+    expect(screen.getByText('Saved')).toBeInTheDocument()
   })
 
   it('publishes and marks the document clean', async () => {
@@ -104,7 +104,7 @@ describe('TopToolbar save and publish', () => {
     expect(screen.getByRole('button', { name: 'Save draft' })).toHaveTextContent('Saving…')
 
     resolveSave()
-    await waitFor(() => expect(screen.getByText('Draft saved')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('Saved')).toBeInTheDocument())
   })
 
   it('shows an error and allows retry after save failure', async () => {
@@ -118,7 +118,7 @@ describe('TopToolbar save and publish', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Save draft' }))
     await waitFor(() => expect(saveDraft).toHaveBeenCalledTimes(2))
-    expect(screen.getByText('Draft saved')).toBeInTheDocument()
+    expect(screen.getByText('Saved')).toBeInTheDocument()
   })
 
   it('toggles preview mode from the toolbar', async () => {
