@@ -1,6 +1,7 @@
 import { registerLeftPanel } from './leftPanelRegistry'
 import { ElementLibraryPanel } from './library/ElementLibraryPanel'
 import { NavigatorPanel } from './navigator/NavigatorPanel'
+import { TokenManager } from '@/tokens/manager/TokenManager'
 
 /**
  * Register all built-in left panels in order.
@@ -20,5 +21,11 @@ export function registerEditorPanels(): void {
     label: 'Elements',
     icon: 'tabler:layout-grid',
     component: ElementLibraryPanel,
+  })
+  registerLeftPanel({
+    id: 'tokens',
+    label: 'Design Tokens',
+    icon: 'tabler:variable',
+    component: TokenManager,
   })
 }
