@@ -99,6 +99,57 @@ function buildCssOutput(token: DesignToken, modes: TokenMode[]): string {
 }
 
 // ---------------------------------------------------------------------------
+// CSS code block with syntax highlighting
+// ---------------------------------------------------------------------------
+
+function CssLine({ line }: { line: string }) {
+  const trim = line.trim()
+  if (trim === '') return <span>{'\n'}</span>
+
+  if (trim.startsWith('/*')) return <span className="text-zinc-500">{line}</span>
+
+  if (trim === '}') return <span className="text-zinc-500">{line}</span>
+
+  if (trim.endsWith('{')) {
+    const brace = line.lastIndexOf('{')
+    return (
+      <>
+        <span className="text-blue-400">{line.slice(0, brace)}</span>
+        <span className="text-zinc-500">{'{'}</span>
+      </>
+    )
+  }
+
+  const m = line.match(/^(\s*)(--[a-z0-9-]+)(:)(\s*)([^;]+)(;?)$/)
+  if (m)
+    return (
+      <>
+        {m[1]}
+        <span className="text-violet-400">{m[2]}</span>
+        <span className="text-zinc-500">{m[3]}</span>
+        {m[4]}
+        <span className="text-amber-300">{m[5]}</span>
+        <span className="text-zinc-500">{m[6]}</span>
+      </>
+    )
+
+  return <span className="text-zinc-300">{line}</span>
+}
+
+function CssCodeBlock({ code }: { code: string }) {
+  const lines = code.split('\n')
+  return (
+    <pre className="overflow-x-auto rounded-md border border-zinc-800 bg-zinc-950 p-3 font-mono text-[10px] leading-5">
+      {lines.map((line, i) => (
+        <div key={i}>
+          <CssLine line={line} />
+        </div>
+      ))}
+    </pre>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Token swatch
 // ---------------------------------------------------------------------------
 
@@ -445,10 +496,9 @@ function TokenTableRow({
   onDelete,
 }: TokenRowProps) {
   const meta = GROUP_META[token.group]
-  const displayValue =
-    activeMode !== DEFAULT_MODE.id && token.modeValues?.[activeMode] !== undefined
-      ? token.modeValues[activeMode]
-      : token.value
+  const isOverride = activeMode !== DEFAULT_MODE.id && token.modeValues?.[activeMode] !== undefined
+  const isInherited = activeMode !== DEFAULT_MODE.id && !isOverride
+  const displayValue = isOverride ? (token.modeValues![activeMode] as TokenValue) : token.value
 
   return (
     <div
@@ -475,8 +525,22 @@ function TokenTableRow({
           {meta.label}
         </span>
       </div>
-      <div className="truncate text-[11px] text-muted-foreground" title={formatValue(displayValue)}>
-        {formatValue(displayValue)}
+      <div
+        className={cn(
+          'flex min-w-0 items-center gap-1.5 text-[11px]',
+          isInherited ? 'text-muted-foreground/35' : 'text-muted-foreground',
+        )}
+        title={formatValue(displayValue)}
+      >
+        {isOverride && (
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" title="Mode override" />
+        )}
+        {isInherited && (
+          <span className="shrink-0 text-[9px] text-muted-foreground/30" title="Inherited default">
+            ↩
+          </span>
+        )}
+        <span className="truncate">{formatValue(displayValue)}</span>
       </div>
       <div className="truncate text-[10px] text-muted-foreground/50" title={cssVarName(token)}>
         {cssVarName(token)}
@@ -795,9 +859,7 @@ function TokenDetailPanel({
           {/* CSS output */}
           <div>
             <label className="mb-1 block text-[10px] text-muted-foreground">CSS output</label>
-            <pre className="rounded border border-border bg-background p-2.5 font-mono text-[10px] text-muted-foreground whitespace-pre-wrap break-all">
-              {fullCssOutput}
-            </pre>
+            <CssCodeBlock code={fullCssOutput} />
           </div>
         </div>
 
@@ -1058,8 +1120,13 @@ export function TokenManagerFull() {
                 <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
                   Group
                 </div>
-                <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
+                <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
                   Value
+                  {activeMode !== DEFAULT_MODE.id && (
+                    <span className="rounded bg-primary/15 px-1 py-0.5 text-[9px] font-medium normal-case tracking-normal text-primary">
+                      {modes.find((m) => m.id === activeMode)?.name}
+                    </span>
+                  )}
                 </div>
                 <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
                   CSS var

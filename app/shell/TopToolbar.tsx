@@ -16,6 +16,8 @@ export function TopToolbar() {
   const isDirty = useDocumentStore((s) => s.isDirty)
   const showBorders = useUiStore((s) => s.showElementBorders)
   const previewMode = useUiStore((s) => s.previewMode)
+  const activeLeftPanel = useUiStore((s) => s.activeLeftPanel)
+  const isAppearance = activeLeftPanel === 'appearance'
   const [saveState, setSaveState] = useState<SaveState>('idle')
   const bs = getBootstrapData()
   const pagesUrl = bs?.pagesUrl ?? '#'
@@ -103,31 +105,31 @@ export function TopToolbar() {
         </span>
       </div>
 
-      {/* Center — device / breakpoint switcher */}
-      <div className="flex flex-1 justify-center">
-        <BreakpointSwitcher />
-      </div>
+      {/* Center — device / breakpoint switcher (hidden in Appearance mode) */}
+      <div className="flex flex-1 justify-center">{!isAppearance && <BreakpointSwitcher />}</div>
 
       {/* Right — borders toggle · autosave · Save Draft · Preview · Publish */}
       <div className="flex flex-1 items-center justify-end gap-2">
-        <button
-          type="button"
-          title={showBorders ? 'Hide element borders' : 'Show element borders'}
-          aria-label={showBorders ? 'Hide element borders' : 'Show element borders'}
-          aria-pressed={showBorders}
-          onClick={() => useUiStore.getState().toggleElementBorders()}
-          className={cn(
-            'flex h-7 items-center gap-1.5 rounded px-2 text-xs transition-colors',
-            showBorders
-              ? 'bg-primary/10 text-primary'
-              : 'text-muted-foreground hover:bg-accent hover:text-foreground',
-          )}
-        >
-          <Icon icon="tabler:border-style" width={14} height={14} />
-          <span className="hidden sm:inline">Borders</span>
-        </button>
+        {!isAppearance && (
+          <button
+            type="button"
+            title={showBorders ? 'Hide element borders' : 'Show element borders'}
+            aria-label={showBorders ? 'Hide element borders' : 'Show element borders'}
+            aria-pressed={showBorders}
+            onClick={() => useUiStore.getState().toggleElementBorders()}
+            className={cn(
+              'flex h-7 items-center gap-1.5 rounded px-2 text-xs transition-colors',
+              showBorders
+                ? 'bg-primary/10 text-primary'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground',
+            )}
+          >
+            <Icon icon="tabler:border-style" width={14} height={14} />
+            <span className="hidden sm:inline">Borders</span>
+          </button>
+        )}
 
-        <AutosaveIndicator />
+        {!isAppearance && <AutosaveIndicator />}
 
         {/* Save Draft — shows "Saved ✓" with animated green underline for 5 s */}
         <div className="relative">
@@ -177,16 +179,18 @@ export function TopToolbar() {
           </span>
         )}
 
-        <Button
-          variant="ghost"
-          size="sm"
-          aria-label={previewMode ? 'Exit preview' : 'Preview page'}
-          aria-pressed={previewMode}
-          disabled={busy}
-          onClick={() => useUiStore.getState().togglePreviewMode()}
-        >
-          {previewMode ? 'Exit Preview' : 'Preview'}
-        </Button>
+        {!isAppearance && (
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-label={previewMode ? 'Exit preview' : 'Preview page'}
+            aria-pressed={previewMode}
+            disabled={busy}
+            onClick={() => useUiStore.getState().togglePreviewMode()}
+          >
+            {previewMode ? 'Exit Preview' : 'Preview'}
+          </Button>
+        )}
 
         <Button
           size="sm"
