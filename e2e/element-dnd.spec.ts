@@ -18,6 +18,10 @@ test('Element Library panel is visible by default', async ({ page }) => {
   // Element cards should be visible in the panel
   await expect(page.locator('[data-testid="element-card-section"]')).toBeVisible()
   await expect(page.locator('[data-testid="element-card-container"]')).toBeVisible()
+  await expect(page.locator('[data-testid="element-card-heading"]')).not.toBeVisible()
+  await expect(page.locator('[data-testid="element-card-text"]')).not.toBeVisible()
+
+  await page.getByRole('button', { name: /typography/i }).click()
   await expect(page.locator('[data-testid="element-card-heading"]')).toBeVisible()
   await expect(page.locator('[data-testid="element-card-text"]')).toBeVisible()
 })
