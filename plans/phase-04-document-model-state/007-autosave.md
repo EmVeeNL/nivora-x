@@ -2,14 +2,14 @@
 task: 007
 phase: 04
 title: Autosave & Status Signal
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [006]
 retry_count: 0
 ---
 
 # Task 007 — Autosave & Status Signal
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 006
 > **Retry count:** 0
 

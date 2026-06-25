@@ -2,14 +2,14 @@
 task: 001
 phase: 04
 title: Node-Tree Schema & TypeScript Types
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Node-Tree Schema & TypeScript Types
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 

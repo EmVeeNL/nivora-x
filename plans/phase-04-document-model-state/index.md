@@ -3,14 +3,14 @@ phase: 04
 slug: document-model-state
 title: Document Model & State
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 04 — Document Model & State
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -71,14 +71,14 @@ inspector consume this in later phases.
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Node-tree schema + TS types + versioned envelope | — | Not Started |
-| 002  | Schema validation + serialization (lossless round-trip) | 001 | Not Started |
-| 003  | Stable node ID generation | 001 | Not Started |
-| 004  | Document store: state shape + pure mutation ops (insert/move/update/duplicate/remove) | 001, 003 | Not Started |
-| 005  | Undo/redo history over mutations | 004 | Not Started |
-| 006  | Persistence: load/save to Phase 02 meta (Save draft vs Publish) | 002, 004 | Not Started |
-| 007  | Autosave (debounced) + status signal | 006 | Not Started |
-| 008  | Schema versioning + migration mechanism (no-op migration) | 002 | Not Started |
+| 001  | Node-tree schema + TS types + versioned envelope | — | Done |
+| 002  | Schema validation + serialization (lossless round-trip) | 001 | Done |
+| 003  | Stable node ID generation | 001 | Done |
+| 004  | Document store: state shape + pure mutation ops (insert/move/update/duplicate/remove) | 001, 003 | Done |
+| 005  | Undo/redo history over mutations | 004 | Done |
+| 006  | Persistence: load/save to Phase 02 meta (Save draft vs Publish) | 002, 004 | Done |
+| 007  | Autosave (debounced) + status signal | 006 | Done |
+| 008  | Schema versioning + migration mechanism (no-op migration) | 002 | Done |
 
 ## Architectural Notes
 

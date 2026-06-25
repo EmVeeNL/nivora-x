@@ -17,6 +17,8 @@ interface UiState {
   activeInspectorTab: string
   /** Keyed by section id — true = expanded. */
   openSections: Record<string, boolean>
+  /** Node currently under the pointer in the canvas; null when none. */
+  hoveredId: string | null
 }
 
 interface UiActions {
@@ -27,6 +29,7 @@ interface UiActions {
   setInspectorTab(tab: string): void
   toggleSection(id: string): void
   setSectionOpen(id: string, open: boolean): void
+  setHoveredId(id: string | null): void
 }
 
 export const useUiStore = create<UiState & UiActions>()((set) => ({
@@ -35,6 +38,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   rightPanelOpen: true,
   activeBreakpoint: 'desktop',
   activeInspectorTab: 'style',
+  hoveredId: null,
   openSections: {
     layout: true,
     spacing: true,
@@ -58,4 +62,5 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
     set((s) => ({
       openSections: { ...s.openSections, [id]: open },
     })),
+  setHoveredId: (id) => set({ hoveredId: id }),
 }))

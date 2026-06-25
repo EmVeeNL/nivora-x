@@ -2,14 +2,14 @@
 task: 001
 phase: 05
 title: Element-Definition Contract & Registry
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Element-Definition Contract & Registry
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 

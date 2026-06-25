@@ -19,6 +19,6 @@ test('NivoraX editor loads for a page', async ({ page }) => {
   // The full-screen editor HTML is rendered by EditorScreen::render()
   await expect(page.locator('#nivorax-editor-root')).toBeAttached()
 
-  // The React placeholder mounts inside the root node
-  await expect(page.locator('#nivorax-editor-placeholder h1')).toContainText('NivoraX Editor')
+  // The Phase 03+ editor shell has mounted — canvas iframe is present
+  await expect(page.locator('[data-testid="canvas-iframe"]')).toBeAttached()
 })
