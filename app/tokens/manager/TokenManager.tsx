@@ -3,6 +3,8 @@ import { Icon } from '@iconify/react'
 import type { DesignToken, TokenGroup } from '@/tokens/model'
 import type { UnitValue } from '@/inspector/controls/types'
 import { useTokenStore } from '@/tokens/store'
+import { useDocumentStore } from '@/document/store'
+import { isTokenReferenced } from '@/tokens/integrity'
 import { TokenEditor } from './TokenEditor'
 
 // ---------------------------------------------------------------------------
@@ -365,6 +367,13 @@ export function TokenManager() {
   }
 
   function handleDelete(id: string) {
+    const tree = useDocumentStore.getState().tree
+    if (tree && isTokenReferenced(tree, id)) {
+      const ok = window.confirm(
+        'This token is used by one or more elements. Deleting it will leave those references unresolved. Delete anyway?',
+      )
+      if (!ok) return
+    }
     useTokenStore.getState().deleteToken(id)
     void useTokenStore.getState().save()
     if (editingId === id) setEditingId(null)

@@ -7,15 +7,15 @@ import type { DocumentTree } from '@/document/schema/types'
 import type { BreakpointConfig } from '@/breakpoints/config'
 
 const BREAKPOINTS: BreakpointConfig[] = [
-  { id: 'desktop', label: 'Desktop', width: 9999, icon: 'monitor' },
+  { id: 'desktop', label: 'Desktop', width: 9999, direction: 'max', builtin: true },
 ]
 
 function makeTree(props: Record<string, unknown>): DocumentTree {
   return {
     rootId: 'root',
     nodes: {
-      root: { id: 'root', type: '__root__', props: {}, overrides: {}, children: ['n1'] },
-      n1: { id: 'n1', type: 'section', props, overrides: {}, children: [] },
+      root: { id: 'root', type: '__root__', props: {}, overrides: {}, children: ['n1'], meta: {} },
+      n1: { id: 'n1', type: 'section', props, overrides: {}, children: [], meta: {} },
     },
   }
 }
@@ -87,19 +87,27 @@ describe('generateCss with tokens', () => {
     const tree: DocumentTree = {
       rootId: 'root',
       nodes: {
-        root: { id: 'root', type: '__root__', props: {}, overrides: {}, children: ['n1'] },
+        root: {
+          id: 'root',
+          type: '__root__',
+          props: {},
+          overrides: {},
+          children: ['n1'],
+          meta: {},
+        },
         n1: {
           id: 'n1',
           type: 'section',
           props: { color: { base: '#000', tablet: makeTokenRef('color-primary') } },
           overrides: {},
           children: [],
+          meta: {},
         },
       },
     }
     const bps: BreakpointConfig[] = [
-      { id: 'desktop', label: 'Desktop', width: 9999, icon: 'monitor' },
-      { id: 'tablet', label: 'Tablet', width: 768, icon: 'tablet' },
+      { id: 'desktop', label: 'Desktop', width: 9999, direction: 'max', builtin: true },
+      { id: 'tablet', label: 'Tablet', width: 768, direction: 'max', builtin: true },
     ]
     const css = generateCss(tree, bps, TOKENS)
     expect(css).toContain('@media (max-width:768px){')
