@@ -2,7 +2,7 @@
 task: 006
 phase: 05
 title: Tests & Polish
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002, 003, 004, 005]
 retry_count: 0
 ---

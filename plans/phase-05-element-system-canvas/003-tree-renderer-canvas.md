@@ -2,7 +2,7 @@
 task: 003
 phase: 05
 title: React Tree Renderer in the iframe Canvas
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001, 002]
 retry_count: 0
 ---

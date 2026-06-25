@@ -21,7 +21,7 @@
 | #   | Phase                                      | Definition | Status      |
 | --- | ------------------------------------------ | ---------- | ----------- |
 | 04  | Document Model & State                     | Defined    | Done        |
-| 05  | Element System & Canvas Rendering          | Defined    | Not Started |
+| 05  | Element System & Canvas Rendering          | Defined    | Done        |
 | 06  | Element Library, Left Rail & Drag-and-Drop | Defined    | Not Started |
 | 07  | Navigator                                  | Defined    | Not Started |
 | 08  | Inspector & Settings                       | Defined    | Not Started |

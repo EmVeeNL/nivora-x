@@ -2,7 +2,7 @@
 task: 005
 phase: 05
 title: Selection & Hover Overlay
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [004]
 retry_count: 0
 ---

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { DocumentTree, NxNode, ResponsiveBreakpoint } from './schema/types'
 import { insertNode, removeNode, moveNode, updateProps, duplicateNode } from './operations'
+import { getElementDefinition, hasElement } from '@/elements/registry'
 
 const MAX_HISTORY = 50
 /** Milliseconds within which repeated edits to the same coalesceKey merge into one history entry. */
@@ -85,6 +86,17 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
     insertNode: (node, parentId, index) => {
       const { tree } = get()
       if (!tree) return
+      // Nesting guard: only check registered types (system nodes like 'body' are unconstrained).
+      const parent = tree.nodes[parentId]
+      if (parent && hasElement(parent.type)) {
+        const parentDef = getElementDefinition(parent.type)
+        if (!parentDef.nesting.acceptsChildren) return
+        if (
+          parentDef.nesting.allowedChildTypes &&
+          !parentDef.nesting.allowedChildTypes.includes(node.type)
+        )
+          return
+      }
       push(tree)
       set({ tree: insertNode(tree, node, parentId, index), isDirty: true })
     },
@@ -105,6 +117,18 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
     moveNode: (nodeId, newParentId, newIndex) => {
       const { tree } = get()
       if (!tree) return false
+      // Nesting guard: only check registered types.
+      const newParent = tree.nodes[newParentId]
+      const movingNode = tree.nodes[nodeId]
+      if (newParent && movingNode && hasElement(newParent.type)) {
+        const parentDef = getElementDefinition(newParent.type)
+        if (!parentDef.nesting.acceptsChildren) return false
+        if (
+          parentDef.nesting.allowedChildTypes &&
+          !parentDef.nesting.allowedChildTypes.includes(movingNode.type)
+        )
+          return false
+      }
       const newTree = moveNode(tree, nodeId, newParentId, newIndex)
       if (!newTree) return false
       push(tree)
