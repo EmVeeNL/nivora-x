@@ -1,6 +1,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useRef,
   useState,
   type MutableRefObject,
@@ -107,6 +108,7 @@ export function DndProvider({ children }: DndProviderProps) {
   const [draggedItem, setDraggedItem] = useState<DraggedItem | null>(null)
   const dropDescriptorRef = useRef<DropDescriptor | null>(null)
   const treeDropDescriptorRef = useRef<DropDescriptor | null>(null)
+  const previewMode = useUiStore((s) => s.previewMode)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -114,6 +116,8 @@ export function DndProvider({ children }: DndProviderProps) {
   )
 
   function handleDragStart(event: DragStartEvent) {
+    if (previewMode) return
+
     const data = event.active.data.current as Record<string, unknown> | undefined
     if (!data) return
 
@@ -176,6 +180,14 @@ export function DndProvider({ children }: DndProviderProps) {
     dropDescriptorRef.current = null
     treeDropDescriptorRef.current = null
   }
+
+  useEffect(() => {
+    if (!previewMode || !isDragging) return
+    setIsDragging(false)
+    setDraggedItem(null)
+    dropDescriptorRef.current = null
+    treeDropDescriptorRef.current = null
+  }, [previewMode, isDragging])
 
   return (
     <DndEditorContext.Provider

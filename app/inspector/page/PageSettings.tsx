@@ -1,4 +1,5 @@
 import { useDocumentStore } from '@/document/store'
+import { BreakpointSettings } from '@/breakpoints/BreakpointSettings'
 
 const INPUT_STYLE: React.CSSProperties = {
   width: '100%',
@@ -58,6 +59,7 @@ export function PageSettings() {
           onChange={(e) => update({ description: e.target.value })}
         />
       </label>
+      <BreakpointSettings />
     </div>
   )
 }

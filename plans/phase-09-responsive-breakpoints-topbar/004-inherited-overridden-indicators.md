@@ -2,14 +2,14 @@
 task: 004
 phase: 09
 title: Inherited / Overridden Indicators + Reset
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [003]
 retry_count: 0
 ---
 
 # Task 004 — Inherited / Overridden Indicators + Reset
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 003
 > **Retry count:** 0
 
@@ -53,3 +53,5 @@ this is a project-standard UX expectation for responsive builders.
 - Derive indicator state from the resolver (task 003): is there an override at the active
   breakpoint, or is the value inherited?
 - Make "reset" a single undo entry.
+- Completed on 2026-06-25 with a dedicated responsive adornment component showing per-control
+  inherited vs overridden state and an explicit reset-to-inherited action.

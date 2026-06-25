@@ -1,0 +1,29 @@
+{
+  "description": "Node with a padding SpacingValue (four UnitValue sides) expanding to longhands",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet",  "label": "Tablet",  "width": 768,  "direction": "max", "builtin": true },
+    { "id": "mobile",  "label": "Mobile",  "width": 375,  "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "root",
+    "nodes": {
+      "root": {
+        "id": "root",
+        "type": "section",
+        "props": {
+          "padding": {
+            "top":    { "value": 24, "unit": "px" },
+            "right":  { "value": 16, "unit": "px" },
+            "bottom": { "value": 24, "unit": "px" },
+            "left":   { "value": 16, "unit": "px" }
+          }
+        },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-root{padding-top:24px;padding-right:16px;padding-bottom:24px;padding-left:16px}"
+}

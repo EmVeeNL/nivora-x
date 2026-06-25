@@ -3,14 +3,14 @@ phase: 10
 slug: frontend-rendering-css
 title: Front-End Rendering & CSS Engine
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 10 — Front-End Rendering & CSS Engine
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -76,14 +76,14 @@ across all four producers (React render, PHP render, JS CSS, PHP CSS) is enforce
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | `ElementRendererInterface` + PHP renderer registry + recursive tree→HTML (escaping, fallback, scoped hooks) | — | Not Started |
-| 002  | PHP element renderers for the starter set (Section, Container, Heading, Text) | 001 | Not Started |
-| 003  | CSS generation rules + JS generator (editor live): scoped classes, desktop-first media queries, token seam | — | Not Started |
-| 004  | PHP CSS generator (same rules) + generate-on-save pipeline (store, enqueue, invalidate) | 003 | Not Started |
-| 005  | Replace Phase 02 front-end switch with the real PHP renderer + enqueued CSS | 002, 004 | Not Started |
-| 006  | Unify editor canvas onto JS-generated CSS (remove Phase 08 inline seam; inject into iframe) | 003 | Not Started |
-| 007  | Golden-fixture parity harness (HTML: React vs PHP; CSS: JS vs PHP) in CI | 002, 003, 004 | Not Started |
-| 008  | Tests + E2E front-end render + polish | 005, 006, 007 | Not Started |
+| 001  | `ElementRendererInterface` + PHP renderer registry + recursive tree→HTML (escaping, fallback, scoped hooks) | — | Done |
+| 002  | PHP element renderers for the starter set (Section, Container, Heading, Text) | 001 | Done |
+| 003  | CSS generation rules + JS generator (editor live): scoped classes, desktop-first media queries, token seam | — | Done |
+| 004  | PHP CSS generator (same rules) + generate-on-save pipeline (store, enqueue, invalidate) | 003 | Done |
+| 005  | Replace Phase 02 front-end switch with the real PHP renderer + enqueued CSS | 002, 004 | Done |
+| 006  | Unify editor canvas onto JS-generated CSS (remove Phase 08 inline seam; inject into iframe) | 003 | Done |
+| 007  | Golden-fixture parity harness (HTML: React vs PHP; CSS: JS vs PHP) in CI | 002, 003, 004 | Done |
+| 008  | Tests + E2E front-end render + polish | 005, 006, 007 | Done |
 
 ## Architectural Notes
 

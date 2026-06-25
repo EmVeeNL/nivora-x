@@ -2,9 +2,10 @@ import type { DocumentEnvelope, ApiEnvelope } from './schema/types'
 import { deserialize } from './schema/serialize'
 import { SCHEMA_VERSION } from './schema/constants'
 import { runMigrations } from './migrations'
+import { getBootstrapData } from '@/lib/bootstrap'
 
 function bootstrap() {
-  const bs = typeof window !== 'undefined' ? window.nivoraxBootstrap : undefined
+  const bs = getBootstrapData()
   if (!bs) throw new Error('nivoraxBootstrap is not defined')
   return bs
 }

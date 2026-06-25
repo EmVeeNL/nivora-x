@@ -34,12 +34,16 @@ final class Plugin {
 
 		// Phase 04 — document REST API.
 		Rest\DocumentController::register();
+		Rest\SettingsController::register();
 		Admin\Menu::register();
 		Admin\Settings\SettingsPage::register();
 		Admin\Screen\EditorScreen::register();
 		Admin\Screen\AllPagesScreen::register();
 		Integration\PostTypeIntegration::register();
 		FrontEnd\RenderSwitch::register();
+
+		// Phase 10 — CSS pipeline.
+		( new Css\CssPipeline( new Css\CssGenerator(), new Css\CssStore() ) )->register();
 	}
 
 	/** Runs on plugin activation. */

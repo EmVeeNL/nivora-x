@@ -1,33 +1,29 @@
 import { Icon } from '@iconify/react'
 import { cn } from '@/lib/utils'
-import { useUiStore, BREAKPOINT_WIDTHS, type Breakpoint } from '@/state/uiStore'
-
-const PRESETS: { key: Breakpoint; icon: string; label: string }[] = [
-  { key: 'desktop', icon: 'tabler:device-desktop', label: 'Desktop' },
-  { key: 'tablet', icon: 'tabler:device-tablet', label: 'Tablet' },
-  { key: 'mobile', icon: 'tabler:device-mobile', label: 'Mobile' },
-]
+import { useUiStore } from '@/state/uiStore'
+import { getBreakpointIcon, getBreakpointWidthFromList } from '@/breakpoints/config'
 
 export function BreakpointSwitcher() {
   const active = useUiStore((s) => s.activeBreakpoint)
+  const breakpoints = useUiStore((s) => s.breakpoints)
   return (
     <div className="flex items-center gap-0.5" role="group" aria-label="Breakpoint switcher">
-      {PRESETS.map(({ key, icon, label }) => (
+      {breakpoints.map(({ id, label, width }) => (
         <button
-          key={key}
+          key={id}
           type="button"
-          onClick={() => useUiStore.getState().setBreakpoint(key)}
-          aria-pressed={active === key}
+          onClick={() => useUiStore.getState().setBreakpoint(id)}
+          aria-pressed={active === id}
           aria-label={label}
-          title={`${label} — ${String(BREAKPOINT_WIDTHS[key])}px`}
+          title={`${label} — ${String(width)}px`}
           className={cn(
             'flex h-7 w-7 items-center justify-center rounded transition-colors',
-            active === key
+            active === id
               ? 'bg-accent text-foreground'
               : 'text-muted-foreground hover:bg-accent hover:text-foreground',
           )}
         >
-          <Icon icon={icon} width={16} height={16} />
+          <Icon icon={getBreakpointIcon(id)} width={16} height={16} />
         </button>
       ))}
       <span
@@ -35,7 +31,7 @@ export function BreakpointSwitcher() {
         aria-live="polite"
         aria-atomic="true"
       >
-        {BREAKPOINT_WIDTHS[active]}px
+        {getBreakpointWidthFromList(breakpoints, active)}px
       </span>
     </div>
   )

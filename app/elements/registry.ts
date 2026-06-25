@@ -43,11 +43,12 @@ export function _clearRegistry(): void {
 // Fallback (safe placeholder for unknown types)
 // ---------------------------------------------------------------------------
 
-function UnknownElement({ node, 'data-node-id': nodeId }: ElementRenderProps) {
+function UnknownElement({ node, 'data-node-id': nodeId, className }: ElementRenderProps) {
   return React.createElement(
     'div',
     {
       'data-node-id': nodeId,
+      className,
       style: {
         display: 'flex',
         alignItems: 'center',

@@ -2,14 +2,14 @@
 task: 008
 phase: 09
 title: Tests & Polish (Responsive E2E)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [003, 004, 005, 006, 007]
 retry_count: 0
 ---
 
 # Task 008 — Tests & Polish (Responsive E2E)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 003, 004, 005, 006, 007
 > **Retry count:** 0
 
@@ -35,10 +35,10 @@ through the real stack; front-end output follows in Phase 10.
 
 ## Acceptance Criteria
 
-- [ ] E2E responsive-edit happy path green.
-- [ ] Indicators/reset, save/publish, autosave, and preview verified together.
-- [ ] Visual polish consistent with the reference across breakpoints.
-- [ ] All JS gates green; editor batch complete.
+- [x] E2E responsive-edit happy path green.
+- [x] Indicators/reset, save/publish, autosave, and preview verified together.
+- [x] Visual polish consistent with the reference across breakpoints.
+- [x] All JS gates green; editor batch complete.
 
 ## Files to Create
 

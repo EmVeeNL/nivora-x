@@ -5,6 +5,13 @@ import { useDocumentStore } from '@/document/store'
 import { useUiStore, type Breakpoint } from '@/state/uiStore'
 import type { NxNode } from '@/document/schema/types'
 import { loadWordPressFontOptions } from '@/inspector/style/fontFamilies'
+import { ResponsiveControlAdornment } from './ResponsiveControlAdornment'
+import {
+  getInheritedResponsiveValue,
+  hasResponsiveOverride,
+  resolveResponsiveValue,
+} from '@/breakpoints/resolveResponsive'
+import { isDesktopBreakpoint, type BreakpointConfig } from '@/breakpoints/config'
 import {
   CSS_UNITS,
   type ControlDefinition,
@@ -31,6 +38,7 @@ function readProp<T>(
   node: NxNode,
   control: ControlDefinition,
   fallback: T,
+  breakpoints: BreakpointConfig[],
   breakpoint: Breakpoint = 'desktop',
 ): T {
   const raw = node.props[control.prop]
@@ -43,13 +51,7 @@ function readProp<T>(
     return (raw as T | undefined) ?? fallback
   }
 
-  const typed = raw as Record<string, unknown>
-  if (breakpoint === 'desktop') {
-    return (typed['base'] as T | undefined) ?? fallback
-  }
-
-  const bpVal = typed[breakpoint] ?? typed['base']
-  return (bpVal as T | undefined) ?? fallback
+  return resolveResponsiveValue(raw, breakpoint, breakpoints, fallback)
 }
 
 function isBreakpointLocked(
@@ -57,14 +59,9 @@ function isBreakpointLocked(
   control: ControlDefinition,
   breakpoint: Breakpoint,
 ): boolean {
-  if (breakpoint === 'desktop' || control.valueScope !== 'style') return false
+  if (isDesktopBreakpoint(breakpoint) || control.valueScope !== 'style') return false
   const raw = node.props[control.prop]
-  return !(
-    raw &&
-    typeof raw === 'object' &&
-    'base' in raw &&
-    breakpoint in (raw as Record<string, unknown>)
-  )
+  return !hasResponsiveOverride(raw, breakpoint)
 }
 
 function updateNode(
@@ -101,21 +98,21 @@ function updateNode(
 }
 
 function toggleBreakpointLock(node: NxNode, control: ControlDefinition, breakpoint: Breakpoint) {
-  if (breakpoint === 'desktop') return
+  if (isDesktopBreakpoint(breakpoint)) return
   const raw = node.props[control.prop]
+  const breakpoints = useUiStore.getState().breakpoints
   const locked = isBreakpointLocked(node, control, breakpoint)
 
   if (locked) {
-    // Unlock: copy base value to current breakpoint
+    // Unlock: copy the currently inherited value to the active breakpoint
+    const inherited = getInheritedResponsiveValue(raw, breakpoint, breakpoints, undefined)
     const existingObj =
       raw && typeof raw === 'object' && 'base' in raw
         ? { ...(raw as Record<string, unknown>) }
         : { base: raw }
-    useDocumentStore
-      .getState()
-      .updateProps(node.id, {
-        [control.prop]: { ...existingObj, [breakpoint]: existingObj['base'] },
-      })
+    useDocumentStore.getState().updateProps(node.id, {
+      [control.prop]: { ...existingObj, [breakpoint]: inherited },
+    })
   } else {
     // Lock: remove the breakpoint override
     const next = { ...(raw as Record<string, unknown>) }
@@ -213,7 +210,7 @@ function FieldBlock({
 // Responsive lock button
 // ---------------------------------------------------------------------------
 
-function BreakpointLockButton({
+function ResponsiveAdornment({
   node,
   control,
   breakpoint,
@@ -222,37 +219,16 @@ function BreakpointLockButton({
   control: ControlDefinition
   breakpoint: Breakpoint
 }) {
-  if (breakpoint === 'desktop' || control.valueScope !== 'style') return null
-  const locked = isBreakpointLocked(node, control, breakpoint)
+  if (isDesktopBreakpoint(breakpoint) || control.valueScope !== 'style') return null
+  const inherited = isBreakpointLocked(node, control, breakpoint)
 
   return (
-    <button
-      type="button"
-      title={
-        locked
-          ? `Locked to desktop — click to override for ${breakpoint}`
-          : `Using ${breakpoint} override — click to remove`
-      }
-      onClick={() => toggleBreakpointLock(node, control, breakpoint)}
-      style={{
-        position: 'absolute',
-        top: 4,
-        right: 0,
-        width: 16,
-        height: 16,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'transparent',
-        border: 'none',
-        color: locked ? '#555' : '#4a9eff',
-        cursor: 'pointer',
-        padding: 0,
-        zIndex: 1,
-      }}
-    >
-      <Icon icon={locked ? 'tabler:lock' : 'tabler:lock-open'} width={11} height={11} />
-    </button>
+    <ResponsiveControlAdornment
+      breakpoint={breakpoint}
+      state={inherited ? 'inherited' : 'overridden'}
+      onCreateOverride={() => toggleBreakpointLock(node, control, breakpoint)}
+      onReset={() => toggleBreakpointLock(node, control, breakpoint)}
+    />
   )
 }
 
@@ -644,6 +620,7 @@ function renderControl(
   node: NxNode,
   control: ControlDefinition,
   disabled: boolean,
+  breakpoints: BreakpointConfig[],
   breakpoint: Breakpoint,
 ) {
   const locked = isBreakpointLocked(node, control, breakpoint)
@@ -652,7 +629,7 @@ function renderControl(
   switch (control.type) {
     case 'text': {
       const c = control as KnownControl & { type: 'text' }
-      const value = readProp(node, c, c.defaultValue ?? '', breakpoint)
+      const value = readProp(node, c, c.defaultValue ?? '', breakpoints, breakpoint)
       return (
         <FieldRow control={control}>
           <input
@@ -668,7 +645,7 @@ function renderControl(
 
     case 'textarea': {
       const c = control as KnownControl & { type: 'textarea' }
-      const value = readProp(node, c, c.defaultValue ?? '', breakpoint)
+      const value = readProp(node, c, c.defaultValue ?? '', breakpoints, breakpoint)
       return (
         <FieldBlock control={control}>
           <textarea
@@ -684,7 +661,7 @@ function renderControl(
 
     case 'number': {
       const c = control as KnownControl & { type: 'number' }
-      const value = readProp(node, c, c.defaultValue ?? 0, breakpoint)
+      const value = readProp(node, c, c.defaultValue ?? 0, breakpoints, breakpoint)
       return (
         <FieldRow control={control}>
           <input
@@ -703,7 +680,7 @@ function renderControl(
 
     case 'slider': {
       const c = control as KnownControl & { type: 'slider' }
-      const value = readProp(node, c, c.defaultValue ?? c.min, breakpoint)
+      const value = readProp(node, c, c.defaultValue ?? c.min, breakpoints, breakpoint)
       return (
         <FieldRow control={control}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -729,7 +706,13 @@ function renderControl(
 
     case 'select': {
       const c = control as KnownControl & { type: 'select' }
-      const value = readProp(node, c, c.defaultValue ?? c.options[0]?.value ?? '', breakpoint)
+      const value = readProp(
+        node,
+        c,
+        c.defaultValue ?? c.options[0]?.value ?? '',
+        breakpoints,
+        breakpoint,
+      )
       return (
         <FieldRow control={control}>
           <SelectInput
@@ -745,7 +728,7 @@ function renderControl(
 
     case 'toggle': {
       const c = control as KnownControl & { type: 'toggle' }
-      const value = readProp(node, c, c.defaultValue ?? false, breakpoint)
+      const value = readProp(node, c, c.defaultValue ?? false, breakpoints, breakpoint)
       return (
         <label
           style={{
@@ -770,7 +753,7 @@ function renderControl(
 
     case 'color': {
       const c = control as KnownControl & { type: 'color' }
-      const value = readProp(node, c, c.defaultValue ?? '', breakpoint)
+      const value = readProp(node, c, c.defaultValue ?? '', breakpoints, breakpoint)
       const pickerValue = value !== '' ? value : '#ffffff'
       return (
         <FieldRow control={control}>
@@ -846,7 +829,7 @@ function renderControl(
     case 'unit': {
       const c = control as KnownControl & { type: 'unit' }
       const value = normalizeUnitValue(
-        readProp(node, c, c.defaultValue, breakpoint),
+        readProp(node, c, c.defaultValue, breakpoints, breakpoint),
         c.defaultValue ?? unitValue(),
       )
       return (
@@ -864,7 +847,7 @@ function renderControl(
     case 'spacing': {
       const c = control as KnownControl & { type: 'spacing' }
       const value = normalizeSpacingValue(
-        readProp(node, c, c.defaultValue, breakpoint),
+        readProp(node, c, c.defaultValue, breakpoints, breakpoint),
         c.defaultValue ?? spacingValue(),
       )
       return (
@@ -880,7 +863,7 @@ function renderControl(
 
     case 'shadow': {
       const c = control as KnownControl & { type: 'shadow' }
-      const value = readProp(node, c, c.defaultValue, breakpoint)
+      const value = readProp(node, c, c.defaultValue, breakpoints, breakpoint)
       return (
         <FieldBlock control={control}>
           <ShadowInput
@@ -904,6 +887,7 @@ function renderControl(
 
 export function ControlRenderer({ node, sections, disabled = false }: ControlRendererProps) {
   const breakpoint = useUiStore((s) => s.activeBreakpoint)
+  const breakpoints = useUiStore((s) => s.breakpoints)
 
   if (sections.length === 0) {
     return (
@@ -918,15 +902,16 @@ export function ControlRenderer({ node, sections, disabled = false }: ControlRen
       {sections.map((section) => (
         <InspectorSection key={section.id} id={section.id} title={section.title}>
           {section.controls.map((control) => {
-            const showLock = breakpoint !== 'desktop' && control.valueScope === 'style'
+            const showResponsiveAdornment =
+              !isDesktopBreakpoint(breakpoint) && control.valueScope === 'style'
             return (
               <div
                 key={control.id}
-                style={{ position: 'relative', paddingRight: showLock ? 20 : 0 }}
+                style={{ position: 'relative', paddingRight: showResponsiveAdornment ? 88 : 0 }}
               >
-                {renderControl(node, control, disabled, breakpoint)}
-                {showLock && (
-                  <BreakpointLockButton node={node} control={control} breakpoint={breakpoint} />
+                {renderControl(node, control, disabled, breakpoints, breakpoint)}
+                {showResponsiveAdornment && (
+                  <ResponsiveAdornment node={node} control={control} breakpoint={breakpoint} />
                 )}
               </div>
             )

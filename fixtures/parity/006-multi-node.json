@@ -1,0 +1,29 @@
+{
+  "description": "Tree with two nodes — rules for all nodes in insertion order, then @media blocks",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet",  "label": "Tablet",  "width": 768,  "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "sect1",
+    "nodes": {
+      "sect1": {
+        "id": "sect1",
+        "type": "section",
+        "props": { "backgroundColor": "#ffffff", "color": { "base": "#111111", "tablet": "#555555" } },
+        "children": ["para1"],
+        "overrides": {},
+        "meta": {}
+      },
+      "para1": {
+        "id": "para1",
+        "type": "text",
+        "props": { "fontSize": { "value": 16, "unit": "px" } },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-sect1{color:#111111;background-color:#ffffff}.nivorax-para1{font-size:16px}@media (max-width:768px){.nivorax-sect1{color:#555555}}"
+}

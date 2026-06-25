@@ -2,7 +2,7 @@ import type { DocumentTree } from '@/document/schema/types'
 import { isHidden } from '@/document/canInteract'
 import { getElementDefinition } from '@/elements/registry'
 import { useUiStore } from '@/state/uiStore'
-import { getEditorInlineStyles, isHiddenAtBreakpoint } from './style/applyStyles'
+import { isHiddenAtBreakpoint } from './style/applyStyles'
 
 interface RenderNodeProps {
   nodeId: string
@@ -28,7 +28,7 @@ export function RenderNode({ nodeId, tree }: RenderNodeProps) {
   ))
 
   const rendered = (
-    <Render node={node} data-node-id={nodeId} style={getEditorInlineStyles(node, activeBreakpoint)}>
+    <Render node={node} data-node-id={nodeId} className={`nivorax-${nodeId}`}>
       {childNodes.length > 0 ? childNodes : undefined}
     </Render>
   )

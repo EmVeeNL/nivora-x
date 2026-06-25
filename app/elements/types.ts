@@ -8,7 +8,16 @@ export interface ElementRenderProps {
   children?: React.ReactNode
   /** Canvas data attribute — must be placed on the element's root DOM node. */
   'data-node-id': string
-  /** Editor-resolved style props. Phase 10 replaces the inline implementation behind this seam. */
+  /**
+   * Scoped CSS class — `nivorax-{nodeId}`. The generated CSS targets this
+   * selector instead of inline styles (Phase 10+). Elements must spread it
+   * onto their root DOM node so `generateCss()` rules apply.
+   */
+  className?: string
+  /**
+   * Editor-resolved inline styles. Kept for element-component structural
+   * defaults; user-set styles now come via injected generated CSS (Phase 10).
+   */
   style?: React.CSSProperties
 }
 
