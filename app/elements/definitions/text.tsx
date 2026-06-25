@@ -21,7 +21,8 @@ function TextElement({ node, 'data-node-id': nodeId }: ElementRenderProps) {
 export const textDefinition: ElementDefinition = {
   type: 'text',
   label: 'Text',
-  icon: 'align-left',
+  icon: 'tabler:align-left',
+  category: 'Content',
   defaultProps: { text: 'Text block' },
   nesting: { acceptsChildren: false },
   render: TextElement,

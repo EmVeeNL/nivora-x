@@ -2,14 +2,14 @@
 task: 004
 phase: 07
 title: Rename, Duplicate & Delete
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 004 — Rename, Duplicate & Delete
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -36,11 +36,11 @@ subtree via existing store ops (Phase 04).
 
 ## Acceptance Criteria
 
-- [ ] Inline rename writing node name metadata.
-- [ ] Duplicate (fresh ids) and delete via Phase 04 store ops.
-- [ ] All actions undoable; selection updates coherently.
-- [ ] Reachable via row controls / context menu + keyboard.
-- [ ] Vitest covers rename/duplicate/delete; lint/format/typecheck pass.
+- [x] Inline rename writing node name metadata.
+- [x] Duplicate (fresh ids) and delete via Phase 04 store ops.
+- [x] All actions undoable; selection updates coherently.
+- [x] Reachable via row controls / context menu + keyboard.
+- [x] Vitest covers rename/duplicate/delete; lint/format/typecheck pass.
 
 ## Files to Create
 

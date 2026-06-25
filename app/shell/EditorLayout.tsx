@@ -1,7 +1,7 @@
 import { useUiStore } from '@/state/uiStore'
 import { TopToolbar } from './TopToolbar'
-import { ActivityBar } from './ActivityBar'
-import { LeftPanel } from './LeftPanel'
+import { LeftRail } from './left/LeftRail'
+import { LeftPanelHost } from './left/LeftPanelHost'
 import { RightPanel } from './RightPanel'
 import { BreadcrumbBar } from './BreadcrumbBar'
 import { CanvasFrame } from '@/canvas/CanvasFrame'
@@ -26,7 +26,7 @@ export function EditorLayout() {
           data-testid="region-activity-bar"
           className="flex w-10 shrink-0 flex-col border-r border-border bg-shell-bar py-1"
         >
-          <ActivityBar />
+          <LeftRail />
         </nav>
 
         <aside
@@ -36,7 +36,7 @@ export function EditorLayout() {
             activeLeftPanel ? 'w-52' : 'w-0',
           ].join(' ')}
         >
-          <LeftPanel />
+          <LeftPanelHost />
         </aside>
 
         <main

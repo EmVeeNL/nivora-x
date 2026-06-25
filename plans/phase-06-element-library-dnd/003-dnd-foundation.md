@@ -2,14 +2,14 @@
 task: 003
 phase: 06
 title: dnd-kit Foundation Across Chrome ↔ iframe
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 003 — dnd-kit Foundation Across Chrome ↔ iframe
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 
@@ -39,11 +39,11 @@ share them.
 
 ## Acceptance Criteria
 
-- [ ] dnd-kit context + sensors spanning chrome and iframe.
-- [ ] Drop-target detection + insertion-indicator infra reusing `useFrameRect`.
-- [ ] A reusable drop-resolution producing `{ targetParentId, index }`.
-- [ ] Keyboard drag supported.
-- [ ] Vitest covers resolution/indicator logic; lint/format/typecheck pass.
+- [x] dnd-kit context + sensors spanning chrome and iframe.
+- [x] Drop-target detection + insertion-indicator infra reusing `useFrameRect`.
+- [x] A reusable drop-resolution producing `{ targetParentId, index }`.
+- [x] Keyboard drag supported.
+- [x] Vitest covers resolution/indicator logic; lint/format/typecheck pass.
 
 ## Files to Create
 

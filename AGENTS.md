@@ -24,7 +24,12 @@ architectural challenge.
 
 - **Planning:** Phases 01–14 **Defined** with full task files (107 tasks); 15–21 **Staged**
   (provisional titles). See `plans/ROADMAP.md`.
-- **Build:** not started — greenfield. Phase 01 (Docker/toolchain/CI) builds first.
+- **Build:** Phases 01–07 are implemented and marked Done. Phase 08 (Inspector &
+  Settings) is next.
+- **Current editor shell:** left rail has Navigator and Elements panels. Elements groups are
+  collapsible with only the first visible group open by default; Navigator supports live
+  tree selection, collapse state, visibility/lock, rename, duplicate/delete, and tree
+  reorder via the shared DnD/store pipeline.
 
 ## Key Architecture Decisions
 

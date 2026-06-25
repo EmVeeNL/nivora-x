@@ -19,17 +19,20 @@ interface UiState {
   openSections: Record<string, boolean>
   /** Node currently under the pointer in the canvas; null when none. */
   hoveredId: string | null
+  /** Navigator rows collapsed by node id. */
+  navigatorCollapsed: Record<string, true>
 }
 
 interface UiActions {
   /** Open a specific left panel, or pass null to collapse the sidebar. */
-  setLeftPanel(panel: string | null): void
-  toggleRightPanel(): void
-  setBreakpoint(bp: Breakpoint): void
-  setInspectorTab(tab: string): void
-  toggleSection(id: string): void
-  setSectionOpen(id: string, open: boolean): void
-  setHoveredId(id: string | null): void
+  setLeftPanel(this: void, panel: string | null): void
+  toggleRightPanel(this: void): void
+  setBreakpoint(this: void, bp: Breakpoint): void
+  setInspectorTab(this: void, tab: string): void
+  toggleSection(this: void, id: string): void
+  setSectionOpen(this: void, id: string, open: boolean): void
+  setHoveredId(this: void, id: string | null): void
+  setNavigatorCollapsed(this: void, nodeId: string, collapsed: boolean): void
 }
 
 export const useUiStore = create<UiState & UiActions>()((set) => ({
@@ -39,6 +42,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   activeBreakpoint: 'desktop',
   activeInspectorTab: 'style',
   hoveredId: null,
+  navigatorCollapsed: {},
   openSections: {
     layout: true,
     spacing: true,
@@ -63,4 +67,11 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
       openSections: { ...s.openSections, [id]: open },
     })),
   setHoveredId: (id) => set({ hoveredId: id }),
+  setNavigatorCollapsed: (nodeId, collapsed) =>
+    set((s) => {
+      const next = { ...s.navigatorCollapsed }
+      if (collapsed) next[nodeId] = true
+      else delete next[nodeId]
+      return { navigatorCollapsed: next }
+    }),
 }))

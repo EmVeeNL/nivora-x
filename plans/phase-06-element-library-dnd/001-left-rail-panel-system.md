@@ -2,14 +2,14 @@
 task: 001
 phase: 06
 title: Left Icon-Rail & Panel-Switching System
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Left Icon-Rail & Panel-Switching System
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 
@@ -37,11 +37,11 @@ avoids rework as panels grow.
 
 ## Acceptance Criteria
 
-- [ ] Panel registry (icon + label + component) with ordered registration.
-- [ ] Icon-only rail; clicking switches the active panel; active icon toggles collapse.
-- [ ] Active-panel/collapse state in the UI store.
-- [ ] Extensible: new panels appear by registration alone.
-- [ ] Vitest covers switching/collapse; lint/format/typecheck pass.
+- [x] Panel registry (icon + label + component) with ordered registration.
+- [x] Icon-only rail; clicking switches the active panel; active icon toggles collapse.
+- [x] Active-panel/collapse state in the UI store.
+- [x] Extensible: new panels appear by registration alone.
+- [x] Vitest covers switching/collapse; lint/format/typecheck pass.
 
 ## Files to Create
 

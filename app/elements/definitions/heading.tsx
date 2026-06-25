@@ -27,7 +27,8 @@ function HeadingElement({ node, 'data-node-id': nodeId }: ElementRenderProps) {
 export const headingDefinition: ElementDefinition = {
   type: 'heading',
   label: 'Heading',
-  icon: 'heading',
+  icon: 'tabler:heading',
+  category: 'Content',
   defaultProps: { text: 'Heading', level: 2 },
   nesting: { acceptsChildren: false },
   render: HeadingElement,

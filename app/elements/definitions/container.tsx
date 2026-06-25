@@ -22,7 +22,8 @@ function ContainerElement({ children, 'data-node-id': nodeId }: ElementRenderPro
 export const containerDefinition: ElementDefinition = {
   type: 'container',
   label: 'Container',
-  icon: 'box',
+  icon: 'tabler:container',
+  category: 'Layout',
   defaultProps: {},
   nesting: { acceptsChildren: true },
   render: ContainerElement,

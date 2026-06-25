@@ -1,4 +1,5 @@
 import { useEffect, type RefObject } from 'react'
+import { canInteract } from '@/document/canInteract'
 import { useDocumentStore } from '@/document/store'
 import { useUiStore } from '@/state/uiStore'
 
@@ -19,6 +20,12 @@ export function useCanvasSelection(iframeRef: RefObject<HTMLIFrameElement | null
     const handleClick = (e: MouseEvent) => {
       const target = (e.target as Element).closest('[data-node-id]')
       const nodeId = target?.getAttribute('data-node-id') ?? null
+      const node = nodeId ? useDocumentStore.getState().tree?.nodes[nodeId] : null
+      if (node && !canInteract(node)) {
+        e.preventDefault()
+        e.stopPropagation()
+        return
+      }
       useDocumentStore.getState().selectNode(nodeId)
     }
 

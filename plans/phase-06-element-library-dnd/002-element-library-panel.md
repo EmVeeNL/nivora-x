@@ -1,15 +1,15 @@
 ---
 task: 002
 phase: 06
-title: Element Library Panel (Categorized + Search)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+title: Element Library Panel (Categorized, Searchable, Collapsible)
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
-# Task 002 — Element Library Panel (Categorized + Search)
+# Task 002 — Element Library Panel (Categorized, Searchable, Collapsible)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -17,6 +17,7 @@ retry_count: 0
 
 Build the Element Library panel: a categorized, searchable list of registered elements
 (from the Phase 05 registry), with each item presented as a draggable card (label + icon).
+Category groups are collapsible; by default only the first visible group is expanded.
 
 ## Context
 
@@ -27,7 +28,9 @@ the catalog scales toward the component-library direction from the screenshots.
 ## Requirements (Test Description)
 
 - **Test:** Given the registry, the panel lists all registered elements grouped by category.
-- **Test:** Given a search query, the list filters by element label/keywords.
+- **Test:** Given a search query, the list filters by element label/keywords and expands
+  only the first matching category by default.
+- **Test:** Given multiple categories, groups can be expanded/collapsed independently.
 - **Test:** Given an item, it renders label + icon and is marked as a drag source.
 - **Test:** Given a new element registered in Phase 05, it appears here without library code
   changes.
@@ -35,11 +38,12 @@ the catalog scales toward the component-library direction from the screenshots.
 
 ## Acceptance Criteria
 
-- [ ] Categorized list of registered elements (e.g. Layout, Content).
-- [ ] Working search/filter over labels/keywords.
-- [ ] Each item is a draggable card (label + icon) — drag wiring completed in task 004.
-- [ ] Data-driven from the Phase 05 registry (no hard-coded element list).
-- [ ] Vitest covers listing/search; lint/format/typecheck pass.
+- [x] Categorized, collapsible list of registered elements (e.g. Layout, Content).
+- [x] Working search/filter over labels/keywords.
+- [x] Only the first visible category is expanded by default.
+- [x] Each item is a draggable card (label + icon) — drag wiring completed in task 004.
+- [x] Data-driven from the Phase 05 registry (no hard-coded element list).
+- [x] Vitest covers listing/search; lint/format/typecheck pass.
 
 ## Files to Create
 

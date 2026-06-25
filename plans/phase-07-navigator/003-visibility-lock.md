@@ -2,14 +2,14 @@
 task: 003
 phase: 07
 title: Visibility & Lock Toggles
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 003 — Visibility & Lock Toggles
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -37,11 +37,11 @@ canvas selection (Phase 05) and DnD (Phase 06). Front-end honoring is deferred t
 
 ## Acceptance Criteria
 
-- [ ] Visibility + lock toggles per tree row, bound to node metadata via store ops.
-- [ ] Hidden nodes dim/skip in the editor canvas.
-- [ ] Locked nodes resist selection/edit/move via a shared `canInteract(node)` guard.
-- [ ] Guard reused by canvas + DnD (no duplicated rules).
-- [ ] Vitest covers toggles + guard; lint/format/typecheck pass.
+- [x] Visibility + lock toggles per tree row, bound to node metadata via store ops.
+- [x] Hidden nodes dim/skip in the editor canvas.
+- [x] Locked nodes resist selection/edit/move via a shared `canInteract(node)` guard.
+- [x] Guard reused by canvas + DnD (no duplicated rules).
+- [x] Vitest covers toggles + guard; lint/format/typecheck pass.
 
 ## Files to Create
 

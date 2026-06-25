@@ -2,14 +2,14 @@
 task: 005
 phase: 06
 title: Canvas Reorder / Re-nest
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [003]
 retry_count: 0
 ---
 
 # Task 005 — Canvas Reorder / Re-nest
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 003
 > **Retry count:** 0
 
@@ -34,11 +34,11 @@ the same resolution + indicators, so the experience is consistent.
 
 ## Acceptance Criteria
 
-- [ ] Reorder among siblings and re-nest across containers via drag.
-- [ ] Nesting rules enforced; move-into-descendant rejected.
-- [ ] Commit via Phase 04 store move op; undoable; selection follows.
-- [ ] Shares the task-003 resolution + indicators with insertion.
-- [ ] Vitest covers reorder/re-nest/guards; lint/format/typecheck pass.
+- [x] Reorder among siblings and re-nest across containers via drag.
+- [x] Nesting rules enforced; move-into-descendant rejected.
+- [x] Commit via Phase 04 store move op; undoable; selection follows.
+- [x] Shares the task-003 resolution + indicators with insertion.
+- [x] Vitest covers reorder/re-nest/guards; lint/format/typecheck pass.
 
 ## Files to Create
 

@@ -1,4 +1,4 @@
-import type { DocumentTree, NxNode, ResponsiveBreakpoint } from './schema/types'
+import type { DocumentTree, NodeMeta, NxNode, ResponsiveBreakpoint } from './schema/types'
 import { reIdSubtree } from './ids'
 
 /** Returns all descendant IDs of a node (inclusive of the node itself). */
@@ -152,6 +152,26 @@ export function updateProps(
     : { ...node, props: { ...node.props, ...props } }
 
   return { ...tree, nodes: { ...tree.nodes, [nodeId]: updatedNode } }
+}
+
+/** Update authoring metadata on a node. */
+export function updateMeta(tree: DocumentTree, nodeId: string, meta: NodeMeta): DocumentTree {
+  const node = tree.nodes[nodeId]
+  if (!node) throw new Error(`updateMeta: node "${nodeId}" not found`)
+
+  return {
+    ...tree,
+    nodes: {
+      ...tree.nodes,
+      [nodeId]: {
+        ...node,
+        meta: {
+          ...node.meta,
+          ...meta,
+        },
+      },
+    },
+  }
 }
 
 /**

@@ -30,8 +30,10 @@ export interface NestingRules {
 export interface ElementDefinition {
   type: string
   label: string
-  /** Icon name (Tabler icon set) used in the element library and navigator. */
+  /** Iconify icon ID (e.g. 'tabler:section') used in the element library and navigator. */
   icon: string
+  /** Library category (e.g. 'Layout', 'Content'). Used to group elements in the palette. */
+  category: string
   defaultProps: Record<string, unknown>
   nesting: NestingRules
   render: React.ComponentType<ElementRenderProps>
