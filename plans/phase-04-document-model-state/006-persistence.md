@@ -2,14 +2,14 @@
 task: 006
 phase: 04
 title: Persistence — Load / Save Draft / Publish
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002, 004]
 retry_count: 0
 ---
 
 # Task 006 — Persistence — Load / Save Draft / Publish
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002, 004
 > **Retry count:** 0
 

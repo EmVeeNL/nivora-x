@@ -31,6 +31,9 @@ final class Plugin {
 		// Phase 02 — plugin foundation.
 		Storage\DocumentStore::register();
 		Editor\EditorMode::register();
+
+		// Phase 04 — document REST API.
+		Rest\DocumentController::register();
 		Admin\Menu::register();
 		Admin\Settings\SettingsPage::register();
 		Admin\Screen\EditorScreen::register();
