@@ -19,17 +19,6 @@ export interface PendingInsert {
   index: number
 }
 
-export interface PendingDelete {
-  nodeId: string
-  label: string
-}
-
-export interface PendingInsert {
-  elementType: string
-  targetParentId: string
-  index: number
-}
-
 interface UiState {
   /** Which left-panel is open; null = sidebar collapsed. */
   activeLeftPanel: string | null

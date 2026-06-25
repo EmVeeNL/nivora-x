@@ -66,34 +66,6 @@ export function TopToolbar() {
           ? 'Published'
           : null
 
-  async function handleSaveDraft() {
-    if (!bs?.postId) return
-    const envelope = useDocumentStore.getState().toEnvelope()
-    if (!envelope) return
-    setSaving('saving')
-    try {
-      await saveDraft(bs.postId, envelope)
-      useDocumentStore.getState().markClean()
-      setSaving('idle')
-    } catch {
-      setSaving('error')
-    }
-  }
-
-  async function handlePublish() {
-    if (!bs?.postId) return
-    const envelope = useDocumentStore.getState().toEnvelope()
-    if (!envelope) return
-    setSaving('saving')
-    try {
-      await publishDocument(bs.postId, envelope)
-      useDocumentStore.getState().markClean()
-      setSaving('idle')
-    } catch {
-      setSaving('error')
-    }
-  }
-
   return (
     <>
       {/* Left — back to pages + site name */}

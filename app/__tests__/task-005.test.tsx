@@ -12,13 +12,6 @@ const renderFrame = () =>
     </DndProvider>,
   )
 
-const renderFrame = () =>
-  render(
-    <DndProvider>
-      <CanvasFrame />
-    </DndProvider>,
-  )
-
 beforeEach(() => {
   useUiStore.setState({ activeBreakpoint: 'desktop' })
 })
