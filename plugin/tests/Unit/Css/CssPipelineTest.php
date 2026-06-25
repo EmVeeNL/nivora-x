@@ -121,20 +121,25 @@ describe(
 		it(
 			'on_save generates and stores CSS for a valid document',
 			function () {
-				$doc = [
-					'rootId' => 'root',
-					'nodes'  => [
-						'root' => [
-							'id'        => 'root',
-							'type'      => 'section',
-							'props'     => [ 'color' => 'red' ],
-							'children'  => [],
-							'overrides' => (object) [],
+				// Envelope format: { version, tree: { rootId, nodes }, meta }.
+				$envelope = [
+					'version' => 1,
+					'tree'    => [
+						'rootId' => 'root',
+						'nodes'  => [
+							'root' => [
+								'id'        => 'root',
+								'type'      => 'section',
+								'props'     => [ 'color' => 'red' ],
+								'children'  => [],
+								'overrides' => (object) [],
+							],
 						],
 					],
+					'meta'    => [],
 				];
 
-				Functions\when( 'get_post_meta' )->justReturn( (string) json_encode( $doc ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
+				Functions\when( 'get_post_meta' )->justReturn( (string) json_encode( $envelope ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
 
 				$this->store->shouldReceive( 'store' )
 				->once()

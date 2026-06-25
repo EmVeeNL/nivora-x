@@ -5,6 +5,7 @@ declare( strict_types=1 );
 namespace NivoraX\Css;
 
 use NivoraX\Settings\Breakpoints;
+use NivoraX\Storage\DocumentStore;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -65,12 +66,9 @@ final class CssPipeline {
 			return;
 		}
 
-		$raw = get_post_meta( $post_id, '_nivorax_document', true );
-		if ( ! is_string( $raw ) || '' === $raw ) {
-			return;
-		}
+		$envelope = DocumentStore::read( $post_id );
+		$tree     = $envelope->tree;
 
-		$tree = json_decode( $raw );
 		if ( ! is_object( $tree ) ) {
 			return;
 		}

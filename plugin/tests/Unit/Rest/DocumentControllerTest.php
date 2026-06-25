@@ -2,12 +2,22 @@
 
 declare( strict_types=1 );
 
+use Brain\Monkey\Functions;
 use NivoraX\Rest\DocumentController;
 use NivoraX\Storage\Envelope;
 
 describe(
 	'DocumentController',
 	function (): void {
+
+		beforeEach(
+			function (): void {
+				// sanitize_text_field may have been defined by other test suites
+				// (Brain Monkey permanently defines functions it stubs). Always stub
+				// it so these tests are independent of run order.
+				Functions\when( 'sanitize_text_field' )->returnArg();
+			}
+		);
 
 		it(
 			'defines the correct namespace and route',
