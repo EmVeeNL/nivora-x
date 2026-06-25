@@ -83,14 +83,11 @@ export function TreeRow({
 
   return (
     <li
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
       role="treeitem"
       data-row-id={node.id}
       aria-selected={selected}
       aria-expanded={canExpand ? expanded : undefined}
-      style={{ paddingLeft: `${depth * 12 + 6}px` }}
+      style={{ paddingLeft: `${depth * 12 + 2}px` }}
       className={cn(
         'group flex h-7 items-center gap-1 pr-1',
         selected
@@ -106,6 +103,24 @@ export function TreeRow({
         if (interactive) setRenaming(true)
       }}
     >
+      {/* Drag handle — reveals on hover, drag source for tree reorder */}
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        aria-label="Drag to reorder"
+        title="Drag to reorder"
+        className={cn(
+          'flex h-5 w-4 shrink-0 items-center justify-center rounded',
+          interactive
+            ? 'cursor-grab opacity-0 group-hover:opacity-40 active:cursor-grabbing active:opacity-70'
+            : 'pointer-events-none opacity-0',
+        )}
+      >
+        <Icon icon="tabler:grip-vertical" width={10} height={10} />
+      </div>
+
+      {/* Expand / collapse toggle */}
       <button
         type="button"
         className="flex h-4 w-4 shrink-0 items-center justify-center rounded hover:bg-accent disabled:hover:bg-transparent"
