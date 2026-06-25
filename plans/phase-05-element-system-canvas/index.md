@@ -10,7 +10,7 @@ definition: Defined # Staged | Draft (under review) | Defined
 # Phase 05 — Element System & Canvas Rendering
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -62,16 +62,14 @@ renderer + CSS engine / parity (Phase 10) come later.
 
 ## Task Overview
 
-> Draft breakdown — refined when we write the task files.
-
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Element-definition contract + registry (type → definition; safe fallback) | — | Not Started |
-| 002  | Starter element set (Section, Container, Heading, Text) + nesting rules | 001 | Not Started |
-| 003  | React tree renderer into the iframe canvas (structural defaults + empty state) | 001, 002 | Not Started |
-| 004  | Single-select + hover highlight, synced to the store | 003 | Not Started |
-| 005  | Selection/hover overlay (outline active element; track rect) | 004 | Not Started |
-| 006  | Tests + polish (registry/render/selection coverage; matches the shell) | 002, 003, 004, 005 | Not Started |
+| 001  | Element-definition contract + registry (type → definition; safe fallback) | — | Done |
+| 002  | Starter element set (Section, Container, Heading, Text) + nesting rules | 001 | Done |
+| 003  | React tree renderer into the iframe canvas (structural defaults + empty state) | 001, 002 | Done |
+| 004  | Single-select + hover highlight, synced to the store | 003 | Done |
+| 005  | Selection/hover overlay (outline active element; track rect) | 004 | Done |
+| 006  | Tests + polish (registry/render/selection coverage; matches the shell) | 002, 003, 004, 005 | Done |
 
 ## Architectural Notes
 

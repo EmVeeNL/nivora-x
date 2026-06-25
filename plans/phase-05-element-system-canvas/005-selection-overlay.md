@@ -9,7 +9,7 @@ retry_count: 0
 
 # Task 005 — Selection & Hover Overlay
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 004
 > **Retry count:** 0
 

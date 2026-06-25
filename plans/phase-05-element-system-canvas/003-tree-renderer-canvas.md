@@ -9,7 +9,7 @@ retry_count: 0
 
 # Task 003 — React Tree Renderer in the iframe Canvas
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001, 002
 > **Retry count:** 0
 

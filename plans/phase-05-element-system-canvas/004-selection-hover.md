@@ -9,7 +9,7 @@ retry_count: 0
 
 # Task 004 — Single-Select & Hover (Store-Synced)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 003
 > **Retry count:** 0
 

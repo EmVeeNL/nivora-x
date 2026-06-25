@@ -9,7 +9,7 @@ retry_count: 0
 
 # Task 006 — Tests & Polish
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002, 003, 004, 005
 > **Retry count:** 0
 
