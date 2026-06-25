@@ -2,7 +2,7 @@
 task: 008
 phase: 10
 title: Tests, Front-End E2E & Polish
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [005, 006, 007]
 retry_count: 0
 ---

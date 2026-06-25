@@ -2,7 +2,7 @@
 task: 002
 phase: 10
 title: PHP Element Renderers (Starter Set)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---

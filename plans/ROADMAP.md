@@ -1,8 +1,8 @@
 # NivoraX — Phase Roadmap
 
 > Manifest of phases. Each is a folder under `plans/` with an `index.md`.
-> Phases 01–08 are **defined** and done. Phase 09 is **in progress**.
-> Phases 10–20 are **staged** —
+> Phases 01–10 are **defined** and done.
+> Phases 11–21 are **staged** —
 > provisional titles, redefined as we reach them.
 >
 > Status: `Not Started · In Progress · Blocked · In Review · Done`
@@ -31,7 +31,7 @@
 
 | #   | Phase                                | Definition | Status      |
 | --- | ------------------------------------ | ---------- | ----------- |
-| 10  | Front-End Rendering & CSS Engine     | Defined    | Not Started |
+| 10  | Front-End Rendering & CSS Engine     | Defined    | Done        |
 | 11  | Design Tokens                        | Defined    | Not Started |
 | 12  | Full Styling Controls                | Defined    | Not Started |
 | 13  | Theme Builder                        | Defined    | Not Started |
