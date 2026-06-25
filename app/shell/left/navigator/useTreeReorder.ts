@@ -67,6 +67,7 @@ function lineDescriptor(
       width: rect.width,
       height: 2,
     },
+    ghost: null,
   }
 }
 
@@ -88,6 +89,7 @@ function boxDescriptor(
       width: rect.width,
       height: rect.height,
     },
+    ghost: null,
   }
 }
 

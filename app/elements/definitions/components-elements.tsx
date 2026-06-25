@@ -1,8 +1,9 @@
 import React from 'react'
 import type { ElementDefinition, ElementRenderProps } from '../types'
+import { basicInspectorSchema, layoutInspectorSchema } from '@/inspector/style/styleSchemas'
 
-function makeLeaf(label: string): React.ComponentType<ElementRenderProps> {
-  function LeafEl({ 'data-node-id': nodeId }: ElementRenderProps) {
+function CompLeaf(label: string): React.ComponentType<ElementRenderProps> {
+  function LeafEl({ 'data-node-id': nodeId, style }: ElementRenderProps) {
     return (
       <div
         data-node-id={nodeId}
@@ -13,6 +14,7 @@ function makeLeaf(label: string): React.ComponentType<ElementRenderProps> {
           borderRadius: 4,
           color: '#94a3b8',
           fontSize: 11,
+          ...style,
         }}
       >
         {label}
@@ -30,7 +32,7 @@ export const navbarDefinition: ElementDefinition = {
   category: 'Components',
   defaultProps: {},
   nesting: { acceptsChildren: true },
-  render: function NavbarElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function NavbarElement({ 'data-node-id': nodeId, children, style }: ElementRenderProps) {
     return (
       <nav
         data-node-id={nodeId}
@@ -41,11 +43,30 @@ export const navbarDefinition: ElementDefinition = {
           background: '#f8fafc',
           borderBottom: '1px solid #e2e8f0',
           minHeight: 56,
+          ...style,
         }}
       >
         {children}
       </nav>
     )
+  },
+  controlSchema: {
+    block: [
+      {
+        id: 'navbar-content',
+        title: 'Navbar',
+        controls: [
+          {
+            id: 'html-id',
+            type: 'text',
+            label: 'HTML ID',
+            prop: 'htmlId',
+            placeholder: 'main-nav',
+          },
+        ],
+      },
+    ],
+    inspector: layoutInspectorSchema,
   },
 }
 
@@ -56,7 +77,8 @@ export const dropdownDefinition: ElementDefinition = {
   category: 'Components',
   defaultProps: { label: 'Dropdown' },
   nesting: { acceptsChildren: true },
-  render: makeLeaf('Dropdown'),
+  render: CompLeaf('Dropdown'),
+  controlSchema: { block: [], inspector: layoutInspectorSchema },
 }
 
 export const searchBarDefinition: ElementDefinition = {
@@ -66,7 +88,25 @@ export const searchBarDefinition: ElementDefinition = {
   category: 'Components',
   defaultProps: { placeholder: 'Search...' },
   nesting: { acceptsChildren: false },
-  render: makeLeaf('Search'),
+  render: CompLeaf('Search'),
+  controlSchema: {
+    block: [
+      {
+        id: 'search-bar-content',
+        title: 'Search',
+        controls: [
+          {
+            id: 'placeholder',
+            type: 'text',
+            label: 'Placeholder',
+            prop: 'placeholder',
+            defaultValue: 'Search...',
+          },
+        ],
+      },
+    ],
+    inspector: basicInspectorSchema,
+  },
 }
 
 export const sliderComponentDefinition: ElementDefinition = {
@@ -79,6 +119,7 @@ export const sliderComponentDefinition: ElementDefinition = {
   render: function SliderComponentElement({
     'data-node-id': nodeId,
     children,
+    style,
   }: ElementRenderProps) {
     return (
       <div
@@ -88,12 +129,14 @@ export const sliderComponentDefinition: ElementDefinition = {
           border: '1px dashed #94a3b8',
           borderRadius: 4,
           minHeight: 80,
+          ...style,
         }}
       >
         {children}
       </div>
     )
   },
+  controlSchema: { block: [], inspector: layoutInspectorSchema },
 }
 
 export const tabsComponentDefinition: ElementDefinition = {
@@ -103,13 +146,18 @@ export const tabsComponentDefinition: ElementDefinition = {
   category: 'Components',
   defaultProps: {},
   nesting: { acceptsChildren: true },
-  render: function TabsComponentElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function TabsComponentElement({
+    'data-node-id': nodeId,
+    children,
+    style,
+  }: ElementRenderProps) {
     return (
-      <div data-node-id={nodeId} style={{ display: 'block', minHeight: 60 }}>
+      <div data-node-id={nodeId} style={{ display: 'block', minHeight: 60, ...style }}>
         {children}
       </div>
     )
   },
+  controlSchema: { block: [], inspector: layoutInspectorSchema },
 }
 
 export const lightboxComponentDefinition: ElementDefinition = {
@@ -119,7 +167,8 @@ export const lightboxComponentDefinition: ElementDefinition = {
   category: 'Components',
   defaultProps: {},
   nesting: { acceptsChildren: false },
-  render: makeLeaf('Lightbox'),
+  render: CompLeaf('Lightbox'),
+  controlSchema: { block: [], inspector: basicInspectorSchema },
 }
 
 export const menuDefinition: ElementDefinition = {
@@ -129,11 +178,12 @@ export const menuDefinition: ElementDefinition = {
   category: 'Components',
   defaultProps: {},
   nesting: { acceptsChildren: true },
-  render: function MenuElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function MenuElement({ 'data-node-id': nodeId, children, style }: ElementRenderProps) {
     return (
-      <nav data-node-id={nodeId} style={{ display: 'block' }}>
+      <nav data-node-id={nodeId} style={{ display: 'block', ...style }}>
         {children}
       </nav>
     )
   },
+  controlSchema: { block: [], inspector: layoutInspectorSchema },
 }

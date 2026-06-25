@@ -1,6 +1,8 @@
 import type { DocumentTree } from '@/document/schema/types'
 import { isHidden } from '@/document/canInteract'
 import { getElementDefinition } from '@/elements/registry'
+import { useUiStore } from '@/state/uiStore'
+import { getEditorInlineStyles } from './style/applyStyles'
 
 interface RenderNodeProps {
   nodeId: string
@@ -14,6 +16,7 @@ interface RenderNodeProps {
  * place it on the root DOM element (required for pointer-event resolution).
  */
 export function RenderNode({ nodeId, tree }: RenderNodeProps) {
+  const activeBreakpoint = useUiStore((s) => s.activeBreakpoint)
   const node = tree.nodes[nodeId]
   if (!node) return null
 
@@ -25,7 +28,7 @@ export function RenderNode({ nodeId, tree }: RenderNodeProps) {
   ))
 
   const rendered = (
-    <Render node={node} data-node-id={nodeId}>
+    <Render node={node} data-node-id={nodeId} style={getEditorInlineStyles(node, activeBreakpoint)}>
       {childNodes.length > 0 ? childNodes : undefined}
     </Render>
   )

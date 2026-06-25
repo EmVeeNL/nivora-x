@@ -1,27 +1,6 @@
 import React from 'react'
 import type { ElementDefinition, ElementRenderProps } from '../types'
-
-function makeLeaf(label: string): React.ComponentType<ElementRenderProps> {
-  function LeafEl({ 'data-node-id': nodeId }: ElementRenderProps) {
-    return (
-      <div
-        data-node-id={nodeId}
-        style={{
-          display: 'inline-block',
-          padding: '2px 6px',
-          border: '1px dashed #94a3b8',
-          borderRadius: 3,
-          color: '#94a3b8',
-          fontSize: 11,
-        }}
-      >
-        {label}
-      </div>
-    )
-  }
-  LeafEl.displayName = label
-  return LeafEl
-}
+import { textInspectorSchema, basicInspectorSchema } from '@/inspector/style/styleSchemas'
 
 export const paragraphDefinition: ElementDefinition = {
   type: 'paragraph',
@@ -30,12 +9,30 @@ export const paragraphDefinition: ElementDefinition = {
   category: 'Typography',
   defaultProps: { text: 'Paragraph text' },
   nesting: { acceptsChildren: false },
-  render: function ParagraphElement({ 'data-node-id': nodeId, node }: ElementRenderProps) {
+  render: function ParagraphElement({ 'data-node-id': nodeId, node, style }: ElementRenderProps) {
     return (
-      <p data-node-id={nodeId} style={{ margin: '0 0 16px' }}>
+      <p data-node-id={nodeId} style={{ margin: '0 0 16px', ...style }}>
         {(node.props['text'] as string | undefined) ?? 'Paragraph text'}
       </p>
     )
+  },
+  controlSchema: {
+    block: [
+      {
+        id: 'paragraph-content',
+        title: 'Paragraph',
+        controls: [
+          {
+            id: 'text',
+            type: 'textarea',
+            label: 'Text',
+            prop: 'text',
+            defaultValue: 'Paragraph text',
+          },
+        ],
+      },
+    ],
+    inspector: textInspectorSchema,
   },
 }
 
@@ -46,12 +43,34 @@ export const richTextDefinition: ElementDefinition = {
   category: 'Typography',
   defaultProps: {},
   nesting: { acceptsChildren: true },
-  render: function RichTextElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function RichTextElement({
+    'data-node-id': nodeId,
+    children,
+    style,
+  }: ElementRenderProps) {
     return (
-      <div data-node-id={nodeId} style={{ lineHeight: 1.6 }}>
+      <div data-node-id={nodeId} style={{ lineHeight: 1.6, ...style }}>
         {children}
       </div>
     )
+  },
+  controlSchema: {
+    block: [
+      {
+        id: 'rich-text-content',
+        title: 'Rich Text',
+        controls: [
+          {
+            id: 'html-id',
+            type: 'text',
+            label: 'HTML ID',
+            prop: 'htmlId',
+            placeholder: 'my-rich-text',
+          },
+        ],
+      },
+    ],
+    inspector: textInspectorSchema,
   },
 }
 
@@ -62,7 +81,23 @@ export const textSpanDefinition: ElementDefinition = {
   category: 'Typography',
   defaultProps: { text: 'span' },
   nesting: { acceptsChildren: false },
-  render: makeLeaf('Text Span'),
+  render: function TextSpanElement({ 'data-node-id': nodeId, node, style }: ElementRenderProps) {
+    return (
+      <span data-node-id={nodeId} style={style}>
+        {(node.props['text'] as string | undefined) ?? 'span'}
+      </span>
+    )
+  },
+  controlSchema: {
+    block: [
+      {
+        id: 'text-span-content',
+        title: 'Text Span',
+        controls: [{ id: 'text', type: 'text', label: 'Text', prop: 'text', defaultValue: 'span' }],
+      },
+    ],
+    inspector: textInspectorSchema,
+  },
 }
 
 export const orderedListDefinition: ElementDefinition = {
@@ -72,12 +107,28 @@ export const orderedListDefinition: ElementDefinition = {
   category: 'Typography',
   defaultProps: {},
   nesting: { acceptsChildren: true },
-  render: function OrderedListElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function OrderedListElement({
+    'data-node-id': nodeId,
+    children,
+    style,
+  }: ElementRenderProps) {
     return (
-      <ol data-node-id={nodeId} style={{ paddingLeft: 20, margin: '0 0 16px' }}>
+      <ol data-node-id={nodeId} style={{ paddingLeft: 20, margin: '0 0 16px', ...style }}>
         {children}
       </ol>
     )
+  },
+  controlSchema: {
+    block: [
+      {
+        id: 'ordered-list-content',
+        title: 'Ordered List',
+        controls: [
+          { id: 'html-id', type: 'text', label: 'HTML ID', prop: 'htmlId', placeholder: 'my-list' },
+        ],
+      },
+    ],
+    inspector: basicInspectorSchema,
   },
 }
 
@@ -88,11 +139,27 @@ export const unorderedListDefinition: ElementDefinition = {
   category: 'Typography',
   defaultProps: {},
   nesting: { acceptsChildren: true },
-  render: function UnorderedListElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function UnorderedListElement({
+    'data-node-id': nodeId,
+    children,
+    style,
+  }: ElementRenderProps) {
     return (
-      <ul data-node-id={nodeId} style={{ paddingLeft: 20, margin: '0 0 16px' }}>
+      <ul data-node-id={nodeId} style={{ paddingLeft: 20, margin: '0 0 16px', ...style }}>
         {children}
       </ul>
     )
+  },
+  controlSchema: {
+    block: [
+      {
+        id: 'unordered-list-content',
+        title: 'Unordered List',
+        controls: [
+          { id: 'html-id', type: 'text', label: 'HTML ID', prop: 'htmlId', placeholder: 'my-list' },
+        ],
+      },
+    ],
+    inspector: basicInspectorSchema,
   },
 }

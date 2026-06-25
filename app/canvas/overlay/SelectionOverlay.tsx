@@ -5,7 +5,40 @@ import { canInteract } from '@/document/canInteract'
 import { useDocumentStore } from '@/document/store'
 import { useUiStore } from '@/state/uiStore'
 import { useDndEditor } from '@/canvas/dnd/DndProvider'
+import { getElementDefinition, hasElement } from '@/elements/registry'
 import { useFrameRect, type RectBox } from './useFrameRect'
+
+function DeleteButton({ nodeId, label }: { nodeId: string; label: string }) {
+  function handleClick(e: React.MouseEvent) {
+    e.stopPropagation()
+    useUiStore.getState().setPendingDelete({ nodeId, label })
+  }
+
+  return (
+    <button
+      type="button"
+      title="Delete element"
+      aria-label="Delete element"
+      onClick={handleClick}
+      style={{
+        width: 20,
+        height: 20,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(239,68,68,0.15)',
+        border: '1px solid rgba(239,68,68,0.4)',
+        borderRadius: 3,
+        color: '#fca5a5',
+        cursor: 'pointer',
+        padding: 0,
+        flexShrink: 0,
+      }}
+    >
+      <Icon icon="tabler:x" width={11} height={11} />
+    </button>
+  )
+}
 
 interface OverlayBoxProps {
   rect: RectBox
@@ -57,14 +90,16 @@ function DragHandle({ nodeId, rect }: DragHandleProps) {
 
   if (!node || !canInteract(node)) return null
 
+  const label = hasElement(node.type) ? getElementDefinition(node.type).label : node.type
+
   return (
     <div
       ref={setNodeRef}
       {...listeners}
       {...attributes}
       data-testid="drag-handle"
-      title="Drag to reorder"
-      aria-label="Drag to reorder element"
+      title={`Drag to reorder — ${label}`}
+      aria-label={`Drag to reorder ${label}`}
       style={{
         position: 'fixed',
         top: rect.top - 22,
@@ -81,9 +116,14 @@ function DragHandle({ nodeId, rect }: DragHandleProps) {
         fontSize: 11,
         userSelect: 'none',
         opacity: isThisDragging ? 0.4 : 1,
+        maxWidth: 160,
       }}
     >
-      <Icon icon="tabler:grip-horizontal" width={12} height={12} />
+      <Icon icon="tabler:grip-horizontal" width={12} height={12} className="shrink-0" />
+      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+        {label}
+      </span>
+      <DeleteButton nodeId={nodeId} label={label} />
     </div>
   )
 }

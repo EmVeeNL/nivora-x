@@ -21,9 +21,12 @@ describe(
 		it(
 			'round-trips through JSON',
 			function (): void {
+				// Tree is stored as stdClass after from_json() (non-associative decode
+				// preserves empty {} objects). Compare the re-serialised JSON, not the
+				// PHP type, since the internal representation intentionally changed.
 				$original = new Envelope(
 					1,
-					[
+					(object) [
 						'type'     => 'root',
 						'children' => [],
 					],
@@ -33,12 +36,7 @@ describe(
 				$restored = Envelope::from_json( $json );
 
 				expect( $restored->version )->toBe( 1 )
-				->and( $restored->tree )->toBe(
-					[
-						'type'     => 'root',
-						'children' => [],
-					]
-				)
+				->and( $restored->to_json() )->toBe( $json )
 				->and( $restored->meta )->toBe( [ 'title' => 'Test' ] );
 			}
 		);

@@ -3,14 +3,14 @@ phase: 08
 slug: inspector-settings
 title: Inspector & Settings
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 08 — Inspector & Settings
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -41,7 +41,7 @@ Phase 05.
   swaps for generated scoped CSS.
 - No-selection and locked states handled; Vitest coverage.
 
-## Out of Scope
+## Out of Scope (original)
 
 - **Per-breakpoint responsive editing UI** — Phase 09. Controls edit the **base** value
   here (the style-prop shape already supports breakpoints from Phase 04).
@@ -49,6 +49,27 @@ Phase 05.
   only here).
 - **PHP CSS generation + front-end parity** — Phase 10.
 - Inline rich-text editing of Heading/Text — later phase.
+
+## Extended Scope (added 2026-06-25)
+
+Features delivered in this phase that exceed the original scope, pre-empting parts of
+Phase 09/12:
+
+- **Border controls** — `borderStyle`, `borderWidth`, `borderColor`, `borderRadius`.
+- **Box-shadow control** — new `shadow` control type with structured sub-fields
+  (offsetX/Y, blur, spread, color, inset) composing a CSS `box-shadow` string.
+- **Spacing widget redesign** — T/B on one row, L/R on another, with Y-axis link,
+  X-axis link, and all-axis link buttons.
+- **Per-breakpoint responsive lock** — lock icon on every style control when on a
+  non-desktop breakpoint; click to unlock and write a breakpoint-specific override.
+- **Visual element borders** — toolbar toggle, RAF-tracked per-element dashed outlines
+  in the editor chrome, coloured by element category (no layout shifts).
+- **Delete confirmation dialog** — React portal, not `window.confirm`.
+- **X delete button** on the drag-handle pill.
+- **Cmd+Z / Cmd+Shift+Z** undo/redo keyboard shortcuts.
+- **Insert config modal** — `insertConfig` slot on `ElementDefinition`; Grid and Columns
+  use it to collect column count / gap before insertion.
+- **Grid/Columns CSS grid renders** — proper `display:grid; grid-template-columns`.
 
 ## Success Criteria
 
@@ -69,13 +90,15 @@ Phase 05.
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Declarative control-schema system + generic control renderer (ShadCN set) bound to the store | — | Not Started |
-| 002  | Right-panel tabs (Page/Block/Inspector) wired + selection-driven (replaces Phase 03 placeholders) | 001 | Not Started |
-| 003  | Block tab: per-element content control schemas (starter set) | 001, 002 | Not Started |
-| 004  | Inspector tab: foundational style controls (Layout, Spacing, Size, Typography) + style-prop schema | 001, 002 | Not Started |
-| 005  | Editor-side style application to canvas (resolve active-breakpoint values → inline, behind a seam) | 004 | Not Started |
-| 006  | Page tab: page settings (title + basics) + persistence | 002 | Not Started |
-| 007  | Tests + polish (empty/locked states, undo coalescing) | 003, 004, 005, 006 | Not Started |
+| 001  | Declarative control-schema system + generic control renderer (ShadCN set) bound to the store | — | Done |
+| 002  | Right-panel tabs (Style/Settings/Page) wired + selection-driven (replaces Phase 03 placeholders) | 001 | Done |
+| 003  | Block tab: per-element content control schemas (starter set) | 001, 002 | Done |
+| 004  | Inspector tab: foundational style controls (Layout, Spacing, Size, Typography, Background, Border, Shadow) | 001, 002 | Done |
+| 005  | Editor-side style application to canvas (resolve active-breakpoint values → inline, behind a seam) | 004 | Done |
+| 006  | Page tab: page settings (title + basics) + persistence | 002 | Done |
+| 007  | Tests + polish (empty/locked states, undo coalescing, extended UX) | 003, 004, 005, 006 | Done |
+| 008  | Extended UX: delete confirmation dialog, X button, Cmd+Z undo/redo, insert config modal, Grid/Columns renders | 007 | Done |
+| 009  | Spacing widget Y/X/All axis links; responsive lock per-breakpoint; visual borders toolbar toggle | 007 | Done |
 
 ## Architectural Notes
 

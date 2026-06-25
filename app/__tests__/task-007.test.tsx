@@ -1,10 +1,61 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { BreadcrumbBar } from '@/shell/BreadcrumbBar'
+import { useDocumentStore } from '@/document/store'
+import { registerElement, _clearRegistry } from '@/elements/registry'
+import { headingDefinition } from '@/elements/definitions/heading'
+import { sectionDefinition } from '@/elements/definitions/section'
 
 // ---------------------------------------------------------------------------
-// BreadcrumbBar — static breadcrumb placeholder
+// BreadcrumbBar — dynamic breadcrumb from document tree
 // ---------------------------------------------------------------------------
+
+beforeEach(() => {
+  _clearRegistry()
+  registerElement(sectionDefinition)
+  registerElement(headingDefinition)
+
+  // Tree: root → section ('Body') → heading ('Heading')
+  useDocumentStore.setState({
+    tree: {
+      rootId: 'root',
+      nodes: {
+        root: {
+          id: 'root',
+          type: '__root__',
+          props: {},
+          children: ['section'],
+          overrides: {},
+          meta: { name: 'Body' },
+        },
+        section: {
+          id: 'section',
+          type: 'section',
+          props: {},
+          children: ['heading'],
+          overrides: {},
+          meta: { name: 'Hero Section' },
+        },
+        heading: {
+          id: 'heading',
+          type: 'heading',
+          props: { text: 'Hello', level: 1 },
+          children: [],
+          overrides: {},
+          meta: { name: 'Hero Heading' },
+        },
+      },
+    },
+    selectedId: 'heading',
+    documentMeta: {},
+    isDirty: false,
+    past: [],
+    future: [],
+    _lastCoalesceKey: null,
+    _lastCoalesceTime: 0,
+  })
+})
+
 describe('BreadcrumbBar', () => {
   it('renders a breadcrumb nav landmark', () => {
     render(<BreadcrumbBar />)
@@ -18,7 +69,6 @@ describe('BreadcrumbBar', () => {
 
   it('renders intermediate crumbs', () => {
     render(<BreadcrumbBar />)
-    expect(screen.getByText('Page Wrapper')).toBeInTheDocument()
     expect(screen.getByText('Hero Section')).toBeInTheDocument()
   })
 

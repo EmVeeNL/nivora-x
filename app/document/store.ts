@@ -1,5 +1,11 @@
 import { create } from 'zustand'
-import type { DocumentTree, NodeMeta, NxNode, ResponsiveBreakpoint } from './schema/types'
+import type {
+  DocumentEnvelope,
+  DocumentTree,
+  NodeMeta,
+  NxNode,
+  ResponsiveBreakpoint,
+} from './schema/types'
 import {
   insertNode,
   removeNode,
@@ -9,6 +15,7 @@ import {
   updateMeta,
 } from './operations'
 import { getElementDefinition, hasElement } from '@/elements/registry'
+import { SCHEMA_VERSION } from './schema/constants'
 
 const MAX_HISTORY = 50
 /** Milliseconds within which repeated edits to the same coalesceKey merge into one history entry. */
@@ -16,6 +23,7 @@ const COALESCE_MS = 500
 
 interface DocumentState {
   tree: DocumentTree | null
+  documentMeta: Record<string, unknown>
   selectedId: string | null
   isDirty: boolean
   // undo/redo
@@ -28,6 +36,10 @@ interface DocumentState {
 interface DocumentActions {
   /** Replace the entire tree (does not push to undo history). */
   setTree(tree: DocumentTree): void
+  /** Replace the entire document envelope (does not push to undo history). */
+  setDocument(envelope: DocumentEnvelope): void
+  /** Build the current persistence envelope from store state. */
+  toEnvelope(): DocumentEnvelope | null
   /** Select a node by ID, or clear selection with null. */
   selectNode(id: string | null): void
   /** Insert node under parentId at optional index (default: append). Pushes history. */
@@ -48,6 +60,8 @@ interface DocumentActions {
   ): void
   /** Update node authoring metadata. Pushes history. */
   updateMeta(nodeId: string, meta: NodeMeta): void
+  /** Update document-scoped metadata. Marks dirty. */
+  updateDocumentMeta(meta: Record<string, unknown>): void
   /** Duplicate node+subtree adjacent to original. Returns new node ID, or null on failure. */
   duplicateNode(nodeId: string): string | null
   /** Undo the last mutation. */
@@ -80,6 +94,7 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
   return {
     // ---- state ----
     tree: null,
+    documentMeta: {},
     selectedId: null,
     isDirty: false,
     past: [],
@@ -89,6 +104,21 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
 
     // ---- actions ----
     setTree: (tree) => set({ tree, isDirty: false, past: [], future: [] }),
+
+    setDocument: (envelope) =>
+      set({
+        tree: envelope.tree,
+        documentMeta: envelope.meta,
+        isDirty: false,
+        past: [],
+        future: [],
+      }),
+
+    toEnvelope: () => {
+      const { tree, documentMeta } = get()
+      if (!tree) return null
+      return { version: SCHEMA_VERSION, tree, meta: documentMeta }
+    },
 
     selectNode: (id) => set({ selectedId: id }),
 
@@ -166,6 +196,9 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
       push(tree)
       set({ tree: updateMeta(tree, nodeId, meta), isDirty: true })
     },
+
+    updateDocumentMeta: (meta) =>
+      set((s) => ({ documentMeta: { ...s.documentMeta, ...meta }, isDirty: true })),
 
     duplicateNode: (nodeId) => {
       const { tree } = get()

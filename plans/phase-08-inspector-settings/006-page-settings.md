@@ -2,14 +2,14 @@
 task: 006
 phase: 08
 title: Page Tab — Page Settings
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002]
 retry_count: 0
 ---
 
 # Task 006 — Page Tab — Page Settings
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002
 > **Retry count:** 0
 

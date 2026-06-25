@@ -6,6 +6,10 @@ import { NavigatorPlaceholder } from '@/shell/NavigatorPlaceholder'
 import { DndProvider } from '@/canvas/dnd/DndProvider'
 import { useUiStore } from '@/state/uiStore'
 import { registerLeftPanel, _clearLeftPanelRegistry } from '@/shell/left/leftPanelRegistry'
+import { registerElement, _clearRegistry } from '@/elements/registry'
+import { sectionDefinition } from '@/elements/definitions/section'
+import { useDocumentStore } from '@/document/store'
+import type { DocumentTree } from '@/document/schema/types'
 import '@/lib/icons'
 
 const renderLayout = () =>
@@ -23,6 +27,7 @@ const renderFrame = () =>
 
 beforeEach(() => {
   _clearLeftPanelRegistry()
+  _clearRegistry()
   registerLeftPanel({
     id: 'navigator',
     label: 'Navigator',
@@ -33,7 +38,7 @@ beforeEach(() => {
     activeLeftPanel: 'navigator',
     rightPanelOpen: true,
     activeBreakpoint: 'desktop',
-    activeInspectorTab: 'style',
+    activeInspectorTab: 'inspector',
     openSections: {
       layout: true,
       spacing: true,
@@ -43,6 +48,38 @@ beforeEach(() => {
       border: false,
       effects: false,
     },
+  })
+  registerElement(sectionDefinition)
+  const tree: DocumentTree = {
+    rootId: 'root',
+    nodes: {
+      root: {
+        id: 'root',
+        type: '__root__',
+        props: {},
+        children: ['section'],
+        overrides: {},
+        meta: {},
+      },
+      section: {
+        id: 'section',
+        type: 'section',
+        props: {},
+        children: [],
+        overrides: {},
+        meta: {},
+      },
+    },
+  }
+  useDocumentStore.setState({
+    tree,
+    documentMeta: {},
+    selectedId: 'section',
+    isDirty: false,
+    past: [],
+    future: [],
+    _lastCoalesceKey: null,
+    _lastCoalesceTime: 0,
   })
 })
 

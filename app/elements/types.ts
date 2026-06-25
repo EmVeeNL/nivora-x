@@ -1,5 +1,6 @@
 import type React from 'react'
 import type { NxNode } from '@/document/schema/types'
+import type { ElementControlSchema } from '@/inspector/controls/types'
 
 /** Props passed to every element's React render component. */
 export interface ElementRenderProps {
@@ -7,6 +8,8 @@ export interface ElementRenderProps {
   children?: React.ReactNode
   /** Canvas data attribute — must be placed on the element's root DOM node. */
   'data-node-id': string
+  /** Editor-resolved style props. Phase 10 replaces the inline implementation behind this seam. */
+  style?: React.CSSProperties
 }
 
 /** Nesting constraints for an element type. */
@@ -18,6 +21,26 @@ export interface NestingRules {
    * When undefined (and acceptsChildren is true), any registered type is accepted.
    */
   allowedChildTypes?: string[]
+}
+
+/** One configurable field shown in the insert config modal. */
+export interface InsertConfigField {
+  id: string
+  label: string
+  /** Key in defaultProps where this value is stored. */
+  prop: string
+  type: 'number' | 'select'
+  defaultValue: unknown
+  min?: number
+  max?: number
+  step?: number
+  options?: Array<{ label: string; value: string }>
+}
+
+/** If set on an ElementDefinition, the editor shows a config modal before inserting. */
+export interface InsertConfig {
+  title: string
+  fields: InsertConfigField[]
 }
 
 /**
@@ -37,8 +60,10 @@ export interface ElementDefinition {
   defaultProps: Record<string, unknown>
   nesting: NestingRules
   render: React.ComponentType<ElementRenderProps>
+  /** If set, the editor shows a config modal before inserting this element. */
+  insertConfig?: InsertConfig
   /** Phase 10 slot: PHP-side render function. Unimplemented until Phase 10. */
   phpRender?: unknown
   /** Phase 08 slot: inspector control descriptors. Unimplemented until Phase 08. */
-  controlSchema?: unknown
+  controlSchema?: ElementControlSchema
 }

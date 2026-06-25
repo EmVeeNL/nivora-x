@@ -11,12 +11,21 @@ export interface DropIndicator {
   height: number
 }
 
+export interface GhostRect {
+  top: number
+  left: number
+  width: number
+  height: number
+}
+
 export interface DropDescriptor {
   targetParentId: string
   index: number
   /** Whether the nesting rules allow this drop. */
   valid: boolean
   indicator: DropIndicator | null
+  /** Optional dotted ghost preview of where the element will be placed. */
+  ghost: GhostRect | null
 }
 
 /** Collect all IDs in the subtree rooted at nodeId (inclusive). */
@@ -141,6 +150,7 @@ export function resolveDropDescriptor(
       index: root ? root.children.length : 0,
       valid,
       indicator: null,
+      ghost: null,
     }
   }
 
@@ -156,6 +166,7 @@ export function resolveDropDescriptor(
       index: root ? root.children.length : 0,
       valid,
       indicator: null,
+      ghost: null,
     }
   }
 
@@ -187,16 +198,20 @@ export function resolveDropDescriptor(
         index: 0,
         valid,
         indicator: boxIndicator(iframeRect, nodeRect),
+        ghost: null,
       }
     }
 
-    if (relY / relH < 0.25) {
-      // Top quarter → before this node in its parent
+    // Use pixel-clamped zones so very tall containers still have reachable edges.
+    const edgeZone = Math.min(relH * 0.2, 28)
+
+    if (relY < edgeZone) {
+      // Top edge → before this node in its parent
       return beforeNode(tree, nodeId, childType, movingNodeId, iframeRect, nodeRect, nodeTopCh)
     }
 
-    if (relY / relH > 0.75) {
-      // Bottom quarter → after this node in its parent
+    if (relY > relH - edgeZone) {
+      // Bottom edge → after this node in its parent
       return afterNode(tree, nodeId, childType, movingNodeId, iframeRect, nodeRect, nodeBottomCh)
     }
 
@@ -207,6 +222,7 @@ export function resolveDropDescriptor(
       index: node.children.length,
       valid,
       indicator: boxIndicator(iframeRect, nodeRect),
+      ghost: null,
     }
   }
 
@@ -216,6 +232,8 @@ export function resolveDropDescriptor(
   }
   return afterNode(tree, nodeId, childType, movingNodeId, iframeRect, nodeRect, nodeBottomCh)
 }
+
+const GHOST_HEIGHT = 40
 
 function beforeNode(
   tree: DocumentTree,
@@ -228,7 +246,7 @@ function beforeNode(
 ): DropDescriptor {
   const parentId = findParentId(tree.nodes, nodeId)
   if (!parentId) {
-    return { targetParentId: tree.rootId, index: 0, valid: false, indicator: null }
+    return { targetParentId: tree.rootId, index: 0, valid: false, indicator: null, ghost: null }
   }
   const parent = tree.nodes[parentId]!
   const index = parent.children.indexOf(nodeId)
@@ -238,6 +256,12 @@ function beforeNode(
     index: Math.max(0, index),
     valid,
     indicator: lineIndicator(lineTop, iframeRect, nodeRect),
+    ghost: {
+      top: lineTop - GHOST_HEIGHT - 2,
+      left: iframeRect.left + nodeRect.left,
+      width: nodeRect.width,
+      height: GHOST_HEIGHT,
+    },
   }
 }
 
@@ -258,6 +282,7 @@ function afterNode(
       index: root ? root.children.length : 0,
       valid: false,
       indicator: null,
+      ghost: null,
     }
   }
   const parent = tree.nodes[parentId]!
@@ -268,5 +293,11 @@ function afterNode(
     index: index + 1,
     valid,
     indicator: lineIndicator(lineTop, iframeRect, nodeRect),
+    ghost: {
+      top: lineTop + 2,
+      left: iframeRect.left + nodeRect.left,
+      width: nodeRect.width,
+      height: GHOST_HEIGHT,
+    },
   }
 }
