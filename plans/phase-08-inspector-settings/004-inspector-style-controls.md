@@ -17,7 +17,7 @@ retry_count: 0
 
 Build the foundational style controls in the Inspector tab — **Layout** (display/flex
 basics), **Spacing** (padding/margin), **Size** (width/height/max), and **Typography**
-(font size/weight/line-height/color) — writing to the node's style props.
+(font family/size/weight/line-height/color) — writing to the node's style props.
 
 ## Context
 
@@ -39,6 +39,7 @@ matching the reference inspector.
 ## Acceptance Criteria
 
 - [ ] Layout, Spacing, Size, Typography control groups in the Inspector tab.
+- [ ] Typography controls include font-family picker sourced from WP Font Library + system-font fallback.
 - [ ] Controls write style props (base value) via the store, using the value/unit model.
 - [ ] Element-appropriate control sets (e.g. Typography for text elements).
 - [ ] Sections grouped/collapsible per the reference.
@@ -56,3 +57,7 @@ matching the reference inspector.
 - Write to the `base` slot of the responsive prop shape; Phase 09 adds the per-breakpoint
   layer on top of these same controls.
 - Keep the style-prop vocabulary aligned with what Phase 10's CSS engine will consume.
+- **Font-family picker:** query `GET /wp/v2/fonts` (WordPress Font Library, WP 7.0) and
+  merge with a static system-font fallback list (Arial, Helvetica, Georgia, Times New Roman,
+  Verdana, Courier New, `system-ui`, etc.). Show a searchable dropdown with a live preview.
+  The same font-resolution logic is reused in Phase 11's token manager UI.

@@ -51,3 +51,8 @@ it's the CRUD surface and presentation.
 - Where the manager lives (a NivoraX admin screen vs an editor panel) — decide and document;
   the screenshot suggests a dedicated screen.
 - Defer delete/rename safety to task 006; keep this focused on CRUD + presentation.
+- **Font-family picker (Typography section):** query `GET /wp/v2/fonts` (WordPress Font
+  Library, WP 7.0) and merge with a static fallback list (Arial, Helvetica, Georgia, Times
+  New Roman, Verdana, Courier New, `system-ui`, `sans-serif`, `serif`, `monospace`). Show
+  a searchable dropdown with a live preview of the selected family. WP Font Library handles
+  `@font-face` registration; no custom font-downloading logic needed here.
