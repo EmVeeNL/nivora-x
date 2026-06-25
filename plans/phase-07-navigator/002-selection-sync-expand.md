@@ -2,14 +2,14 @@
 task: 002
 phase: 07
 title: Selection Sync & Expand/Collapse
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 002 — Selection Sync & Expand/Collapse
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -35,10 +35,10 @@ a row to select on canvas). Expand/collapse is ephemeral UI state.
 
 ## Acceptance Criteria
 
-- [ ] Two-way selection sync (tree ↔ canvas) via the single store selection.
-- [ ] Selected node auto-revealed in the tree (ancestors expanded).
-- [ ] Expand/collapse with state in the Phase 03 UI store.
-- [ ] Vitest covers sync + expand/collapse; lint/format/typecheck pass.
+- [x] Two-way selection sync (tree ↔ canvas) via the single store selection.
+- [x] Selected node auto-revealed in the tree (ancestors expanded).
+- [x] Expand/collapse with state in the Phase 03 UI store.
+- [x] Vitest covers sync + expand/collapse; lint/format/typecheck pass.
 
 ## Files to Create
 

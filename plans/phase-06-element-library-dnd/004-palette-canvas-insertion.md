@@ -2,14 +2,14 @@
 task: 004
 phase: 06
 title: Palette → Canvas Insertion
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002, 003]
 retry_count: 0
 ---
 
 # Task 004 — Palette → Canvas Insertion
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002, 003
 > **Retry count:** 0
 
@@ -39,11 +39,11 @@ undoable and selection follows.
 
 ## Acceptance Criteria
 
-- [ ] Drop a library item → insert a new defaulted element at the resolved parent/index.
-- [ ] Nesting rules enforced; invalid drops refused with feedback.
-- [ ] Empty-container nesting works.
-- [ ] Insertion via Phase 04 store op; undoable; new node selected.
-- [ ] Vitest covers insert + rejection + empty-container; lint/format/typecheck pass.
+- [x] Drop a library item → insert a new defaulted element at the resolved parent/index.
+- [x] Nesting rules enforced; invalid drops refused with feedback.
+- [x] Empty-container nesting works.
+- [x] Insertion via Phase 04 store op; undoable; new node selected.
+- [x] Vitest covers insert + rejection + empty-container; lint/format/typecheck pass.
 
 ## Files to Create
 

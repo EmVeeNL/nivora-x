@@ -29,6 +29,11 @@ export function listElementTypes(): string[] {
   return Array.from(_registry.keys())
 }
 
+/** List all registered element definitions (ordered by registration). */
+export function listElementDefinitions(): ElementDefinition[] {
+  return Array.from(_registry.values())
+}
+
 /** Remove all registrations. Intended for use in tests only. */
 export function _clearRegistry(): void {
   _registry.clear()
@@ -64,7 +69,8 @@ function UnknownElement({ node, 'data-node-id': nodeId }: ElementRenderProps) {
 const FALLBACK_DEFINITION: ElementDefinition = {
   type: '__unknown__',
   label: 'Unknown Element',
-  icon: 'circle-help',
+  icon: 'tabler:help-circle',
+  category: '',
   defaultProps: {},
   nesting: { acceptsChildren: false },
   render: UnknownElement,

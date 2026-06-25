@@ -1,6 +1,13 @@
 import { create } from 'zustand'
-import type { DocumentTree, NxNode, ResponsiveBreakpoint } from './schema/types'
-import { insertNode, removeNode, moveNode, updateProps, duplicateNode } from './operations'
+import type { DocumentTree, NodeMeta, NxNode, ResponsiveBreakpoint } from './schema/types'
+import {
+  insertNode,
+  removeNode,
+  moveNode,
+  updateProps,
+  duplicateNode,
+  updateMeta,
+} from './operations'
 import { getElementDefinition, hasElement } from '@/elements/registry'
 
 const MAX_HISTORY = 50
@@ -39,6 +46,8 @@ interface DocumentActions {
     breakpoint?: ResponsiveBreakpoint,
     coalesceKey?: string,
   ): void
+  /** Update node authoring metadata. Pushes history. */
+  updateMeta(nodeId: string, meta: NodeMeta): void
   /** Duplicate node+subtree adjacent to original. Returns new node ID, or null on failure. */
   duplicateNode(nodeId: string): string | null
   /** Undo the last mutation. */
@@ -104,13 +113,21 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
     removeNode: (nodeId) => {
       const { tree } = get()
       if (!tree) return
+      let newTree: DocumentTree
+      let removedIds: string[]
+      try {
+        const result = removeNode(tree, nodeId)
+        newTree = result.tree
+        removedIds = result.removedIds
+      } catch {
+        return
+      }
       push(tree)
-      const { tree: newTree } = removeNode(tree, nodeId)
       const selectedId = get().selectedId
       set({
         tree: newTree,
         isDirty: true,
-        selectedId: selectedId === nodeId ? null : selectedId,
+        selectedId: selectedId && removedIds.includes(selectedId) ? null : selectedId,
       })
     },
 
@@ -143,12 +160,19 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
       set({ tree: updateProps(tree, nodeId, props, breakpoint), isDirty: true })
     },
 
+    updateMeta: (nodeId, meta) => {
+      const { tree } = get()
+      if (!tree) return
+      push(tree)
+      set({ tree: updateMeta(tree, nodeId, meta), isDirty: true })
+    },
+
     duplicateNode: (nodeId) => {
       const { tree } = get()
       if (!tree) return null
       try {
-        push(tree)
         const { tree: newTree, newNodeId } = duplicateNode(tree, nodeId)
+        push(tree)
         set({ tree: newTree, isDirty: true })
         return newNodeId
       } catch {

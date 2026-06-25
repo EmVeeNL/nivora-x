@@ -5,6 +5,8 @@ import { bootstrapIframe } from './iframe'
 import { CanvasRenderer } from './CanvasRenderer'
 import { useCanvasSelection } from './useCanvasSelection'
 import { SelectionOverlay } from './overlay/SelectionOverlay'
+import { useDndEditor } from './dnd/DndProvider'
+import { CanvasDropOverlay } from './dnd/CanvasDropOverlay'
 
 const BREAKPOINT_LABEL: Record<string, string> = {
   desktop: 'Desktop',
@@ -17,6 +19,7 @@ export function CanvasFrame() {
   const canvasRootRef = useRef<Root | null>(null)
   const activeBreakpoint = useUiStore((s) => s.activeBreakpoint)
   const frameWidth = BREAKPOINT_WIDTHS[activeBreakpoint]
+  const { isDragging } = useDndEditor()
 
   // Bootstrap the iframe HTML and mount the canvas React root inside it.
   useEffect(() => {
@@ -64,13 +67,21 @@ export function CanvasFrame() {
         ref={iframeRef}
         data-testid="canvas-iframe"
         title="NivoraX canvas"
-        style={{ width: `${String(frameWidth)}px`, maxWidth: '100%' }}
+        style={{
+          width: `${String(frameWidth)}px`,
+          maxWidth: '100%',
+          // Disable iframe pointer capture during DnD so parent window receives events
+          pointerEvents: isDragging ? 'none' : 'auto',
+        }}
         className="min-h-[640px] shrink-0 border-0 bg-white shadow-2xl"
         sandbox="allow-same-origin"
       />
 
       {/* Selection/hover overlay — position:fixed, tracks element rects in the iframe */}
       <SelectionOverlay iframeRef={iframeRef} />
+
+      {/* Full-viewport drag capture overlay — only active while dragging */}
+      <CanvasDropOverlay iframeRef={iframeRef} />
     </div>
   )
 }

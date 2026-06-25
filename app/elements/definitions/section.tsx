@@ -20,7 +20,8 @@ function SectionElement({ children, 'data-node-id': nodeId }: ElementRenderProps
 export const sectionDefinition: ElementDefinition = {
   type: 'section',
   label: 'Section',
-  icon: 'layout-panel-top',
+  icon: 'tabler:section',
+  category: 'Layout',
   defaultProps: {},
   nesting: { acceptsChildren: true },
   render: SectionElement,

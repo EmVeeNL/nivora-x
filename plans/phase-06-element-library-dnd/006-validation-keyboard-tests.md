@@ -2,14 +2,14 @@
 task: 006
 phase: 06
 title: Drop Validation, Keyboard DnD, Tests & Polish
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [004, 005]
 retry_count: 0
 ---
 
 # Task 006 — Drop Validation, Keyboard DnD, Tests & Polish
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 004, 005
 > **Retry count:** 0
 
@@ -38,11 +38,11 @@ this foundation.
 
 ## Acceptance Criteria
 
-- [ ] Unified invalid-drop feedback across insert + move.
-- [ ] Keyboard-accessible drag for both intents.
-- [ ] Selection-follow after every successful drop.
-- [ ] E2E happy path (library → canvas insert) green.
-- [ ] All JS gates green.
+- [x] Unified invalid-drop feedback across insert + move.
+- [x] Keyboard-accessible drag for both intents.
+- [x] Selection-follow after every successful drop.
+- [x] E2E happy path (library → canvas insert) green.
+- [x] All JS gates green.
 
 ## Files to Create
 

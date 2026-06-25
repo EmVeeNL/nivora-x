@@ -2,14 +2,14 @@
 task: 001
 phase: 07
 title: Navigator Panel & Live Tree
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Navigator Panel & Live Tree
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 
@@ -35,11 +35,11 @@ into the Phase 06 left-panel system. It's the base that selection sync, controls
 
 ## Acceptance Criteria
 
-- [ ] Navigator registered via the Phase 06 panel registry.
-- [ ] Live, virtualized tree reflecting the store hierarchy.
-- [ ] Updates reactively on store changes.
-- [ ] Rows show name/type; stable keys by node id.
-- [ ] Vitest covers render/reactivity; lint/format/typecheck pass.
+- [x] Navigator registered via the Phase 06 panel registry.
+- [x] Live, virtualized tree reflecting the store hierarchy.
+- [x] Updates reactively on store changes.
+- [x] Rows show name/type; stable keys by node id.
+- [x] Vitest covers render/reactivity; lint/format/typecheck pass.
 
 ## Files to Create
 

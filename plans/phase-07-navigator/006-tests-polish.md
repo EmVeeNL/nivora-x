@@ -2,14 +2,14 @@
 task: 006
 phase: 07
 title: Tests & Polish
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002, 003, 004, 005]
 retry_count: 0
 ---
 
 # Task 006 — Tests & Polish
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002, 003, 004, 005
 > **Retry count:** 0
 
@@ -34,10 +34,10 @@ later phases build on it.
 
 ## Acceptance Criteria
 
-- [ ] Integration tests across selection sync, controls, and reorder.
-- [ ] Lock/visibility consistent between canvas and tree.
-- [ ] Polished visuals consistent with the Phase 03 shell.
-- [ ] All JS gates green.
+- [x] Integration tests across selection sync, controls, and reorder.
+- [x] Lock/visibility consistent between canvas and tree.
+- [x] Polished visuals consistent with the Phase 03 shell.
+- [x] All JS gates green.
 
 ## Files to Create
 

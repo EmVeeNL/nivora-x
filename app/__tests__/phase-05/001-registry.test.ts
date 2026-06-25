@@ -19,7 +19,8 @@ const NoopRender = (_unused: ElementRenderProps) => null
 const mkDef = (type: string): ElementDefinition => ({
   type,
   label: `Label ${type}`,
-  icon: 'circle',
+  icon: 'tabler:circle',
+  category: 'Test',
   defaultProps: { foo: 'bar' },
   nesting: { acceptsChildren: true },
   render: NoopRender,
