@@ -40,6 +40,9 @@ final class Envelope {
 	 * Deserialise from the raw JSON string stored in post meta.
 	 *
 	 * Returns the empty default on any parse / structural failure (fail-safe).
+	 * Uses non-associative decode so empty JSON objects ({}) remain as stdClass
+	 * instances and round-trip back to {} rather than collapsing to PHP [] which
+	 * json_encode would emit as a JSON array.
 	 *
 	 * @param string $json Serialised envelope JSON.
 	 */
@@ -48,27 +51,38 @@ final class Envelope {
 			return self::empty();
 		}
 
-		$data = json_decode( $json, true );
+		$data = json_decode( $json );
 
-		if ( ! is_array( $data ) ) {
+		if ( ! is_object( $data ) ) {
 			return self::empty();
 		}
 
 		return new self(
-			version: isset( $data['version'] ) && is_int( $data['version'] ) ? $data['version'] : self::CURRENT_VERSION,
-			tree:    $data['tree'] ?? null,
-			meta:    isset( $data['meta'] ) && is_array( $data['meta'] ) ? $data['meta'] : [],
+			version: isset( $data->version ) && is_int( $data->version ) ? $data->version : self::CURRENT_VERSION,
+			tree:    $data->tree ?? null,
+			meta:    isset( $data->meta ) && is_object( $data->meta ) ? (array) $data->meta : [],
 		);
 	}
 
-	/** Serialise to a JSON string for storage in post meta. */
+	/**
+	 * Serialise to a JSON string for storage in post meta.
+	 *
+	 * @throws \RuntimeException If JSON encoding fails.
+	 */
 	public function to_json(): string {
-		return (string) wp_json_encode(
+		$encoded = wp_json_encode(
 			[
 				'version' => $this->version,
 				'tree'    => $this->tree,
 				'meta'    => $this->meta,
 			]
 		);
+
+		if ( false === $encoded ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- exception message, not rendered output
+			throw new \RuntimeException( 'Failed to serialize document: ' . json_last_error_msg() );
+		}
+
+		return $encoded;
 	}
 }

@@ -2,14 +2,14 @@
 task: 002
 phase: 09
 title: Functional Breakpoint Switcher
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 002 — Functional Breakpoint Switcher
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -49,3 +49,6 @@ it the configured set (task 001) and connects the active breakpoint to the canva
 
 - Replace the Phase 03 hard-coded preset list with the task-001 accessor (single source).
 - Canvas width binding already exists (Phase 03 task 005) — point it at the configured widths.
+- Completed on 2026-06-25 as part of the task-001/task-003 groundwork: the switcher renders the
+  live configured breakpoint set, updates the active UI breakpoint, and the canvas width reacts
+  immediately to saved config changes.

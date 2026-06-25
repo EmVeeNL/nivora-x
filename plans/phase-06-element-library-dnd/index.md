@@ -3,14 +3,14 @@ phase: 06
 slug: element-library-dnd
 title: Element Library, Left Rail & Drag-and-Drop
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 06 — Element Library, Left Rail & Drag-and-Drop
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -27,8 +27,9 @@ store ops (undoable). Reuses Phase 05's `useFrameRect` mapping.
 - **Left icon-rail + panel-switching system:** a generic, icon-only rail of registered left
   panels; Element Library is the first (Navigator registers in Phase 07). Clicking the
   active icon collapses the panel. Active-panel/collapse state in the Phase 03 UI store.
-- **Element Library panel:** categories (e.g. Layout, Content) + search over the Phase 05
-  registry; each item shows label/icon and is draggable.
+- **Element Library panel:** collapsible categories (e.g. Layout, Content) + search over
+  the Phase 05 registry; only the first visible category opens by default; each item shows
+  label/icon and is draggable.
 - **dnd-kit foundation** spanning the editor chrome (rail/palette) and the **iframe canvas**,
   reusing `useFrameRect` for drop-position math + insertion indicators.
 - **Palette → canvas insertion:** drop a new element (with defaults) at the indicated
@@ -50,17 +51,18 @@ store ops (undoable). Reuses Phase 05's `useFrameRect` mapping.
 
 ## Success Criteria
 
-- [ ] The left icon-rail switches left panels; Element Library is the active first panel;
+- [x] The left icon-rail switches left panels; Element Library is the active first panel;
       clicking the active icon collapses it.
-- [ ] The Element Library lists registered elements in categories with working search.
-- [ ] Dragging a library item into the canvas inserts a new element (defaults) at the
+- [x] The Element Library lists registered elements in collapsible categories with working
+      search; only the first visible group opens by default.
+- [x] Dragging a library item into the canvas inserts a new element (defaults) at the
       indicated position, honoring nesting rules.
-- [ ] Dragging an existing element reorders/re-nests it; invalid drops are rejected with
+- [x] Dragging an existing element reorders/re-nests it; invalid drops are rejected with
       feedback.
-- [ ] Insertion indicators show the drop position (between siblings, into empty containers).
-- [ ] All DnD mutations go through Phase 04 store ops, are undoable, and selection follows.
-- [ ] Keyboard drag-and-drop works.
-- [ ] Vitest + an E2E drag-insert happy path pass; lint/format/typecheck/build green.
+- [x] Insertion indicators show the drop position (between siblings, into empty containers).
+- [x] All DnD mutations go through Phase 04 store ops, are undoable, and selection follows.
+- [x] Keyboard drag-and-drop works.
+- [x] Vitest + an E2E drag-insert happy path pass; lint/format/typecheck/build green.
 
 ## Task Overview
 
@@ -68,12 +70,12 @@ store ops (undoable). Reuses Phase 05's `useFrameRect` mapping.
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Left icon-rail + left-panel switching system (hosts multiple panels; Element Library first) | — | Not Started |
-| 002  | Element Library panel: categorized + searchable list of registered elements (draggable items) | 001 | Not Started |
-| 003  | dnd-kit foundation across chrome ↔ iframe (context, sensors, drop-target + indicator infra reusing `useFrameRect`) | — | Not Started |
-| 004  | Palette → canvas insertion (drop resolution, nesting rules, defaults, indicators) | 002, 003 | Not Started |
-| 005  | Canvas reorder / re-nest of existing elements | 003 | Not Started |
-| 006  | Drop validation + feedback, keyboard DnD, selection-follow, tests (unit + E2E) + polish | 004, 005 | Not Started |
+| 001  | Left icon-rail + left-panel switching system (hosts multiple panels; Element Library first) | — | Done |
+| 002  | Element Library panel: categorized, searchable, collapsible list of registered elements (draggable items) | 001 | Done |
+| 003  | dnd-kit foundation across chrome ↔ iframe (context, sensors, drop-target + indicator infra reusing `useFrameRect`) | — | Done |
+| 004  | Palette → canvas insertion (drop resolution, nesting rules, defaults, indicators) | 002, 003 | Done |
+| 005  | Canvas reorder / re-nest of existing elements | 003 | Done |
+| 006  | Drop validation + feedback, keyboard DnD, selection-follow, tests (unit + E2E) + polish | 004, 005 | Done |
 
 ## Architectural Notes
 

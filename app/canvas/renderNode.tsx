@@ -1,5 +1,8 @@
 import type { DocumentTree } from '@/document/schema/types'
+import { isHidden } from '@/document/canInteract'
 import { getElementDefinition } from '@/elements/registry'
+import { useUiStore } from '@/state/uiStore'
+import { getEditorInlineStyles, isHiddenAtBreakpoint } from './style/applyStyles'
 
 interface RenderNodeProps {
   nodeId: string
@@ -13,6 +16,7 @@ interface RenderNodeProps {
  * place it on the root DOM element (required for pointer-event resolution).
  */
 export function RenderNode({ nodeId, tree }: RenderNodeProps) {
+  const activeBreakpoint = useUiStore((s) => s.activeBreakpoint)
   const node = tree.nodes[nodeId]
   if (!node) return null
 
@@ -23,9 +27,48 @@ export function RenderNode({ nodeId, tree }: RenderNodeProps) {
     <RenderNode key={childId} nodeId={childId} tree={tree} />
   ))
 
-  return (
-    <Render node={node} data-node-id={nodeId}>
+  const rendered = (
+    <Render node={node} data-node-id={nodeId} style={getEditorInlineStyles(node, activeBreakpoint)}>
       {childNodes.length > 0 ? childNodes : undefined}
     </Render>
   )
+
+  if (isHiddenAtBreakpoint(node, activeBreakpoint)) {
+    return (
+      <div style={{ position: 'relative', opacity: 0.25, pointerEvents: 'none' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <span
+            style={{
+              background: 'rgba(0,0,0,0.65)',
+              borderRadius: 4,
+              padding: '3px 8px',
+              fontSize: 11,
+              color: '#fff',
+              fontFamily: 'sans-serif',
+              letterSpacing: 0.3,
+            }}
+          >
+            Hidden on {activeBreakpoint}
+          </span>
+        </div>
+        {rendered}
+      </div>
+    )
+  }
+
+  if (isHidden(node)) {
+    return <div style={{ opacity: 0.35, pointerEvents: 'none' }}>{rendered}</div>
+  }
+
+  return rendered
 }

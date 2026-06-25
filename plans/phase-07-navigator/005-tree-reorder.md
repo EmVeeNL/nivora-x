@@ -2,14 +2,14 @@
 task: 005
 phase: 07
 title: Tree Drag-to-Reorder / Re-nest
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 005 — Tree Drag-to-Reorder / Re-nest
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -35,11 +35,11 @@ abstracts target computation per surface, so this task supplies a tree-row targe
 
 ## Acceptance Criteria
 
-- [ ] Drag-reorder among siblings and re-nest across containers in the tree.
-- [ ] Nesting rules enforced; descendant-target moves rejected.
-- [ ] Commits via Phase 04 move op; canvas stays in sync; undoable.
-- [ ] Reuses the Phase 06 pipeline with a tree-row target resolver.
-- [ ] Vitest covers reorder/re-nest/guards; lint/format/typecheck pass.
+- [x] Drag-reorder among siblings and re-nest across containers in the tree.
+- [x] Nesting rules enforced; descendant-target moves rejected.
+- [x] Commits via Phase 04 move op; canvas stays in sync; undoable.
+- [x] Reuses the Phase 06 pipeline with a tree-row target resolver.
+- [x] Vitest covers reorder/re-nest/guards; lint/format/typecheck pass.
 
 ## Files to Create
 

@@ -3,15 +3,42 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { EditorLayout } from '@/shell/EditorLayout'
 import { CanvasFrame } from '@/canvas/CanvasFrame'
 import { NavigatorPlaceholder } from '@/shell/NavigatorPlaceholder'
+import { DndProvider } from '@/canvas/dnd/DndProvider'
 import { useUiStore } from '@/state/uiStore'
+import { registerLeftPanel, _clearLeftPanelRegistry } from '@/shell/left/leftPanelRegistry'
+import { registerElement, _clearRegistry } from '@/elements/registry'
+import { sectionDefinition } from '@/elements/definitions/section'
+import { useDocumentStore } from '@/document/store'
+import type { DocumentTree } from '@/document/schema/types'
 import '@/lib/icons'
 
+const renderLayout = () =>
+  render(
+    <DndProvider>
+      <EditorLayout />
+    </DndProvider>,
+  )
+const renderFrame = () =>
+  render(
+    <DndProvider>
+      <CanvasFrame />
+    </DndProvider>,
+  )
+
 beforeEach(() => {
+  _clearLeftPanelRegistry()
+  _clearRegistry()
+  registerLeftPanel({
+    id: 'navigator',
+    label: 'Navigator',
+    icon: 'tabler:layers-subtract',
+    component: NavigatorPlaceholder,
+  })
   useUiStore.setState({
     activeLeftPanel: 'navigator',
     rightPanelOpen: true,
     activeBreakpoint: 'desktop',
-    activeInspectorTab: 'style',
+    activeInspectorTab: 'inspector',
     openSections: {
       layout: true,
       spacing: true,
@@ -22,6 +49,38 @@ beforeEach(() => {
       effects: false,
     },
   })
+  registerElement(sectionDefinition)
+  const tree: DocumentTree = {
+    rootId: 'root',
+    nodes: {
+      root: {
+        id: 'root',
+        type: '__root__',
+        props: {},
+        children: ['section'],
+        overrides: {},
+        meta: {},
+      },
+      section: {
+        id: 'section',
+        type: 'section',
+        props: {},
+        children: [],
+        overrides: {},
+        meta: {},
+      },
+    },
+  }
+  useDocumentStore.setState({
+    tree,
+    documentMeta: {},
+    selectedId: 'section',
+    isDirty: false,
+    past: [],
+    future: [],
+    _lastCoalesceKey: null,
+    _lastCoalesceTime: 0,
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -29,7 +88,7 @@ beforeEach(() => {
 // ---------------------------------------------------------------------------
 describe('EditorLayout — full shell integration', () => {
   it('renders all shell regions simultaneously', () => {
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByTestId('region-toolbar')).toBeInTheDocument()
     expect(screen.getByTestId('region-activity-bar')).toBeInTheDocument()
     expect(screen.getByTestId('region-left')).toBeInTheDocument()
@@ -39,27 +98,27 @@ describe('EditorLayout — full shell integration', () => {
   })
 
   it('activity bar navigator button collapses left panel and canvas persists', () => {
-    render(<EditorLayout />)
+    renderLayout()
     fireEvent.click(screen.getByRole('button', { name: /navigator/i }))
     expect(useUiStore.getState().activeLeftPanel).toBeNull()
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
   })
 
   it('right panel toggle and canvas coexist', () => {
-    render(<EditorLayout />)
+    renderLayout()
     fireEvent.click(screen.getByRole('button', { name: /collapse inspector/i }))
     expect(useUiStore.getState().rightPanelOpen).toBe(false)
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
   })
 
   it('breakpoint buttons are reachable in the toolbar region', () => {
-    render(<EditorLayout />)
+    renderLayout()
     const toolbar = screen.getByTestId('region-toolbar')
     expect(toolbar.querySelector('[aria-label="Tablet"]')).toBeTruthy()
   })
 
   it('breadcrumb is in the footer region', () => {
-    render(<EditorLayout />)
+    renderLayout()
     const footer = screen.getByTestId('region-breadcrumb')
     expect(footer.querySelector('nav')).toBeTruthy()
   })
@@ -70,18 +129,18 @@ describe('EditorLayout — full shell integration', () => {
 // ---------------------------------------------------------------------------
 describe('CanvasFrame breakpoint label', () => {
   it('shows "Desktop" label by default', () => {
-    render(<CanvasFrame />)
+    renderFrame()
     expect(screen.getByTestId('canvas-breakpoint-label').textContent).toContain('Desktop')
   })
 
   it('shows the desktop pixel width in the label', () => {
-    render(<CanvasFrame />)
+    renderFrame()
     expect(screen.getByTestId('canvas-breakpoint-label').textContent).toContain('1440')
   })
 
   it('updates label when breakpoint changes to tablet', () => {
     useUiStore.setState({ activeBreakpoint: 'tablet' })
-    render(<CanvasFrame />)
+    renderFrame()
     const label = screen.getByTestId('canvas-breakpoint-label')
     expect(label.textContent).toContain('Tablet')
     expect(label.textContent).toContain('768')
@@ -89,14 +148,14 @@ describe('CanvasFrame breakpoint label', () => {
 
   it('updates label when breakpoint changes to mobile', () => {
     useUiStore.setState({ activeBreakpoint: 'mobile' })
-    render(<CanvasFrame />)
+    renderFrame()
     const label = screen.getByTestId('canvas-breakpoint-label')
     expect(label.textContent).toContain('Mobile')
     expect(label.textContent).toContain('375')
   })
 
   it('label has aria-live so screen readers announce breakpoint changes', () => {
-    render(<CanvasFrame />)
+    renderFrame()
     expect(screen.getByTestId('canvas-breakpoint-label')).toHaveAttribute('aria-live', 'polite')
   })
 })
@@ -145,17 +204,17 @@ describe('NavigatorPlaceholder — polish', () => {
 // ---------------------------------------------------------------------------
 describe('RightPanel Layout section controls', () => {
   it('layout section shows Direction control', () => {
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByText('Direction')).toBeInTheDocument()
   })
 
   it('layout section shows Align control', () => {
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByText('Align')).toBeInTheDocument()
   })
 
   it('layout section shows Justify control', () => {
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByText('Justify')).toBeInTheDocument()
   })
 })

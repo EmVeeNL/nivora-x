@@ -75,5 +75,32 @@ describe(
 				->and( $callback( 'abc' ) )->toBeFalse();
 			}
 		);
+
+		it(
+			'maps document title metadata to post title updates',
+			function (): void {
+				$ref    = new ReflectionClass( DocumentController::class );
+				$method = $ref->getMethod( 'post_update_from_meta' );
+				$result = $method->invoke( null, 42, [ 'title' => 'About' ], false );
+
+				expect( $result )->toBe(
+					[
+						'ID'         => 42,
+						'post_title' => 'About',
+					]
+				);
+			}
+		);
+
+		it(
+			'includes publish status in post updates when requested',
+			function (): void {
+				$ref    = new ReflectionClass( DocumentController::class );
+				$method = $ref->getMethod( 'post_update_from_meta' );
+				$result = $method->invoke( null, 42, [ 'title' => 'About' ], true );
+
+				expect( $result['post_status'] )->toBe( 'publish' );
+			}
+		);
 	}
 );

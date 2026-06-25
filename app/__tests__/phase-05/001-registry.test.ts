@@ -19,7 +19,8 @@ const NoopRender = (_unused: ElementRenderProps) => null
 const mkDef = (type: string): ElementDefinition => ({
   type,
   label: `Label ${type}`,
-  icon: 'circle',
+  icon: 'tabler:circle',
+  category: 'Test',
   defaultProps: { foo: 'bar' },
   nesting: { acceptsChildren: true },
   render: NoopRender,
@@ -116,12 +117,20 @@ describe('parity slots', () => {
     const def: ElementDefinition = {
       ...mkDef('rich'),
       phpRender: 'some-php-class',
-      controlSchema: [{ type: 'text', key: 'label' }],
+      controlSchema: {
+        block: [
+          {
+            id: 'content',
+            title: 'Content',
+            controls: [{ id: 'label', type: 'text', label: 'Label', prop: 'label' }],
+          },
+        ],
+      },
     }
     registerElement(def)
     const retrieved = getElementDefinition('rich')
     expect(retrieved.phpRender).toBe('some-php-class')
-    expect(retrieved.controlSchema).toEqual([{ type: 'text', key: 'label' }])
+    expect(retrieved.controlSchema?.block?.[0]?.controls[0]?.prop).toBe('label')
   })
 })
 

@@ -1,6 +1,7 @@
 import type { ElementDefinition, ElementRenderProps } from '../types'
+import { layoutInspectorSchema } from '@/inspector/style/styleSchemas'
 
-function ContainerElement({ children, 'data-node-id': nodeId }: ElementRenderProps) {
+function ContainerElement({ children, 'data-node-id': nodeId, style }: ElementRenderProps) {
   return (
     <div
       data-node-id={nodeId}
@@ -12,6 +13,7 @@ function ContainerElement({ children, 'data-node-id': nodeId }: ElementRenderPro
         padding: '0 24px',
         boxSizing: 'border-box',
         minHeight: 48,
+        ...style,
       }}
     >
       {children}
@@ -22,8 +24,27 @@ function ContainerElement({ children, 'data-node-id': nodeId }: ElementRenderPro
 export const containerDefinition: ElementDefinition = {
   type: 'container',
   label: 'Container',
-  icon: 'box',
+  icon: 'tabler:container',
+  category: 'Layout',
   defaultProps: {},
   nesting: { acceptsChildren: true },
   render: ContainerElement,
+  controlSchema: {
+    block: [
+      {
+        id: 'container-content',
+        title: 'Container',
+        controls: [
+          {
+            id: 'html-id',
+            type: 'text',
+            label: 'HTML ID',
+            prop: 'htmlId',
+            placeholder: 'content',
+          },
+        ],
+      },
+    ],
+    inspector: layoutInspectorSchema,
+  },
 }

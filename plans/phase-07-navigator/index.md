@@ -3,14 +3,14 @@ phase: 07
 slug: navigator
 title: Navigator
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 07 — Navigator
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -44,16 +44,16 @@ Replaces the Phase 03 placeholder navigator.
 
 ## Success Criteria
 
-- [ ] Navigator registered as a left-rail panel; switches with the Element Library.
-- [ ] Tree reflects the live hierarchy and updates on store changes; virtualized.
-- [ ] Selecting in the tree selects on canvas and vice versa.
-- [ ] Expand/collapse works and persists in UI state.
-- [ ] Visibility + lock toggles work; lock prevents selection/edit/move; hidden nodes dim
+- [x] Navigator registered as a left-rail panel; switches with the Element Library.
+- [x] Tree reflects the live hierarchy and updates on store changes; virtualized.
+- [x] Selecting in the tree selects on canvas and vice versa.
+- [x] Expand/collapse works and persists in UI state.
+- [x] Visibility + lock toggles work; lock prevents selection/edit/move; hidden nodes dim
       in the editor.
-- [ ] Rename updates the node name (tree + breadcrumb).
-- [ ] Duplicate/delete mutate via store ops and are undoable.
-- [ ] Drag-to-reorder/re-nest honors nesting rules via the Phase 06 pipeline; undoable.
-- [ ] Vitest covers tree render, selection sync, controls, and reorder; JS gates green.
+- [x] Rename updates the node name (tree + breadcrumb).
+- [x] Duplicate/delete mutate via store ops and are undoable.
+- [x] Drag-to-reorder/re-nest honors nesting rules via the Phase 06 pipeline; undoable.
+- [x] Vitest covers tree render, selection sync, controls, and reorder; JS gates green.
 
 ## Task Overview
 
@@ -61,12 +61,12 @@ Replaces the Phase 03 placeholder navigator.
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Navigator panel registration + live, virtualized tree bound to the store | — | Not Started |
-| 002  | Two-way selection sync (tree ↔ canvas) + expand/collapse | 001 | Not Started |
-| 003  | Visibility + lock toggles (+ editor selection/edit semantics) | 001 | Not Started |
-| 004  | Rename + duplicate + delete (store ops, undoable) | 001 | Not Started |
-| 005  | Tree drag-to-reorder/re-nest (reuse Phase 06 pipeline + nesting rules) | 001 | Not Started |
-| 006  | Tests + polish | 002, 003, 004, 005 | Not Started |
+| 001  | Navigator panel registration + live, virtualized tree bound to the store | — | Done |
+| 002  | Two-way selection sync (tree ↔ canvas) + expand/collapse | 001 | Done |
+| 003  | Visibility + lock toggles (+ editor selection/edit semantics) | 001 | Done |
+| 004  | Rename + duplicate + delete (store ops, undoable) | 001 | Done |
+| 005  | Tree drag-to-reorder/re-nest (reuse Phase 06 pipeline + nesting rules) | 001 | Done |
+| 006  | Tests + polish | 002, 003, 004, 005 | Done |
 
 ## Architectural Notes
 

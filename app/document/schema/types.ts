@@ -1,5 +1,5 @@
 /** Breakpoints that support responsive overrides (desktop/base is always the default). */
-export type ResponsiveBreakpoint = 'tablet' | 'mobile'
+export type ResponsiveBreakpoint = string
 
 /**
  * A typed value that can vary per breakpoint.

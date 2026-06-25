@@ -24,7 +24,47 @@ architectural challenge.
 
 - **Planning:** Phases 01–14 **Defined** with full task files (107 tasks); 15–21 **Staged**
   (provisional titles). See `plans/ROADMAP.md`.
-- **Build:** not started — greenfield. Phase 01 (Docker/toolchain/CI) builds first.
+- **Build:** Phases 01–09 are implemented and marked Done. Phase 10 (Front-End
+  Rendering & CSS Engine) is next.
+- **Current editor shell:** left rail has Navigator and Elements panels. Elements groups are
+  collapsible with only the first visible group open by default; Navigator supports live
+  tree selection, collapse state, visibility/lock, rename, duplicate/delete, and tree
+  reorder via the shared DnD/store pipeline. The right panel has functional **Style /
+  Settings / Page** tabs driven by declarative element control schemas.
+
+**Phase 08 extended scope (all Done, delivered on top of the original tasks):**
+
+- **Style controls:** Layout, Spacing (redesigned with Y/X/All axis-link buttons), Size,
+  Typography, Background, **Border** (style/width/color/radius), and **Box Shadow**
+  (structured sub-fields: offset-x/y, blur, spread, color, inset).
+- **Responsive lock:** every style control shows a lock icon when a non-desktop breakpoint
+  is active. Locked (default) = inherits desktop; click to create a breakpoint-specific
+  override; click again to remove it.
+- **Visual element borders toggle:** toolbar button shows per-element dashed outlines in the
+  chrome (RAF-tracked, zero layout shifts) coloured by category (Layout=blue,
+  Typography=purple, Forms=emerald, Media=orange, …).
+- **Delete confirmation dialog:** React portal modal (not `window.confirm`). Delete /
+  Backspace and the drag-handle × button both open it. Deletion is undoable.
+- **X delete button** on the selection drag-handle pill.
+- **Cmd+Z / Cmd+Shift+Z** undo/redo wired into the editor keyboard hook (chrome + iframe).
+- **Insert config modal:** elements that declare `insertConfig` on their `ElementDefinition`
+  show a config modal before dropping into the canvas. Grid (columns, gap) and Columns
+  (column count) use it. Extensible to any future element.
+- **Grid/Columns proper renders:** Grid uses CSS `display:grid; grid-template-columns:
+  repeat(N, 1fr)`; Columns is a 2-column grid; both use their configured props.
+
+**Phase 09 scope (Done):**
+
+- **Responsive breakpoints:** site-wide configurable breakpoints (Desktop/Tablet/Mobile +
+  custom), persisted via plugin settings, exposed to the editor bootstrap, and used by the
+  breakpoint switcher/canvas width logic.
+- **Desktop-first responsive editing:** style controls write `base` on desktop and
+  breakpoint-specific overrides on narrower breakpoints; the canvas resolver honors the
+  configured cascade order.
+- **Inherited/overridden indicators:** non-desktop style controls show per-control
+  inherited/overridden state with explicit create-override and reset-to-inherited actions.
+- **Top bar workflow:** Save Draft, Publish, autosave status, and **Preview** (chrome-off,
+  read-only, active-breakpoint clean view) are all wired and tested.
 
 ## Key Architecture Decisions
 

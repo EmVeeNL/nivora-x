@@ -2,14 +2,14 @@
 task: 001
 phase: 09
 title: Site-Wide Breakpoint Configuration
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Site-Wide Breakpoint Configuration
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 
@@ -55,3 +55,6 @@ a breakpoint must safely handle existing per-breakpoint style overrides on docum
 - Mirror the Phase 02 settings accessor pattern; this set is the single source for switcher,
   canvas widths, and the Phase 08 resolver.
 - Decide override-on-remove policy (drop vs remap to nearest) and document it.
+- First implementation slice landed on 2026-06-25: PHP defaults/sanitizer + typed accessor,
+  editor bootstrap exposure, client breakpoint accessor, and switcher/canvas consumption. CRUD
+  settings UI and override-removal policy still open in this task.

@@ -1,7 +1,22 @@
 import { create } from 'zustand'
-import type { DocumentTree, NxNode, ResponsiveBreakpoint } from './schema/types'
-import { insertNode, removeNode, moveNode, updateProps, duplicateNode } from './operations'
+import type {
+  DocumentEnvelope,
+  DocumentTree,
+  NodeMeta,
+  NxNode,
+  ResponsiveBreakpoint,
+} from './schema/types'
+import {
+  insertNode,
+  removeNode,
+  moveNode,
+  updateProps,
+  duplicateNode,
+  updateMeta,
+} from './operations'
 import { getElementDefinition, hasElement } from '@/elements/registry'
+import { SCHEMA_VERSION } from './schema/constants'
+import type { SaveStatus } from './autosave'
 
 const MAX_HISTORY = 50
 /** Milliseconds within which repeated edits to the same coalesceKey merge into one history entry. */
@@ -9,8 +24,10 @@ const COALESCE_MS = 500
 
 interface DocumentState {
   tree: DocumentTree | null
+  documentMeta: Record<string, unknown>
   selectedId: string | null
   isDirty: boolean
+  autosaveStatus: SaveStatus
   // undo/redo
   past: DocumentTree[]
   future: DocumentTree[]
@@ -21,6 +38,10 @@ interface DocumentState {
 interface DocumentActions {
   /** Replace the entire tree (does not push to undo history). */
   setTree(tree: DocumentTree): void
+  /** Replace the entire document envelope (does not push to undo history). */
+  setDocument(envelope: DocumentEnvelope): void
+  /** Build the current persistence envelope from store state. */
+  toEnvelope(): DocumentEnvelope | null
   /** Select a node by ID, or clear selection with null. */
   selectNode(id: string | null): void
   /** Insert node under parentId at optional index (default: append). Pushes history. */
@@ -39,6 +60,10 @@ interface DocumentActions {
     breakpoint?: ResponsiveBreakpoint,
     coalesceKey?: string,
   ): void
+  /** Update node authoring metadata. Pushes history. */
+  updateMeta(nodeId: string, meta: NodeMeta): void
+  /** Update document-scoped metadata. Marks dirty. */
+  updateDocumentMeta(meta: Record<string, unknown>): void
   /** Duplicate node+subtree adjacent to original. Returns new node ID, or null on failure. */
   duplicateNode(nodeId: string): string | null
   /** Undo the last mutation. */
@@ -47,6 +72,8 @@ interface DocumentActions {
   redo(): void
   /** Mark the document as clean (e.g. after a successful save). */
   markClean(): void
+  /** Update the autosave status signal consumed by the toolbar indicator. */
+  setAutosaveStatus(status: SaveStatus): void
 }
 
 export const useDocumentStore = create<DocumentState & DocumentActions>()((set, get) => {
@@ -71,15 +98,33 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
   return {
     // ---- state ----
     tree: null,
+    documentMeta: {},
     selectedId: null,
     isDirty: false,
+    autosaveStatus: 'idle',
     past: [],
     future: [],
     _lastCoalesceKey: null,
     _lastCoalesceTime: 0,
 
     // ---- actions ----
-    setTree: (tree) => set({ tree, isDirty: false, past: [], future: [] }),
+    setTree: (tree) => set({ tree, isDirty: false, autosaveStatus: 'idle', past: [], future: [] }),
+
+    setDocument: (envelope) =>
+      set({
+        tree: envelope.tree,
+        documentMeta: envelope.meta,
+        isDirty: false,
+        autosaveStatus: 'idle',
+        past: [],
+        future: [],
+      }),
+
+    toEnvelope: () => {
+      const { tree, documentMeta } = get()
+      if (!tree) return null
+      return { version: SCHEMA_VERSION, tree, meta: documentMeta }
+    },
 
     selectNode: (id) => set({ selectedId: id }),
 
@@ -104,13 +149,21 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
     removeNode: (nodeId) => {
       const { tree } = get()
       if (!tree) return
+      let newTree: DocumentTree
+      let removedIds: string[]
+      try {
+        const result = removeNode(tree, nodeId)
+        newTree = result.tree
+        removedIds = result.removedIds
+      } catch {
+        return
+      }
       push(tree)
-      const { tree: newTree } = removeNode(tree, nodeId)
       const selectedId = get().selectedId
       set({
         tree: newTree,
         isDirty: true,
-        selectedId: selectedId === nodeId ? null : selectedId,
+        selectedId: selectedId && removedIds.includes(selectedId) ? null : selectedId,
       })
     },
 
@@ -143,12 +196,22 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
       set({ tree: updateProps(tree, nodeId, props, breakpoint), isDirty: true })
     },
 
+    updateMeta: (nodeId, meta) => {
+      const { tree } = get()
+      if (!tree) return
+      push(tree)
+      set({ tree: updateMeta(tree, nodeId, meta), isDirty: true })
+    },
+
+    updateDocumentMeta: (meta) =>
+      set((s) => ({ documentMeta: { ...s.documentMeta, ...meta }, isDirty: true })),
+
     duplicateNode: (nodeId) => {
       const { tree } = get()
       if (!tree) return null
       try {
-        push(tree)
         const { tree: newTree, newNodeId } = duplicateNode(tree, nodeId)
+        push(tree)
         set({ tree: newTree, isDirty: true })
         return newNodeId
       } catch {
@@ -183,5 +246,6 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
       }),
 
     markClean: () => set({ isDirty: false }),
+    setAutosaveStatus: (status) => set({ autosaveStatus: status }),
   }
 })

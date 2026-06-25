@@ -53,5 +53,15 @@ describe(
 				expect( $defaults['enabled_post_types'] )->toContain( 'page' );
 			}
 		);
+
+		it(
+			'default options include breakpoint presets',
+			function (): void {
+				$defaults = SettingsPage::defaults();
+				expect( array_column( $defaults['breakpoints'], 'id' ) )->toBe(
+					[ 'desktop', 'tablet', 'mobile' ]
+				);
+			}
+		);
 	}
 );

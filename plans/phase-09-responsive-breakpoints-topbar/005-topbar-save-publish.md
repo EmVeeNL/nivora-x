@@ -2,14 +2,14 @@
 task: 005
 phase: 09
 title: Top Bar — Save Draft & Publish
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 005 — Top Bar — Save Draft & Publish
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** []
 > **Retry count:** 0
 
@@ -52,3 +52,5 @@ Phase 10).
 
 - Call the Phase 04 store persistence actions directly — no new persistence logic here.
 - Coordinate with autosave (task 006) so manual + auto saves share the single write queue.
+- Completed on 2026-06-25: Save Draft and Publish are wired to the Phase 04 persistence actions,
+  with explicit in-flight disabling and success/error feedback in the toolbar.

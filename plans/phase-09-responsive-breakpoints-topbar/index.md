@@ -3,14 +3,14 @@ phase: 09
 slug: responsive-breakpoints-topbar
 title: Responsive Breakpoints & Top Bar
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 09 — Responsive Breakpoints & Top Bar
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -66,14 +66,14 @@ Phase 04 status signal. After this phase the editor is usable end-to-end.
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Site-wide breakpoint configuration (presets + custom add/edit/remove) + persistence + accessor | — | Not Started |
-| 002  | Functional breakpoint switcher from the configured set; active breakpoint drives canvas width | 001 | Not Started |
-| 003  | Desktop-first responsive editing: controls write active-breakpoint overrides; resolver honors cascade | 002 | Not Started |
-| 004  | Inherited/overridden indicators + reset-to-inherited per control | 003 | Not Started |
-| 005  | Top bar: Save draft + Publish (wire Phase 04 persistence) | — | Not Started |
-| 006  | Top bar: autosave indicator (Phase 04 signal, no layout shift) | — | Not Started |
-| 007  | Preview: in-editor clean (chrome-off) view at the active breakpoint | — | Not Started |
-| 008  | Tests (unit + E2E) + polish | 003, 004, 005, 006, 007 | Not Started |
+| 001  | Site-wide breakpoint configuration (presets + custom add/edit/remove) + persistence + accessor | — | Done |
+| 002  | Functional breakpoint switcher from the configured set; active breakpoint drives canvas width | 001 | Done |
+| 003  | Desktop-first responsive editing: controls write active-breakpoint overrides; resolver honors cascade | 002 | Done |
+| 004  | Inherited/overridden indicators + reset-to-inherited per control | 003 | Done |
+| 005  | Top bar: Save draft + Publish (wire Phase 04 persistence) | — | Done |
+| 006  | Top bar: autosave indicator (Phase 04 signal, no layout shift) | — | Done |
+| 007  | Preview: in-editor clean (chrome-off) view at the active breakpoint | — | Done |
+| 008  | Tests (unit + E2E) + polish | 003, 004, 005, 006, 007 | Done |
 
 ## Architectural Notes
 

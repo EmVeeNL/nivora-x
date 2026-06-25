@@ -2,13 +2,22 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { EditorLayout } from '@/shell/EditorLayout'
 import { useUiStore, type Breakpoint } from '@/state/uiStore'
+import { DndProvider } from '@/canvas/dnd/DndProvider'
 import '@/lib/icons'
+
+const renderLayout = () =>
+  render(
+    <DndProvider>
+      <EditorLayout />
+    </DndProvider>,
+  )
 
 // Reset store to initial values before each test.
 beforeEach(() => {
   useUiStore.setState({
     activeLeftPanel: 'navigator',
     rightPanelOpen: true,
+    previewMode: false,
     activeBreakpoint: 'desktop',
     activeInspectorTab: 'style',
     openSections: {
@@ -28,7 +37,7 @@ beforeEach(() => {
 // ---------------------------------------------------------------------------
 describe('EditorLayout', () => {
   it('renders all shell regions', () => {
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByTestId('region-toolbar')).toBeInTheDocument()
     expect(screen.getByTestId('region-activity-bar')).toBeInTheDocument()
     expect(screen.getByTestId('region-left')).toBeInTheDocument()
@@ -38,31 +47,40 @@ describe('EditorLayout', () => {
   })
 
   it('left panel is open (w-52) by default', () => {
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByTestId('region-left').className).toContain('w-52')
   })
 
   it('right panel is open (w-72) by default', () => {
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByTestId('region-right').className).toContain('w-72')
   })
 
   it('left panel collapses to w-0 when activeLeftPanel is null', () => {
     useUiStore.setState({ activeLeftPanel: null })
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByTestId('region-left').className).toContain('w-0')
   })
 
   it('right panel collapses to w-10 when rightPanelOpen is false', () => {
     useUiStore.setState({ rightPanelOpen: false })
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByTestId('region-right').className).toContain('w-10')
   })
 
   it('canvas region always renders regardless of panel state', () => {
     useUiStore.setState({ activeLeftPanel: null, rightPanelOpen: false })
-    render(<EditorLayout />)
+    renderLayout()
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
+  })
+
+  it('renders preview mode instead of editor chrome when enabled', () => {
+    useUiStore.setState({ previewMode: true })
+    renderLayout()
+    expect(screen.getByTestId('preview-mode')).toBeInTheDocument()
+    expect(screen.queryByTestId('region-toolbar')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('region-activity-bar')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('region-breadcrumb')).not.toBeInTheDocument()
   })
 })
 
@@ -70,9 +88,9 @@ describe('EditorLayout', () => {
 // uiStore — defaults
 // ---------------------------------------------------------------------------
 describe('uiStore defaults', () => {
-  it('has navigator panel active and right panel open', () => {
+  it('has the left panel active and right panel open', () => {
     const { activeLeftPanel, rightPanelOpen } = useUiStore.getState()
-    expect(activeLeftPanel).toBe('navigator')
+    expect(activeLeftPanel).toBe('navigator') // set to 'navigator' by beforeEach
     expect(rightPanelOpen).toBe(true)
   })
 
@@ -111,6 +129,13 @@ describe('uiStore actions', () => {
   it('toggleRightPanel flips panel visibility', () => {
     useUiStore.getState().toggleRightPanel()
     expect(useUiStore.getState().rightPanelOpen).toBe(false)
+  })
+
+  it('togglePreviewMode flips preview visibility', () => {
+    useUiStore.getState().togglePreviewMode()
+    expect(useUiStore.getState().previewMode).toBe(true)
+    useUiStore.getState().togglePreviewMode()
+    expect(useUiStore.getState().previewMode).toBe(false)
   })
 
   it('setBreakpoint updates the active breakpoint', () => {

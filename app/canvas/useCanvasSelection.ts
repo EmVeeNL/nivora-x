@@ -1,4 +1,5 @@
 import { useEffect, type RefObject } from 'react'
+import { canInteract } from '@/document/canInteract'
 import { useDocumentStore } from '@/document/store'
 import { useUiStore } from '@/state/uiStore'
 
@@ -10,8 +11,16 @@ import { useUiStore } from '@/state/uiStore'
  * Resolution strategy: find the closest ancestor (or self) with data-node-id,
  * so clicking inside a deeply nested element selects the nearest node.
  */
-export function useCanvasSelection(iframeRef: RefObject<HTMLIFrameElement | null>): void {
+export function useCanvasSelection(
+  iframeRef: RefObject<HTMLIFrameElement | null>,
+  enabled = true,
+): void {
   useEffect(() => {
+    if (!enabled) {
+      useUiStore.getState().setHoveredId(null)
+      return
+    }
+
     const iframe = iframeRef.current
     const doc = iframe?.contentDocument
     if (!doc) return
@@ -19,6 +28,12 @@ export function useCanvasSelection(iframeRef: RefObject<HTMLIFrameElement | null
     const handleClick = (e: MouseEvent) => {
       const target = (e.target as Element).closest('[data-node-id]')
       const nodeId = target?.getAttribute('data-node-id') ?? null
+      const node = nodeId ? useDocumentStore.getState().tree?.nodes[nodeId] : null
+      if (node && !canInteract(node)) {
+        e.preventDefault()
+        e.stopPropagation()
+        return
+      }
       useDocumentStore.getState().selectNode(nodeId)
     }
 
@@ -47,5 +62,5 @@ export function useCanvasSelection(iframeRef: RefObject<HTMLIFrameElement | null
     }
     // iframeRef is a stable ref object; intentionally omitted from deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [enabled])
 }

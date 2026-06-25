@@ -1,14 +1,26 @@
 import { useUiStore } from '@/state/uiStore'
 import { TopToolbar } from './TopToolbar'
-import { ActivityBar } from './ActivityBar'
-import { LeftPanel } from './LeftPanel'
+import { LeftRail } from './left/LeftRail'
+import { LeftPanelHost } from './left/LeftPanelHost'
 import { RightPanel } from './RightPanel'
 import { BreadcrumbBar } from './BreadcrumbBar'
 import { CanvasFrame } from '@/canvas/CanvasFrame'
+import { ConfirmDialog } from '@/canvas/overlay/ConfirmDialog'
+import { InsertConfigModal } from '@/canvas/overlay/InsertConfigModal'
+import { PreviewMode } from './PreviewMode'
 
 export function EditorLayout() {
   const activeLeftPanel = useUiStore((s) => s.activeLeftPanel)
   const rightOpen = useUiStore((s) => s.rightPanelOpen)
+  const previewMode = useUiStore((s) => s.previewMode)
+
+  if (previewMode) {
+    return (
+      <div className="flex h-full flex-col overflow-hidden">
+        <PreviewMode />
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -26,7 +38,7 @@ export function EditorLayout() {
           data-testid="region-activity-bar"
           className="flex w-10 shrink-0 flex-col border-r border-border bg-shell-bar py-1"
         >
-          <ActivityBar />
+          <LeftRail />
         </nav>
 
         <aside
@@ -36,7 +48,7 @@ export function EditorLayout() {
             activeLeftPanel ? 'w-52' : 'w-0',
           ].join(' ')}
         >
-          <LeftPanel />
+          <LeftPanelHost />
         </aside>
 
         <main
@@ -64,6 +76,10 @@ export function EditorLayout() {
       >
         <BreadcrumbBar />
       </footer>
+
+      {/* Global portal dialogs */}
+      <ConfirmDialog />
+      <InsertConfigModal />
     </div>
   )
 }

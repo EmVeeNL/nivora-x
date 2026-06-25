@@ -55,3 +55,7 @@ survive renames.
 
 - Keep ids opaque + stable; names are display-only (id-based references survive renames).
 - Mirror the Phase 02/09 settings accessor pattern; one source for UI, controls, generators.
+- **Font family values** in Typography tokens store a font-family CSS string (e.g.
+  `"Inter, sans-serif"`). The available choices are resolved at UI time from the WP Font
+  Library API (`GET /wp/v2/fonts`) merged with a static system-font fallback list — the model
+  itself is just the stored string value, not a font-library reference.
