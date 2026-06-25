@@ -255,6 +255,20 @@ export const shadowStyleSection: ControlSectionSchema = styleSection({
   ],
 })
 
+export const visibilityStyleSection: ControlSectionSchema = styleSection({
+  id: 'visibility',
+  title: 'Visibility',
+  controls: [
+    {
+      id: 'hidden',
+      type: 'toggle',
+      label: 'Hidden',
+      prop: 'hidden',
+      defaultValue: false,
+    },
+  ],
+})
+
 export const layoutInspectorSchema: ControlSectionSchema[] = [
   layoutStyleSection,
   spacingStyleSection,
@@ -262,6 +276,7 @@ export const layoutInspectorSchema: ControlSectionSchema[] = [
   backgroundStyleSection,
   borderStyleSection,
   shadowStyleSection,
+  visibilityStyleSection,
 ]
 
 export const textInspectorSchema: ControlSectionSchema[] = [
@@ -271,6 +286,7 @@ export const textInspectorSchema: ControlSectionSchema[] = [
   backgroundStyleSection,
   borderStyleSection,
   shadowStyleSection,
+  visibilityStyleSection,
 ]
 
 /** Minimal inspector for non-text leaf elements (images, embeds, etc.) */
@@ -280,4 +296,5 @@ export const basicInspectorSchema: ControlSectionSchema[] = [
   backgroundStyleSection,
   borderStyleSection,
   shadowStyleSection,
+  visibilityStyleSection,
 ]

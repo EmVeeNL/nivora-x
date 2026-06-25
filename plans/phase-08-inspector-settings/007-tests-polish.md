@@ -54,6 +54,7 @@ the same controls.
 - [x] Spacing widget redesigned: T/B row + L/R row with Y-link, X-link, all-link buttons.
 - [x] Responsive lock: lock icon per style control on tablet/mobile; click to create/remove bp override.
 - [x] Visual element borders: toolbar toggle, `ElementBordersOverlay`, RAF-tracked, category colours.
+- [x] Per-breakpoint element visibility: `hidden` toggle in Visibility section; resolves to semi-transparent canvas overlay in editor; Phase 10 maps to `display:none` in CSS output.
 
 ## Files Created / Modified (extended scope)
 

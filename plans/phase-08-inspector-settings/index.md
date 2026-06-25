@@ -70,6 +70,7 @@ Phase 09/12:
 - **Insert config modal** — `insertConfig` slot on `ElementDefinition`; Grid and Columns
   use it to collect column count / gap before insertion.
 - **Grid/Columns CSS grid renders** — proper `display:grid; grid-template-columns`.
+- **Per-breakpoint element visibility** — `hidden` style prop with responsive shape; editor shows semi-transparent "Hidden on [breakpoint]" overlay; `display:none` CSS generation deferred to Phase 10.
 
 ## Success Criteria
 

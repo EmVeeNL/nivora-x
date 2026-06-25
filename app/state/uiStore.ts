@@ -74,6 +74,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
     background: true,
     border: false,
     shadow: false,
+    visibility: false,
     position: false,
     effects: false,
   },

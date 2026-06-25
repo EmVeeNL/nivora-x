@@ -75,6 +75,19 @@ function applySpacing(
   result[`${prop}Left`] = unitToCss(value.left)
 }
 
+export function resolveHiddenAtBreakpoint(
+  node: NxNode,
+  breakpoint: ActiveStyleBreakpoint,
+): boolean {
+  const raw = node.props['hidden']
+  if (raw === null || raw === undefined) return false
+  if (typeof raw === 'boolean') return raw
+  if (typeof raw !== 'object' || !('base' in raw)) return false
+  const typed = raw as Record<string, unknown>
+  const val = breakpoint === 'base' ? typed['base'] : (typed[breakpoint] ?? typed['base'])
+  return val === true
+}
+
 export function resolveNodeStyles(
   node: NxNode,
   breakpoint: ActiveStyleBreakpoint = 'base',
