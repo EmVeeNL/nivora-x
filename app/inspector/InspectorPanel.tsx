@@ -1,11 +1,28 @@
 import { Icon } from '@iconify/react'
 import { ControlRenderer } from './controls/ControlRenderer'
 import { PageSettings } from './page/PageSettings'
+import type { ControlSectionSchema } from './controls/types'
 import { isLocked } from '@/document/canInteract'
 import { useDocumentStore } from '@/document/store'
 import { getElementDefinition, hasElement } from '@/elements/registry'
 import { useUiStore } from '@/state/uiStore'
 import { InspectorTabs } from '@/shell/InspectorTabs'
+
+/** Shared identity section prepended to every element's Block (Settings) tab. */
+const IDENTITY_SECTION: ControlSectionSchema = {
+  id: 'identity',
+  title: 'Identity',
+  controls: [
+    {
+      id: 'html-id',
+      type: 'text',
+      label: 'HTML ID',
+      prop: 'htmlId',
+      valueScope: 'prop',
+      placeholder: 'e.g. hero-section',
+    },
+  ],
+}
 
 const TABS = [
   { id: 'inspector', label: 'Style', icon: 'tabler:palette' },
@@ -83,7 +100,7 @@ export function InspectorPanel() {
             {locked && <LockedBanner />}
             <ControlRenderer
               node={node}
-              sections={definition.controlSchema?.block ?? []}
+              sections={[IDENTITY_SECTION, ...(definition.controlSchema?.block ?? [])]}
               disabled={locked}
             />
           </div>

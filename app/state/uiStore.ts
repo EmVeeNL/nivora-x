@@ -67,6 +67,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   pendingDelete: null,
   pendingInsert: null,
   openSections: {
+    identity: true,
     layout: true,
     spacing: true,
     size: true,

@@ -90,7 +90,11 @@ function DragHandle({ nodeId, rect }: DragHandleProps) {
 
   if (!node || !canInteract(node)) return null
 
-  const label = hasElement(node.type) ? getElementDefinition(node.type).label : node.type
+  const htmlId = typeof node.props['htmlId'] === 'string' ? node.props['htmlId'].trim() : ''
+  const label =
+    node.meta.name ||
+    (htmlId ? `#${htmlId}` : null) ||
+    (hasElement(node.type) ? getElementDefinition(node.type).label : node.type)
 
   return (
     <div

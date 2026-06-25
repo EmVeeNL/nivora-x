@@ -97,9 +97,13 @@ function resolveTreeDescriptor(clientX: number, clientY: number, movingNodeId: s
   const tree = useDocumentStore.getState().tree
   if (!tree) return null
 
-  const row = document
-    .elementFromPoint(clientX, clientY)
-    ?.closest('[data-row-id]') as HTMLElement | null
+  // Use elementsFromPoint (returns all elements in z-order) so the fixed
+  // CanvasDropOverlay and DragOverlay ghost don't block finding the row beneath.
+  const row =
+    document
+      .elementsFromPoint(clientX, clientY)
+      .find((el): el is HTMLElement => el instanceof HTMLElement && Boolean(el.dataset['rowId'])) ??
+    null
   if (!row) return null
 
   const targetId = row.dataset['rowId']

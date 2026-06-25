@@ -22,8 +22,10 @@ function nodeIcon(type: string): string {
   return getElementDefinition(type).icon
 }
 
-function nodeLabel(node: NxNode): string {
+export function nodeLabel(node: NxNode): string {
   if (node.meta.name) return node.meta.name
+  const htmlId = node.props['htmlId']
+  if (typeof htmlId === 'string' && htmlId.trim()) return `#${htmlId.trim()}`
   if (!hasElement(node.type)) return 'Page'
   return getElementDefinition(node.type).label
 }
@@ -89,7 +91,7 @@ export function TreeRow({
       aria-expanded={canExpand ? expanded : undefined}
       style={{ paddingLeft: `${depth * 12 + 2}px` }}
       className={cn(
-        'group flex h-7 items-center gap-1 pr-1',
+        'group relative flex h-7 items-center gap-1 pr-1',
         selected
           ? 'bg-primary/15 text-foreground'
           : 'text-foreground/75 hover:bg-accent/50 hover:text-foreground',
@@ -169,7 +171,17 @@ export function TreeRow({
         </span>
       )}
 
-      <div className="ml-auto flex shrink-0 items-center opacity-0 group-hover:opacity-100 group-focus-within:opacity-100">
+      {/* Action buttons — absolutely positioned so they overlay the label instead of
+          squeezing it. Gradient background fades in with the row hover state. */}
+      <div
+        className={cn(
+          'pointer-events-none absolute bottom-0 right-0 top-0 flex items-center pr-1',
+          'bg-gradient-to-l from-background pl-8 to-transparent',
+          'opacity-0 transition-opacity duration-100',
+          'group-hover:pointer-events-auto group-hover:opacity-100',
+          'group-focus-within:pointer-events-auto group-focus-within:opacity-100',
+        )}
+      >
         <button
           type="button"
           className="flex h-5 w-5 items-center justify-center rounded hover:bg-accent"
