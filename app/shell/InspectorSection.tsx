@@ -1,6 +1,24 @@
-import { Icon } from '@iconify/react'
-import { cn } from '@/lib/utils'
 import { useUiStore } from '@/state/uiStore'
+
+/** Placeholder control row used in tests and as a skeleton. */
+export function ControlRow({ label }: { label: string }) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '4px 0',
+      }}
+    >
+      <span style={{ fontSize: 11, color: '#888' }}>{label}</span>
+      <div
+        style={{ height: 22, width: 72, borderRadius: 3, background: '#252525' }}
+        aria-hidden="true"
+      />
+    </div>
+  )
+}
 
 interface InspectorSectionProps {
   id: string
@@ -8,55 +26,40 @@ interface InspectorSectionProps {
   children: React.ReactNode
 }
 
-/** A control-row placeholder: label on the left, grey pill on the right. */
-export function ControlRow({ label }: { label: string }) {
-  return (
-    <div className="flex items-center justify-between py-1">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <div className="h-6 w-20 rounded bg-input" aria-hidden="true" />
-    </div>
-  )
-}
-
-/** A row of small toggle-button placeholders (e.g. flex-direction, align). */
-export function ButtonGroupRow({ label, count }: { label: string; count: number }) {
-  return (
-    <div className="flex items-center justify-between py-1">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <div className="flex gap-0.5" aria-hidden="true">
-        {Array.from({ length: count }).map((_, i) => (
-          <div key={i} className="h-6 w-6 rounded border border-border bg-input" />
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function InspectorSection({ id, title, children }: InspectorSectionProps) {
-  const isOpen = useUiStore((s) => s.openSections[id] ?? false)
+  const isOpen = useUiStore((s) => s.openSections[id] ?? true)
 
   return (
-    <div className="border-b border-border">
+    <div style={{ borderBottom: '1px solid #2e2e2e' }}>
       <button
         type="button"
         onClick={() => useUiStore.getState().toggleSection(id)}
         aria-expanded={isOpen}
         aria-controls={`section-body-${id}`}
-        className={cn(
-          'flex h-9 w-full items-center justify-between px-3 transition-colors',
-          'text-[11px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground',
-        )}
+        className="flex w-full items-center gap-2 px-3 transition-colors"
+        style={{ height: 32, color: '#cccccc' }}
       >
-        {title}
-        <Icon
-          icon={isOpen ? 'tabler:chevron-down' : 'tabler:chevron-right'}
-          width={12}
-          height={12}
-        />
+        {/* Solid triangle — rotates on collapse */}
+        <span
+          style={{
+            display: 'inline-block',
+            fontSize: 7,
+            lineHeight: 1,
+            color: '#888',
+            transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+            transition: 'transform 120ms',
+          }}
+          aria-hidden="true"
+        >
+          ▼
+        </span>
+        <span className="flex-1 text-left" style={{ fontSize: 11, fontWeight: 500 }}>
+          {title}
+        </span>
       </button>
 
       {isOpen && (
-        <div id={`section-body-${id}`} className="px-3 pb-3 pt-0.5">
+        <div id={`section-body-${id}`} className="px-3" style={{ paddingBottom: 8, paddingTop: 2 }}>
           {children}
         </div>
       )}

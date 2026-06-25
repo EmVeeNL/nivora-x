@@ -1,8 +1,9 @@
 import React from 'react'
 import type { ElementDefinition, ElementRenderProps } from '../types'
+import { basicInspectorSchema } from '@/inspector/style/styleSchemas'
 
-function makeLeaf(label: string): React.ComponentType<ElementRenderProps> {
-  function LeafEl({ 'data-node-id': nodeId }: ElementRenderProps) {
+function CmsLeaf(label: string): React.ComponentType<ElementRenderProps> {
+  function LeafEl({ 'data-node-id': nodeId, style }: ElementRenderProps) {
     return (
       <div
         data-node-id={nodeId}
@@ -13,6 +14,7 @@ function makeLeaf(label: string): React.ComponentType<ElementRenderProps> {
           borderRadius: 4,
           color: '#94a3b8',
           fontSize: 11,
+          ...style,
         }}
       >
         {label}
@@ -30,15 +32,43 @@ export const collectionListDefinition: ElementDefinition = {
   category: 'CMS',
   defaultProps: { collection: '' },
   nesting: { acceptsChildren: true },
-  render: function CollectionListElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function CollectionListElement({
+    'data-node-id': nodeId,
+    children,
+    style,
+  }: ElementRenderProps) {
     return (
       <div
         data-node-id={nodeId}
-        style={{ display: 'block', border: '1px dashed #94a3b8', borderRadius: 4, minHeight: 60 }}
+        style={{
+          display: 'block',
+          border: '1px dashed #94a3b8',
+          borderRadius: 4,
+          minHeight: 60,
+          ...style,
+        }}
       >
         {children}
       </div>
     )
+  },
+  controlSchema: {
+    block: [
+      {
+        id: 'collection-list-content',
+        title: 'Collection List',
+        controls: [
+          {
+            id: 'collection',
+            type: 'text',
+            label: 'Collection slug',
+            prop: 'collection',
+            placeholder: 'posts',
+          },
+        ],
+      },
+    ],
+    inspector: basicInspectorSchema,
   },
 }
 
@@ -49,13 +79,18 @@ export const collectionItemDefinition: ElementDefinition = {
   category: 'CMS',
   defaultProps: {},
   nesting: { acceptsChildren: true },
-  render: function CollectionItemElement({ 'data-node-id': nodeId, children }: ElementRenderProps) {
+  render: function CollectionItemElement({
+    'data-node-id': nodeId,
+    children,
+    style,
+  }: ElementRenderProps) {
     return (
-      <div data-node-id={nodeId} style={{ display: 'block', padding: 8 }}>
+      <div data-node-id={nodeId} style={{ display: 'block', padding: 8, ...style }}>
         {children}
       </div>
     )
   },
+  controlSchema: { block: [], inspector: basicInspectorSchema },
 }
 
 export const collectionPageDefinition: ElementDefinition = {
@@ -65,5 +100,6 @@ export const collectionPageDefinition: ElementDefinition = {
   category: 'CMS',
   defaultProps: {},
   nesting: { acceptsChildren: false },
-  render: makeLeaf('Collection Page'),
+  render: CmsLeaf('Collection Page'),
+  controlSchema: { block: [], inspector: basicInspectorSchema },
 }

@@ -9,6 +9,17 @@ export const BREAKPOINT_WIDTHS: Record<Breakpoint, number> = {
   mobile: 375,
 }
 
+export interface PendingDelete {
+  nodeId: string
+  label: string
+}
+
+export interface PendingInsert {
+  elementType: string
+  targetParentId: string
+  index: number
+}
+
 interface UiState {
   /** Which left-panel is open; null = sidebar collapsed. */
   activeLeftPanel: string | null
@@ -21,6 +32,12 @@ interface UiState {
   hoveredId: string | null
   /** Navigator rows collapsed by node id. */
   navigatorCollapsed: Record<string, true>
+  /** When true, colored dotted edit borders are shown on all canvas elements. */
+  showElementBorders: boolean
+  /** When set, the delete confirmation dialog is shown. */
+  pendingDelete: PendingDelete | null
+  /** When set, the insert config modal is shown. */
+  pendingInsert: PendingInsert | null
 }
 
 interface UiActions {
@@ -33,6 +50,9 @@ interface UiActions {
   setSectionOpen(this: void, id: string, open: boolean): void
   setHoveredId(this: void, id: string | null): void
   setNavigatorCollapsed(this: void, nodeId: string, collapsed: boolean): void
+  toggleElementBorders(this: void): void
+  setPendingDelete(this: void, info: PendingDelete | null): void
+  setPendingInsert(this: void, info: PendingInsert | null): void
 }
 
 export const useUiStore = create<UiState & UiActions>()((set) => ({
@@ -40,16 +60,23 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   activeLeftPanel: 'navigator',
   rightPanelOpen: true,
   activeBreakpoint: 'desktop',
-  activeInspectorTab: 'style',
+  activeInspectorTab: 'inspector',
   hoveredId: null,
   navigatorCollapsed: {},
+  showElementBorders: false,
+  pendingDelete: null,
+  pendingInsert: null,
   openSections: {
+    identity: true,
     layout: true,
     spacing: true,
-    size: false,
-    typography: false,
-    position: false,
+    size: true,
+    typography: true,
+    background: true,
     border: false,
+    shadow: false,
+    visibility: false,
+    position: false,
     effects: false,
   },
 
@@ -74,4 +101,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
       else delete next[nodeId]
       return { navigatorCollapsed: next }
     }),
+  toggleElementBorders: () => set((s) => ({ showElementBorders: !s.showElementBorders })),
+  setPendingDelete: (info) => set({ pendingDelete: info }),
+  setPendingInsert: (info) => set({ pendingInsert: info }),
 }))

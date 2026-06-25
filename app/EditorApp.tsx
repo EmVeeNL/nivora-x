@@ -8,6 +8,7 @@ import { EditorLayout } from './shell/EditorLayout'
 import { useDocumentStore } from './document/store'
 import { loadDocument } from './document/persistence'
 import { createBlankTree } from './document/blankTree'
+import { SCHEMA_VERSION } from './document/schema/constants'
 
 // Register element types and left panels once at app init
 registerStarterElements()
@@ -27,10 +28,23 @@ function DocumentInit() {
     if (bs?.postId) {
       loadDocument(bs.postId)
         .then((envelope) => {
-          useDocumentStore.getState().setTree(envelope ? envelope.tree : createBlankTree())
+          if (envelope) {
+            useDocumentStore.getState().setDocument(envelope)
+          } else {
+            useDocumentStore.getState().setDocument({
+              version: SCHEMA_VERSION,
+              tree: createBlankTree(),
+              meta: { title: bs.postTitle ?? 'Untitled Page' },
+            })
+          }
         })
-        .catch(() => {
-          useDocumentStore.getState().setTree(createBlankTree())
+        .catch((err: unknown) => {
+          console.error('[NivoraX] Failed to load document:', err)
+          useDocumentStore.getState().setDocument({
+            version: SCHEMA_VERSION,
+            tree: createBlankTree(),
+            meta: { title: bs.postTitle ?? 'Untitled Page' },
+          })
         })
     } else {
       // No WordPress context (local dev / test) — use a blank tree so DnD works

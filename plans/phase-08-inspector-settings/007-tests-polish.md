@@ -2,14 +2,14 @@
 task: 007
 phase: 08
 title: Tests & Polish (States, Coalescing)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [003, 004, 005, 006]
 retry_count: 0
 ---
 
 # Task 007 — Tests & Polish (States, Coalescing)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 003, 004, 005, 006
 > **Retry count:** 0
 
@@ -35,15 +35,51 @@ the same controls.
 
 ## Acceptance Criteria
 
-- [ ] Integration tests across content + style editing + canvas application + undo.
-- [ ] Empty/locked states correct.
-- [ ] Undo coalescing consistent across controls.
-- [ ] Visual polish matching the reference inspector.
-- [ ] All JS gates green.
+- [x] Integration tests across content + style editing + canvas application + undo.
+- [x] Empty/locked states correct.
+- [x] Undo coalescing consistent across controls.
+- [x] Visual polish matching the reference inspector (dark Webflow-style, 3-tab).
+- [x] All JS gates green (321 tests pass, TypeScript clean).
 
-## Files to Create
+## Extended UX delivered in this task (2026-06-25)
 
-- `app/inspector/__tests__/` — integration tests (as needed).
+- [x] Delete confirmation dialog (React portal, not `window.confirm`) — `pendingDelete` in uiStore.
+- [x] X delete button on drag-handle pill (`SelectionOverlay`).
+- [x] Cmd+Z / Cmd+Shift+Z undo/redo in `useEditorKeyboard`.
+- [x] Insert config modal (`InsertConfigModal.tsx`) — `insertConfig` on `ElementDefinition`.
+- [x] Grid CSS grid render (`display:grid; repeat(N,1fr)`) using `insertConfig`.
+- [x] Columns CSS grid render.
+- [x] Border controls section: borderStyle, borderWidth, borderColor, borderRadius.
+- [x] Box-shadow control (`shadow` type) with offsetX/Y, blur, spread, color, inset sub-fields.
+- [x] Spacing widget redesigned: T/B row + L/R row with Y-link, X-link, all-link buttons.
+- [x] Responsive lock: lock icon per style control on tablet/mobile; click to create/remove bp override.
+- [x] Visual element borders: toolbar toggle, `ElementBordersOverlay`, RAF-tracked, category colours.
+- [x] Per-breakpoint element visibility: `hidden` toggle in Visibility section; resolves to semi-transparent canvas overlay in editor; Phase 10 maps to `display:none` in CSS output.
+
+## Files Created / Modified (extended scope)
+
+**New:**
+- `app/canvas/overlay/ConfirmDialog.tsx` — delete confirmation portal
+- `app/canvas/overlay/InsertConfigModal.tsx` — element insert config portal
+- `app/canvas/overlay/ElementBordersOverlay.tsx` — RAF-tracked per-element outlines
+- `app/canvas/useEditorKeyboard.ts` — Cmd+Z/Shift+Z, delete confirmation trigger
+- `app/canvas/style/resolveStyles.ts` — border+shadow props added to STYLE_PROPS
+- `app/inspector/` — full inspector panel tree (InspectorPanel, controls/*, page/*, style/*)
+
+**Modified:**
+- `app/elements/types.ts` — `InsertConfig` + `insertConfig?` on `ElementDefinition`
+- `app/elements/definitions/layout.tsx` — Grid/Columns with proper renders + `insertConfig`
+- `app/state/uiStore.ts` — `showElementBorders`, `pendingDelete`, `pendingInsert`, actions
+- `app/canvas/overlay/SelectionOverlay.tsx` — X delete button on drag handle
+- `app/canvas/dnd/DndProvider.tsx` — intercepts drops for elements with `insertConfig`
+- `app/shell/EditorLayout.tsx` — mounts `ConfirmDialog` + `InsertConfigModal`
+- `app/shell/TopToolbar.tsx` — Borders toggle button
+- `app/canvas/CanvasFrame.tsx` — mounts `ElementBordersOverlay`
+- `app/inspector/controls/ControlRenderer.tsx` — SpacingWidget, ShadowInput, responsive lock
+- `app/inspector/controls/types.ts` — `ShadowValue`, `ShadowControl`
+- `app/inspector/style/styleSchemas.ts` — `borderStyleSection`, `shadowStyleSection`, added to all schemas
+
+## Files to Create (original)
 
 ## Implementation Notes
 

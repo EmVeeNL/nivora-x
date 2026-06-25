@@ -4,7 +4,9 @@ import { useUiStore, BREAKPOINT_WIDTHS } from '@/state/uiStore'
 import { bootstrapIframe } from './iframe'
 import { CanvasRenderer } from './CanvasRenderer'
 import { useCanvasSelection } from './useCanvasSelection'
+import { useEditorKeyboard } from './useEditorKeyboard'
 import { SelectionOverlay } from './overlay/SelectionOverlay'
+import { ElementBordersOverlay } from './overlay/ElementBordersOverlay'
 import { useDndEditor } from './dnd/DndProvider'
 import { CanvasDropOverlay } from './dnd/CanvasDropOverlay'
 
@@ -47,6 +49,7 @@ export function CanvasFrame() {
   // Wire pointer-event listeners for selection and hover.
   // Runs after the bootstrap effect due to React's sequential effect ordering.
   useCanvasSelection(iframeRef)
+  useEditorKeyboard(iframeRef)
 
   return (
     <div
@@ -76,6 +79,9 @@ export function CanvasFrame() {
         className="min-h-[640px] shrink-0 border-0 bg-white shadow-2xl"
         sandbox="allow-same-origin"
       />
+
+      {/* Element borders overlay — shows colored dashed edit borders when enabled */}
+      <ElementBordersOverlay iframeRef={iframeRef} />
 
       {/* Selection/hover overlay — position:fixed, tracks element rects in the iframe */}
       <SelectionOverlay iframeRef={iframeRef} />

@@ -73,12 +73,16 @@ final class DocumentController {
 	public static function get_document( \WP_REST_Request $request ): \WP_REST_Response {
 		$post_id  = (int) $request->get_param( 'id' );
 		$envelope = DocumentStore::read( $post_id );
+		$meta     = $envelope->meta;
+		if ( ! isset( $meta['title'] ) ) {
+			$meta['title'] = get_the_title( $post_id );
+		}
 
 		return rest_ensure_response(
 			[
 				'version' => $envelope->version,
 				'tree'    => $envelope->tree,
-				'meta'    => $envelope->meta,
+				'meta'    => $meta,
 			]
 		);
 	}
@@ -92,18 +96,23 @@ final class DocumentController {
 	 */
 	public static function save_document( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
 		$post_id = (int) $request->get_param( 'id' );
-		$body    = $request->get_json_params();
 
-		if ( ! is_array( $body ) ) {
+		// Decode without associative flag so empty JSON objects ({}) remain as
+		// stdClass instances. get_json_params() uses json_decode($body, true)
+		// which converts {} to [] — that empty PHP array then re-encodes as a
+		// JSON array [], breaking the JS schema validator on reload.
+		$body = json_decode( $request->get_body() );
+
+		if ( ! is_object( $body ) ) {
 			return new \WP_Error( 'invalid_body', 'Request body must be a JSON object.', [ 'status' => 400 ] );
 		}
 
-		$version = isset( $body['version'] ) && is_int( $body['version'] )
-			? $body['version']
+		$version = isset( $body->version ) && is_int( $body->version )
+			? $body->version
 			: Envelope::CURRENT_VERSION;
-		$tree    = $body['tree'] ?? null;
-		$meta    = isset( $body['meta'] ) && is_array( $body['meta'] ) ? $body['meta'] : [];
-		$publish = ! empty( $body['publish'] );
+		$tree    = $body->tree ?? null;
+		$meta    = isset( $body->meta ) && is_object( $body->meta ) ? (array) $body->meta : [];
+		$publish = ! empty( $body->publish );
 
 		$envelope = new Envelope( $version, $tree, $meta );
 
@@ -113,13 +122,12 @@ final class DocumentController {
 			return new \WP_Error( 'save_failed', $e->getMessage(), [ 'status' => 403 ] );
 		}
 
-		if ( $publish ) {
-			wp_update_post(
-				[
-					'ID'          => $post_id,
-					'post_status' => 'publish',
-				]
-			);
+		$post_update = self::post_update_from_meta( $post_id, $meta, $publish );
+		if ( count( $post_update ) > 1 ) {
+			$result = wp_update_post( $post_update, true );
+			if ( is_wp_error( $result ) ) {
+				return new \WP_Error( 'post_update_failed', $result->get_error_message(), [ 'status' => 403 ] );
+			}
 		}
 
 		return rest_ensure_response(
@@ -141,5 +149,40 @@ final class DocumentController {
 				'validate_callback' => static fn( mixed $v ): bool => is_numeric( $v ) && (int) $v > 0,
 			],
 		];
+	}
+
+	/**
+	 * Build the post update payload implied by document metadata.
+	 *
+	 * @param int                  $post_id Post being edited.
+	 * @param array<string, mixed> $meta    Document metadata.
+	 * @param bool                 $publish Whether to publish the post.
+	 * @return array<string, mixed>
+	 */
+	private static function post_update_from_meta( int $post_id, array $meta, bool $publish ): array {
+		$update = [ 'ID' => $post_id ];
+
+		if ( isset( $meta['title'] ) && is_string( $meta['title'] ) ) {
+			$update['post_title'] = self::sanitize_document_title( $meta['title'] );
+		}
+
+		if ( $publish ) {
+			$update['post_status'] = 'publish';
+		}
+
+		return $update;
+	}
+
+	/**
+	 * Sanitize the document title with WordPress when available, falling back for unit tests.
+	 *
+	 * @param string $title Raw title from document metadata.
+	 */
+	private static function sanitize_document_title( string $title ): string {
+		if ( function_exists( 'sanitize_text_field' ) ) {
+			return sanitize_text_field( $title );
+		}
+
+		return trim( (string) preg_replace( '/<[^>]*>/', '', $title ) );
 	}
 }

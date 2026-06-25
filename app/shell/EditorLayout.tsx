@@ -5,6 +5,8 @@ import { LeftPanelHost } from './left/LeftPanelHost'
 import { RightPanel } from './RightPanel'
 import { BreadcrumbBar } from './BreadcrumbBar'
 import { CanvasFrame } from '@/canvas/CanvasFrame'
+import { ConfirmDialog } from '@/canvas/overlay/ConfirmDialog'
+import { InsertConfigModal } from '@/canvas/overlay/InsertConfigModal'
 
 export function EditorLayout() {
   const activeLeftPanel = useUiStore((s) => s.activeLeftPanel)
@@ -64,6 +66,10 @@ export function EditorLayout() {
       >
         <BreadcrumbBar />
       </footer>
+
+      {/* Global portal dialogs */}
+      <ConfirmDialog />
+      <InsertConfigModal />
     </div>
   )
 }

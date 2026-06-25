@@ -18,6 +18,7 @@ import {
 } from '@dnd-kit/core'
 import { Icon } from '@iconify/react'
 import { useDocumentStore } from '@/document/store'
+import { useUiStore } from '@/state/uiStore'
 import { canInteract } from '@/document/canInteract'
 import { getElementDefinition } from '@/elements/registry'
 import { generateId } from '@/document/ids'
@@ -137,6 +138,7 @@ export function DndProvider({ children }: DndProviderProps) {
     setDraggedItem(null)
     dropDescriptorRef.current = null
     treeDropDescriptorRef.current = null
+    useUiStore.getState().setHoveredId(null)
 
     if (!descriptor || !descriptor.valid || !item) return
 
@@ -145,6 +147,13 @@ export function DndProvider({ children }: DndProviderProps) {
 
     if (item.intent === 'insert') {
       const def = getElementDefinition(item.elementType)
+      if (def.insertConfig) {
+        // Show config modal before inserting
+        useUiStore
+          .getState()
+          .setPendingInsert({ elementType: item.elementType, targetParentId, index })
+        return
+      }
       const node: NxNode = {
         id: generateId(),
         type: item.elementType,

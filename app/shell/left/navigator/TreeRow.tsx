@@ -22,8 +22,10 @@ function nodeIcon(type: string): string {
   return getElementDefinition(type).icon
 }
 
-function nodeLabel(node: NxNode): string {
+export function nodeLabel(node: NxNode): string {
   if (node.meta.name) return node.meta.name
+  const htmlId = node.props['htmlId']
+  if (typeof htmlId === 'string' && htmlId.trim()) return `#${htmlId.trim()}`
   if (!hasElement(node.type)) return 'Page'
   return getElementDefinition(node.type).label
 }
@@ -83,16 +85,13 @@ export function TreeRow({
 
   return (
     <li
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
       role="treeitem"
       data-row-id={node.id}
       aria-selected={selected}
       aria-expanded={canExpand ? expanded : undefined}
-      style={{ paddingLeft: `${depth * 12 + 6}px` }}
+      style={{ paddingLeft: `${depth * 12 + 2}px` }}
       className={cn(
-        'group flex h-7 items-center gap-1 pr-1',
+        'group relative flex h-7 items-center gap-1 pr-1',
         selected
           ? 'bg-primary/15 text-foreground'
           : 'text-foreground/75 hover:bg-accent/50 hover:text-foreground',
@@ -106,6 +105,24 @@ export function TreeRow({
         if (interactive) setRenaming(true)
       }}
     >
+      {/* Drag handle — reveals on hover, drag source for tree reorder */}
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        aria-label="Drag to reorder"
+        title="Drag to reorder"
+        className={cn(
+          'flex h-5 w-4 shrink-0 items-center justify-center rounded',
+          interactive
+            ? 'cursor-grab opacity-0 group-hover:opacity-40 active:cursor-grabbing active:opacity-70'
+            : 'pointer-events-none opacity-0',
+        )}
+      >
+        <Icon icon="tabler:grip-vertical" width={10} height={10} />
+      </div>
+
+      {/* Expand / collapse toggle */}
       <button
         type="button"
         className="flex h-4 w-4 shrink-0 items-center justify-center rounded hover:bg-accent disabled:hover:bg-transparent"
@@ -154,7 +171,17 @@ export function TreeRow({
         </span>
       )}
 
-      <div className="ml-auto flex shrink-0 items-center opacity-0 group-hover:opacity-100 group-focus-within:opacity-100">
+      {/* Action buttons — absolutely positioned so they overlay the label instead of
+          squeezing it. Gradient background fades in with the row hover state. */}
+      <div
+        className={cn(
+          'pointer-events-none absolute bottom-0 right-0 top-0 flex items-center pr-1',
+          'bg-gradient-to-l from-background pl-8 to-transparent',
+          'opacity-0 transition-opacity duration-100',
+          'group-hover:pointer-events-auto group-hover:opacity-100',
+          'group-focus-within:pointer-events-auto group-focus-within:opacity-100',
+        )}
+      >
         <button
           type="button"
           className="flex h-5 w-5 items-center justify-center rounded hover:bg-accent"

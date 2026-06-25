@@ -30,6 +30,7 @@ final class Bootstrap {
 			'pagesUrl'  => admin_url( 'admin.php?page=' . \NivoraX\Admin\Menu::SLUG_ALL ),
 			'homeUrl'   => home_url( '/' ),
 			'siteName'  => get_bloginfo( 'name' ),
+			'postTitle' => get_the_title( $post_id ),
 			'version'   => NIVORAX_VERSION,
 		];
 	}
