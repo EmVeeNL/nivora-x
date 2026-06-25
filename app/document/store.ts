@@ -126,6 +126,21 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
       return { version: SCHEMA_VERSION, tree, meta: documentMeta }
     },
 
+    setDocument: (envelope) =>
+      set({
+        tree: envelope.tree,
+        documentMeta: envelope.meta,
+        isDirty: false,
+        past: [],
+        future: [],
+      }),
+
+    toEnvelope: () => {
+      const { tree, documentMeta } = get()
+      if (!tree) return null
+      return { version: SCHEMA_VERSION, tree, meta: documentMeta }
+    },
+
     selectNode: (id) => set({ selectedId: id }),
 
     insertNode: (node, parentId, index) => {
