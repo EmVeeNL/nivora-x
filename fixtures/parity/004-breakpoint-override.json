@@ -1,0 +1,23 @@
+{
+  "description": "Node with node.overrides[bp_id] breakpoint-specific overrides",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet",  "label": "Tablet",  "width": 768,  "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "root",
+    "nodes": {
+      "root": {
+        "id": "root",
+        "type": "section",
+        "props": { "color": "#000000" },
+        "children": [],
+        "overrides": {
+          "tablet": { "color": "#ffffff" }
+        },
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-root{color:#000000}@media (max-width:768px){.nivorax-root{color:#ffffff}}"
+}

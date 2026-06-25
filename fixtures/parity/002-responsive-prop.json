@@ -1,0 +1,24 @@
+{
+  "description": "Node with a responsive prop object { base, tablet, mobile } in node.props",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet",  "label": "Tablet",  "width": 768,  "direction": "max", "builtin": true },
+    { "id": "mobile",  "label": "Mobile",  "width": 375,  "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "root",
+    "nodes": {
+      "root": {
+        "id": "root",
+        "type": "section",
+        "props": {
+          "backgroundColor": { "base": "#ff0000", "tablet": "#00ff00", "mobile": "#0000ff" }
+        },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-root{background-color:#ff0000}@media (max-width:768px){.nivorax-root{background-color:#00ff00}}@media (max-width:375px){.nivorax-root{background-color:#0000ff}}"
+}

@@ -1,0 +1,31 @@
+{
+  "description": "Node with a boxShadow value (ShadowValue type)",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet",  "label": "Tablet",  "width": 768,  "direction": "max", "builtin": true },
+    { "id": "mobile",  "label": "Mobile",  "width": 375,  "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "root",
+    "nodes": {
+      "root": {
+        "id": "root",
+        "type": "section",
+        "props": {
+          "boxShadow": {
+            "offsetX": { "value": 2, "unit": "px" },
+            "offsetY": { "value": 4, "unit": "px" },
+            "blur":    { "value": 8, "unit": "px" },
+            "spread":  { "value": 0, "unit": "px" },
+            "color":   "rgba(0,0,0,0.5)",
+            "inset":   false
+          }
+        },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-root{box-shadow:2px 4px 8px 0px rgba(0,0,0,0.5)}"
+}

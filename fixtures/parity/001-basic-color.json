@@ -1,0 +1,22 @@
+{
+  "description": "Single node with a plain backgroundColor string value",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet",  "label": "Tablet",  "width": 768,  "direction": "max", "builtin": true },
+    { "id": "mobile",  "label": "Mobile",  "width": 375,  "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "root",
+    "nodes": {
+      "root": {
+        "id": "root",
+        "type": "section",
+        "props": { "backgroundColor": "#ff0000" },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-root{background-color:#ff0000}"
+}
