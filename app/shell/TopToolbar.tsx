@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/lib/ui/button'
@@ -23,11 +23,13 @@ export function TopToolbar() {
   const siteName = bs?.siteName ?? 'NivoraX'
   const busy = saveState === 'saving-draft' || saveState === 'publishing'
 
-  function resetTransientState() {
-    if (saveState === 'saved' || saveState === 'published' || saveState === 'error') {
-      setSaveState('idle')
+  // Auto-revert "saved" state after 5 seconds
+  useEffect(() => {
+    if (saveState === 'saved') {
+      const t = setTimeout(() => setSaveState('idle'), 5000)
+      return () => clearTimeout(t)
     }
-  }
+  }, [saveState])
 
   async function handleSaveDraft() {
     if (!bs?.postId) return
@@ -57,14 +59,8 @@ export function TopToolbar() {
     }
   }
 
-  const feedback =
-    saveState === 'error'
-      ? 'Save failed'
-      : saveState === 'saved'
-        ? 'Draft saved'
-        : saveState === 'published'
-          ? 'Published'
-          : null
+  const isSaved = saveState === 'saved'
+  const isPublished = saveState === 'published'
 
   return (
     <>
@@ -112,7 +108,7 @@ export function TopToolbar() {
         <BreakpointSwitcher />
       </div>
 
-      {/* Right — borders toggle · Save Draft · Preview · Publish */}
+      {/* Right — borders toggle · autosave · Save Draft · Preview · Publish */}
       <div className="flex flex-1 items-center justify-end gap-2">
         <button
           type="button"
@@ -130,31 +126,57 @@ export function TopToolbar() {
           <Icon icon="tabler:border-style" width={14} height={14} />
           <span className="hidden sm:inline">Borders</span>
         </button>
+
         <AutosaveIndicator />
-        {feedback && (
-          <span
-            className={cn(
-              'min-w-[4.75rem] text-right text-[11px]',
-              saveState === 'error' ? 'text-destructive' : 'text-muted-foreground',
-            )}
-            aria-live="polite"
-            aria-atomic="true"
+
+        {/* Save Draft — shows "Saved ✓" with animated green underline for 5 s */}
+        <div className="relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-label="Save draft"
+            disabled={busy || (!isDirty && !isSaved)}
+            onClick={() => {
+              void handleSaveDraft()
+            }}
+            className={cn(isSaved && 'text-emerald-400')}
           >
-            {feedback}
+            {saveState === 'saving-draft' ? (
+              <>
+                <Icon icon="tabler:loader-2" width={13} height={13} className="animate-spin" />
+                Saving…
+              </>
+            ) : isSaved ? (
+              <>
+                <Icon icon="tabler:check" width={13} height={13} />
+                Saved
+              </>
+            ) : (
+              'Save Draft'
+            )}
+          </Button>
+
+          {/* Growing green underline — only visible during the 5-second "saved" window */}
+          {isSaved && (
+            <span
+              className="animate-save-bar absolute bottom-0 left-0 h-0.5 rounded-full bg-emerald-400"
+              aria-hidden="true"
+            />
+          )}
+        </div>
+
+        {saveState === 'error' && (
+          <span className="text-[11px] text-destructive" aria-live="polite">
+            Save failed
           </span>
         )}
-        <Button
-          variant="ghost"
-          size="sm"
-          aria-label="Save draft"
-          disabled={busy || !isDirty}
-          onClick={() => {
-            resetTransientState()
-            void handleSaveDraft()
-          }}
-        >
-          {saveState === 'saving-draft' ? 'Saving…' : 'Save Draft'}
-        </Button>
+
+        {isPublished && (
+          <span className="text-[11px] text-emerald-400" aria-live="polite">
+            Published
+          </span>
+        )}
+
         <Button
           variant="ghost"
           size="sm"
@@ -165,12 +187,12 @@ export function TopToolbar() {
         >
           {previewMode ? 'Exit Preview' : 'Preview'}
         </Button>
+
         <Button
           size="sm"
           aria-label="Publish page"
           disabled={busy}
           onClick={() => {
-            resetTransientState()
             void handlePublish()
           }}
         >

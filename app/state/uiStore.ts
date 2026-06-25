@@ -7,6 +7,7 @@ import {
 } from '@/breakpoints/config'
 
 export type Breakpoint = BreakpointId
+export type EditorTheme = 'dark' | 'light'
 
 export interface PendingDelete {
   nodeId: string
@@ -20,6 +21,21 @@ export interface PendingInsert {
 }
 
 export type AppearanceView = 'themes' | 'templates' | 'global-styles' | 'tokens' | 'icons'
+
+const LS_THEME_KEY = 'nx-editor-theme'
+
+function readStoredTheme(): EditorTheme {
+  try {
+    const v = localStorage.getItem(LS_THEME_KEY)
+    return v === 'light' ? 'light' : 'dark'
+  } catch {
+    return 'dark'
+  }
+}
+
+function applyThemeToRoot(theme: EditorTheme) {
+  document.documentElement.classList.toggle('nx-light', theme === 'light')
+}
 
 interface UiState {
   /** Which left-panel is open; null = sidebar collapsed. */
@@ -43,6 +59,8 @@ interface UiState {
   pendingDelete: PendingDelete | null
   /** When set, the insert config modal is shown. */
   pendingInsert: PendingInsert | null
+  /** Editor chrome theme — persisted in localStorage. */
+  editorTheme: EditorTheme
 }
 
 interface UiActions {
@@ -62,9 +80,14 @@ interface UiActions {
   toggleElementBorders(this: void): void
   setPendingDelete(this: void, info: PendingDelete | null): void
   setPendingInsert(this: void, info: PendingInsert | null): void
+  toggleEditorTheme(this: void): void
+  setEditorTheme(this: void, theme: EditorTheme): void
 }
 
 const INITIAL_BREAKPOINTS = getBreakpoints()
+const INITIAL_THEME = readStoredTheme()
+// Apply immediately so there's no flash before React mounts.
+applyThemeToRoot(INITIAL_THEME)
 
 export const useUiStore = create<UiState & UiActions>()((set) => ({
   // ---- state ----
@@ -80,6 +103,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   showElementBorders: false,
   pendingDelete: null,
   pendingInsert: null,
+  editorTheme: INITIAL_THEME,
   openSections: {
     identity: true,
     layout: true,
@@ -143,4 +167,24 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   toggleElementBorders: () => set((s) => ({ showElementBorders: !s.showElementBorders })),
   setPendingDelete: (info) => set({ pendingDelete: info }),
   setPendingInsert: (info) => set({ pendingInsert: info }),
+  toggleEditorTheme: () =>
+    set((s) => {
+      const next: EditorTheme = s.editorTheme === 'dark' ? 'light' : 'dark'
+      try {
+        localStorage.setItem(LS_THEME_KEY, next)
+      } catch {
+        /* ignore */
+      }
+      applyThemeToRoot(next)
+      return { editorTheme: next }
+    }),
+  setEditorTheme: (theme) => {
+    try {
+      localStorage.setItem(LS_THEME_KEY, theme)
+    } catch {
+      /* ignore */
+    }
+    applyThemeToRoot(theme)
+    set({ editorTheme: theme })
+  },
 }))

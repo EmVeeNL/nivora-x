@@ -20,7 +20,22 @@ export interface DesignToken {
   group: TokenGroup
   name: string
   value: TokenValue
+  description?: string
+  category?: string
+  /** Per-mode value overrides. Key = mode id; missing = falls back to `value`. */
+  modeValues?: Record<string, TokenValue>
 }
+
+// ---------------------------------------------------------------------------
+// Token modes (site-wide theme variants, e.g. Light / Dark)
+// ---------------------------------------------------------------------------
+
+export interface TokenMode {
+  id: string
+  name: string
+}
+
+export const DEFAULT_MODE: TokenMode = { id: 'default', name: 'Default' }
 
 // ---------------------------------------------------------------------------
 // Token reference (stored in node.props in place of a concrete value)
