@@ -1,10 +1,16 @@
 import type { ElementDefinition, ElementRenderProps } from '../types'
 import { layoutInspectorSchema } from '@/inspector/style/styleSchemas'
 
-function ContainerElement({ children, 'data-node-id': nodeId, style }: ElementRenderProps) {
+function ContainerElement({
+  children,
+  'data-node-id': nodeId,
+  className,
+  style,
+}: ElementRenderProps) {
   return (
     <div
       data-node-id={nodeId}
+      className={className}
       style={{
         display: 'block',
         width: '100%',

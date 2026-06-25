@@ -10,6 +10,7 @@ import { ElementBordersOverlay } from './overlay/ElementBordersOverlay'
 import { useDndEditor } from './dnd/DndProvider'
 import { CanvasDropOverlay } from './dnd/CanvasDropOverlay'
 import { getBreakpointLabelFromList, getBreakpointWidthFromList } from '@/breakpoints/config'
+import { useInjectGeneratedCss } from './style/injectGeneratedCss'
 
 interface CanvasFrameProps {
   clean?: boolean
@@ -47,6 +48,9 @@ export function CanvasFrame({ clean = false }: CanvasFrameProps) {
       queueMicrotask(() => r?.unmount())
     }
   }, [])
+
+  // Inject generated CSS into the iframe head whenever tree/breakpoints change.
+  useInjectGeneratedCss(iframeRef)
 
   // Wire pointer-event listeners for selection and hover.
   // Runs after the bootstrap effect due to React's sequential effect ordering.

@@ -1,10 +1,16 @@
 import type { ElementDefinition, ElementRenderProps } from '../types'
 import { layoutInspectorSchema } from '@/inspector/style/styleSchemas'
 
-function SectionElement({ children, 'data-node-id': nodeId, style }: ElementRenderProps) {
+function SectionElement({
+  children,
+  'data-node-id': nodeId,
+  className,
+  style,
+}: ElementRenderProps) {
   return (
     <section
       data-node-id={nodeId}
+      className={className}
       style={{
         display: 'block',
         width: '100%',

@@ -1,12 +1,13 @@
 import type { ElementDefinition, ElementRenderProps } from '../types'
 import { textInspectorSchema } from '@/inspector/style/styleSchemas'
 
-function TextElement({ node, 'data-node-id': nodeId, style }: ElementRenderProps) {
+function TextElement({ node, 'data-node-id': nodeId, className, style }: ElementRenderProps) {
   const text = (node.props['text'] as string | undefined) ?? 'Text block'
 
   return (
     <p
       data-node-id={nodeId}
+      className={className}
       style={{
         display: 'block',
         margin: '0 0 1em',

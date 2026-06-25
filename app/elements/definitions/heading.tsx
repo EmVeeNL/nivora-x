@@ -3,7 +3,7 @@ import { textInspectorSchema } from '@/inspector/style/styleSchemas'
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
-function HeadingElement({ node, 'data-node-id': nodeId, style }: ElementRenderProps) {
+function HeadingElement({ node, 'data-node-id': nodeId, className, style }: ElementRenderProps) {
   const level = Number((node.props['level'] as number | string | undefined) ?? 2)
   const text = (node.props['text'] as string | undefined) ?? 'Heading'
   const clamped = Math.min(Math.max(Math.round(level), 1), 6)
@@ -12,6 +12,7 @@ function HeadingElement({ node, 'data-node-id': nodeId, style }: ElementRenderPr
   return (
     <Tag
       data-node-id={nodeId}
+      className={className}
       style={{
         display: 'block',
         margin: '0 0 0.5em',
