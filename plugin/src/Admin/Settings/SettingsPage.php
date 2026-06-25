@@ -4,6 +4,8 @@ declare( strict_types=1 );
 
 namespace NivoraX\Admin\Settings;
 
+use NivoraX\Settings\Breakpoints;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -131,6 +133,7 @@ final class SettingsPage {
 		return [
 			'enabled_post_types' => $enabled,
 			'editor_label'       => sanitize_text_field( (string) ( $input['editor_label'] ?? '' ) ),
+			'breakpoints'        => Breakpoints::sanitize_option( $input['breakpoints'] ?? [] ),
 		];
 	}
 
@@ -143,6 +146,7 @@ final class SettingsPage {
 		return [
 			'enabled_post_types' => [ 'page' ],
 			'editor_label'       => '',
+			'breakpoints'        => Breakpoints::defaults(),
 		];
 	}
 

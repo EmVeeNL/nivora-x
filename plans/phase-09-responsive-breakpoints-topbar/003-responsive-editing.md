@@ -2,14 +2,14 @@
 task: 003
 phase: 09
 title: Desktop-First Responsive Editing
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [002]
 retry_count: 0
 ---
 
 # Task 003 — Desktop-First Responsive Editing
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 002
 > **Retry count:** 0
 
@@ -56,3 +56,6 @@ Phase 10's CSS generation must mirror.
 - Extend the Phase 08 resolver seam rather than forking it; Phase 10 implements the same
   cascade as CSS (max-width media queries).
 - Capture golden fixtures of resolution so editor + Phase 10 stay in agreement.
+- Completed on 2026-06-25: responsive edits now target base vs active breakpoint override, and
+  canvas/style resolution follows the configured desktop-first cascade across the live configured
+  breakpoint set.

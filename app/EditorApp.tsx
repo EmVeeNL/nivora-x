@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import './styles/theme.css'
 import './lib/icons'
 import { registerStarterElements } from './elements/definitions'
@@ -9,6 +9,9 @@ import { useDocumentStore } from './document/store'
 import { loadDocument } from './document/persistence'
 import { createBlankTree } from './document/blankTree'
 import { SCHEMA_VERSION } from './document/schema/constants'
+import { getBootstrapData } from './lib/bootstrap'
+import { createAutosave } from './document/autosave'
+import { saveDraft } from './document/persistence'
 
 // Register element types and left panels once at app init
 registerStarterElements()
@@ -23,7 +26,7 @@ function DocumentInit() {
     const store = useDocumentStore.getState()
     if (store.tree) return
 
-    const bs = typeof window !== 'undefined' ? window.nivoraxBootstrap : undefined
+    const bs = getBootstrapData()
 
     if (bs?.postId) {
       loadDocument(bs.postId)
@@ -55,10 +58,48 @@ function DocumentInit() {
   return null
 }
 
+function AutosaveSync() {
+  const tree = useDocumentStore((s) => s.tree)
+  const documentMeta = useDocumentStore((s) => s.documentMeta)
+  const isDirty = useDocumentStore((s) => s.isDirty)
+  const autosaveRef = useRef<ReturnType<typeof createAutosave> | null>(null)
+
+  useEffect(() => {
+    const bs = getBootstrapData()
+    if (!bs?.postId) return
+
+    autosaveRef.current = createAutosave({
+      onSave: async (envelope) => {
+        await saveDraft(bs.postId, envelope)
+        useDocumentStore.getState().markClean()
+      },
+      onStatus: (status) => useDocumentStore.getState().setAutosaveStatus(status),
+    })
+
+    return () => {
+      autosaveRef.current?.cancel()
+      autosaveRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    const bs = getBootstrapData()
+    if (!bs?.postId || !isDirty || !tree) return
+
+    const envelope = useDocumentStore.getState().toEnvelope()
+    if (!envelope) return
+
+    autosaveRef.current?.schedule(envelope)
+  }, [documentMeta, isDirty, tree])
+
+  return null
+}
+
 export function EditorApp() {
   return (
     <div className="nivorax-editor h-screen w-screen overflow-hidden bg-background text-foreground">
       <DocumentInit />
+      <AutosaveSync />
       <DndProvider>
         <EditorLayout />
       </DndProvider>

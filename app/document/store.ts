@@ -16,6 +16,7 @@ import {
 } from './operations'
 import { getElementDefinition, hasElement } from '@/elements/registry'
 import { SCHEMA_VERSION } from './schema/constants'
+import type { SaveStatus } from './autosave'
 
 const MAX_HISTORY = 50
 /** Milliseconds within which repeated edits to the same coalesceKey merge into one history entry. */
@@ -26,6 +27,7 @@ interface DocumentState {
   documentMeta: Record<string, unknown>
   selectedId: string | null
   isDirty: boolean
+  autosaveStatus: SaveStatus
   // undo/redo
   past: DocumentTree[]
   future: DocumentTree[]
@@ -70,6 +72,8 @@ interface DocumentActions {
   redo(): void
   /** Mark the document as clean (e.g. after a successful save). */
   markClean(): void
+  /** Update the autosave status signal consumed by the toolbar indicator. */
+  setAutosaveStatus(status: SaveStatus): void
 }
 
 export const useDocumentStore = create<DocumentState & DocumentActions>()((set, get) => {
@@ -97,19 +101,21 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
     documentMeta: {},
     selectedId: null,
     isDirty: false,
+    autosaveStatus: 'idle',
     past: [],
     future: [],
     _lastCoalesceKey: null,
     _lastCoalesceTime: 0,
 
     // ---- actions ----
-    setTree: (tree) => set({ tree, isDirty: false, past: [], future: [] }),
+    setTree: (tree) => set({ tree, isDirty: false, autosaveStatus: 'idle', past: [], future: [] }),
 
     setDocument: (envelope) =>
       set({
         tree: envelope.tree,
         documentMeta: envelope.meta,
         isDirty: false,
+        autosaveStatus: 'idle',
         past: [],
         future: [],
       }),
@@ -240,5 +246,6 @@ export const useDocumentStore = create<DocumentState & DocumentActions>()((set, 
       }),
 
     markClean: () => set({ isDirty: false }),
+    setAutosaveStatus: (status) => set({ autosaveStatus: status }),
   }
 })

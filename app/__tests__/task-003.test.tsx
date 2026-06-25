@@ -2,7 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { TopToolbar } from '@/shell/TopToolbar'
 import { BreakpointSwitcher } from '@/shell/BreakpointSwitcher'
-import { useUiStore, BREAKPOINT_WIDTHS } from '@/state/uiStore'
+import { useUiStore } from '@/state/uiStore'
+import { getBreakpointWidth } from '@/breakpoints/config'
 import '@/lib/icons'
 
 beforeEach(() => {
@@ -80,12 +81,12 @@ describe('BreakpointSwitcher', () => {
 
   it('shows the width of the active breakpoint', () => {
     render(<BreakpointSwitcher />)
-    expect(screen.getByText(`${String(BREAKPOINT_WIDTHS['desktop'])}px`)).toBeInTheDocument()
+    expect(screen.getByText(`${String(getBreakpointWidth('desktop'))}px`)).toBeInTheDocument()
   })
 
   it('width label updates when the breakpoint changes', () => {
     render(<BreakpointSwitcher />)
     fireEvent.click(screen.getByRole('button', { name: /mobile/i }))
-    expect(screen.getByText(`${String(BREAKPOINT_WIDTHS['mobile'])}px`)).toBeInTheDocument()
+    expect(screen.getByText(`${String(getBreakpointWidth('mobile'))}px`)).toBeInTheDocument()
   })
 })

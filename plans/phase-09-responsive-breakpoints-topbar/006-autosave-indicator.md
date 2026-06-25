@@ -2,14 +2,14 @@
 task: 006
 phase: 09
 title: Top Bar — Autosave Indicator (No Layout Shift)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 006 — Top Bar — Autosave Indicator (No Layout Shift)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** []
 > **Retry count:** 0
 
@@ -53,3 +53,6 @@ transitions so the surrounding toolbar never reflows as the status changes.
 - Use a fixed-width container + opacity/cross-fade; never change toolbar element sizes on
   status change (the "no layout shift" requirement).
 - Consume the signal from Phase 04 task 007 — don't recompute status.
+- Completed on 2026-06-25: the top bar now renders a fixed-width autosave indicator driven by
+  the shared document autosave status signal, with distinct saving/saved/error states and no
+  toolbar reflow.

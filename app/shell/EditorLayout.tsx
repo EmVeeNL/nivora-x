@@ -7,10 +7,20 @@ import { BreadcrumbBar } from './BreadcrumbBar'
 import { CanvasFrame } from '@/canvas/CanvasFrame'
 import { ConfirmDialog } from '@/canvas/overlay/ConfirmDialog'
 import { InsertConfigModal } from '@/canvas/overlay/InsertConfigModal'
+import { PreviewMode } from './PreviewMode'
 
 export function EditorLayout() {
   const activeLeftPanel = useUiStore((s) => s.activeLeftPanel)
   const rightOpen = useUiStore((s) => s.rightPanelOpen)
+  const previewMode = useUiStore((s) => s.previewMode)
+
+  if (previewMode) {
+    return (
+      <div className="flex h-full flex-col overflow-hidden">
+        <PreviewMode />
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-full flex-col overflow-hidden">

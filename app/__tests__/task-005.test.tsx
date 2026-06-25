@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { CanvasFrame } from '@/canvas/CanvasFrame'
 import { DndProvider } from '@/canvas/dnd/DndProvider'
-import { useUiStore, BREAKPOINT_WIDTHS } from '@/state/uiStore'
+import { useUiStore } from '@/state/uiStore'
+import { getBreakpointWidth } from '@/breakpoints/config'
 
 const renderFrame = () =>
   render(
@@ -43,21 +44,21 @@ describe('CanvasFrame', () => {
   it('defaults to desktop width (1440px) as inline style', () => {
     renderFrame()
     const iframe = screen.getByTestId('canvas-iframe')
-    expect(iframe.style.width).toBe(`${String(BREAKPOINT_WIDTHS.desktop)}px`)
+    expect(iframe.style.width).toBe(`${String(getBreakpointWidth('desktop'))}px`)
   })
 
   it('reflects tablet breakpoint width (768px) when store is set to tablet', () => {
     useUiStore.setState({ activeBreakpoint: 'tablet' })
     renderFrame()
     const iframe = screen.getByTestId('canvas-iframe')
-    expect(iframe.style.width).toBe(`${String(BREAKPOINT_WIDTHS.tablet)}px`)
+    expect(iframe.style.width).toBe(`${String(getBreakpointWidth('tablet'))}px`)
   })
 
   it('reflects mobile breakpoint width (375px) when store is set to mobile', () => {
     useUiStore.setState({ activeBreakpoint: 'mobile' })
     renderFrame()
     const iframe = screen.getByTestId('canvas-iframe')
-    expect(iframe.style.width).toBe(`${String(BREAKPOINT_WIDTHS.mobile)}px`)
+    expect(iframe.style.width).toBe(`${String(getBreakpointWidth('mobile'))}px`)
   })
 
   it('does not carry Tailwind/editor class names inside the iframe', () => {

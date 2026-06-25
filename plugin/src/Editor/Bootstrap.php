@@ -4,6 +4,9 @@ declare( strict_types=1 );
 
 namespace NivoraX\Editor;
 
+use NivoraX\Capabilities\Capabilities;
+use NivoraX\Settings\Breakpoints;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -22,16 +25,18 @@ final class Bootstrap {
 	 */
 	public static function data( int $post_id, string $mode ): array {
 		return [
-			'postId'    => $post_id,
-			'mode'      => $mode,
-			'restRoot'  => esc_url_raw( rest_url() ),
-			'restNonce' => wp_create_nonce( 'wp_rest' ),
-			'adminUrl'  => admin_url(),
-			'pagesUrl'  => admin_url( 'admin.php?page=' . \NivoraX\Admin\Menu::SLUG_ALL ),
-			'homeUrl'   => home_url( '/' ),
-			'siteName'  => get_bloginfo( 'name' ),
-			'postTitle' => get_the_title( $post_id ),
-			'version'   => NIVORAX_VERSION,
+			'postId'            => $post_id,
+			'mode'              => $mode,
+			'restRoot'          => esc_url_raw( rest_url() ),
+			'restNonce'         => wp_create_nonce( 'wp_rest' ),
+			'adminUrl'          => admin_url(),
+			'pagesUrl'          => admin_url( 'admin.php?page=' . \NivoraX\Admin\Menu::SLUG_ALL ),
+			'homeUrl'           => home_url( '/' ),
+			'siteName'          => get_bloginfo( 'name' ),
+			'postTitle'         => get_the_title( $post_id ),
+			'version'           => NIVORAX_VERSION,
+			'canManageSettings' => Capabilities::current_user_can_manage(),
+			'breakpoints'       => Breakpoints::all(),
 		];
 	}
 }

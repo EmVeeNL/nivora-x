@@ -1,4 +1,5 @@
 import type { SelectControl } from '@/inspector/controls/types'
+import { getBootstrapData } from '@/lib/bootstrap'
 
 export const SYSTEM_FONT_OPTIONS: SelectControl['options'] = [
   { label: 'System UI', value: 'system-ui' },
@@ -11,7 +12,7 @@ export const SYSTEM_FONT_OPTIONS: SelectControl['options'] = [
 ]
 
 export async function loadWordPressFontOptions(): Promise<SelectControl['options']> {
-  const bs = typeof window !== 'undefined' ? window.nivoraxBootstrap : undefined
+  const bs = getBootstrapData()
   if (!bs?.restRoot) return []
 
   try {

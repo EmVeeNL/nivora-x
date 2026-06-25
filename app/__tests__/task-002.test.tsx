@@ -17,6 +17,7 @@ beforeEach(() => {
   useUiStore.setState({
     activeLeftPanel: 'navigator',
     rightPanelOpen: true,
+    previewMode: false,
     activeBreakpoint: 'desktop',
     activeInspectorTab: 'style',
     openSections: {
@@ -72,6 +73,15 @@ describe('EditorLayout', () => {
     renderLayout()
     expect(screen.getByTestId('region-canvas')).toBeInTheDocument()
   })
+
+  it('renders preview mode instead of editor chrome when enabled', () => {
+    useUiStore.setState({ previewMode: true })
+    renderLayout()
+    expect(screen.getByTestId('preview-mode')).toBeInTheDocument()
+    expect(screen.queryByTestId('region-toolbar')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('region-activity-bar')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('region-breadcrumb')).not.toBeInTheDocument()
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -119,6 +129,13 @@ describe('uiStore actions', () => {
   it('toggleRightPanel flips panel visibility', () => {
     useUiStore.getState().toggleRightPanel()
     expect(useUiStore.getState().rightPanelOpen).toBe(false)
+  })
+
+  it('togglePreviewMode flips preview visibility', () => {
+    useUiStore.getState().togglePreviewMode()
+    expect(useUiStore.getState().previewMode).toBe(true)
+    useUiStore.getState().togglePreviewMode()
+    expect(useUiStore.getState().previewMode).toBe(false)
   })
 
   it('setBreakpoint updates the active breakpoint', () => {

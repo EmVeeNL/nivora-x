@@ -1,9 +1,12 @@
 import type React from 'react'
-import type { NxNode, ResponsiveBreakpoint } from '@/document/schema/types'
+import type { NxNode } from '@/document/schema/types'
 import type { ShadowValue } from '@/inspector/controls/types'
 import { isSpacingValue, isUnitValue, unitToCss } from '@/inspector/controls/valueUnits'
+import type { BreakpointConfig, BreakpointId } from '@/breakpoints/config'
+import { resolveResponsiveValue } from '@/breakpoints/resolveResponsive'
+import { useUiStore } from '@/state/uiStore'
 
-export type ActiveStyleBreakpoint = 'base' | ResponsiveBreakpoint
+export type ActiveStyleBreakpoint = BreakpointId
 
 const STYLE_PROPS = [
   'display',
@@ -30,14 +33,12 @@ const STYLE_PROPS = [
   'boxShadow',
 ] as const
 
-function resolveValue(value: unknown, breakpoint: ActiveStyleBreakpoint): unknown {
-  if (value && typeof value === 'object' && 'base' in value) {
-    const responsive = value as Record<string, unknown>
-    return breakpoint === 'base'
-      ? responsive['base']
-      : (responsive[breakpoint] ?? responsive['base'])
-  }
-  return value
+function resolveValue(
+  value: unknown,
+  breakpoint: ActiveStyleBreakpoint,
+  breakpoints: BreakpointConfig[],
+): unknown {
+  return resolveResponsiveValue(value, breakpoint, breakpoints, undefined)
 }
 
 function isShadowValue(v: unknown): v is ShadowValue {
@@ -78,24 +79,24 @@ function applySpacing(
 export function resolveHiddenAtBreakpoint(
   node: NxNode,
   breakpoint: ActiveStyleBreakpoint,
+  breakpoints: BreakpointConfig[] = useUiStore.getState().breakpoints,
 ): boolean {
   const raw = node.props['hidden']
   if (raw === null || raw === undefined) return false
   if (typeof raw === 'boolean') return raw
-  if (typeof raw !== 'object' || !('base' in raw)) return false
-  const typed = raw as Record<string, unknown>
-  const val = breakpoint === 'base' ? typed['base'] : (typed[breakpoint] ?? typed['base'])
+  const val = resolveResponsiveValue<boolean>(raw, breakpoint, breakpoints, false)
   return val === true
 }
 
 export function resolveNodeStyles(
   node: NxNode,
-  breakpoint: ActiveStyleBreakpoint = 'base',
+  breakpoint: ActiveStyleBreakpoint = 'desktop',
+  breakpoints: BreakpointConfig[] = useUiStore.getState().breakpoints,
 ): React.CSSProperties {
   const result: React.CSSProperties = {}
 
   for (const prop of STYLE_PROPS) {
-    const value = resolveValue(node.props[prop], breakpoint)
+    const value = resolveValue(node.props[prop], breakpoint, breakpoints)
     if (prop === 'margin' || prop === 'padding') {
       applySpacing(result, prop, value)
       continue

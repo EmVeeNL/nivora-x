@@ -3,48 +3,43 @@ import { Icon } from '@iconify/react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/lib/ui/button'
 import { BreakpointSwitcher } from './BreakpointSwitcher'
+import { AutosaveIndicator } from './AutosaveIndicator'
 import { useDocumentStore } from '@/document/store'
 import { useUiStore } from '@/state/uiStore'
 import { saveDraft, publishDocument } from '@/document/persistence'
+import { getBootstrapData } from '@/lib/bootstrap'
 
-declare global {
-  interface Window {
-    nivoraxBootstrap?: {
-      postId: number
-      mode: string
-      restRoot: string
-      restNonce: string
-      adminUrl: string
-      pagesUrl: string
-      homeUrl: string
-      siteName: string
-      postTitle?: string
-      version: string
-    }
-  }
-}
+type SaveState = 'idle' | 'saving-draft' | 'publishing' | 'saved' | 'published' | 'error'
 
 export function TopToolbar() {
   const documentMeta = useDocumentStore((s) => s.documentMeta)
   const isDirty = useDocumentStore((s) => s.isDirty)
   const showBorders = useUiStore((s) => s.showElementBorders)
-  const [saving, setSaving] = useState<'idle' | 'saving' | 'error'>('idle')
-  const bs = typeof window !== 'undefined' ? window.nivoraxBootstrap : undefined
+  const previewMode = useUiStore((s) => s.previewMode)
+  const [saveState, setSaveState] = useState<SaveState>('idle')
+  const bs = getBootstrapData()
   const pagesUrl = bs?.pagesUrl ?? '#'
   const homeUrl = bs?.homeUrl ?? '#'
   const siteName = bs?.siteName ?? 'NivoraX'
+  const busy = saveState === 'saving-draft' || saveState === 'publishing'
+
+  function resetTransientState() {
+    if (saveState === 'saved' || saveState === 'published' || saveState === 'error') {
+      setSaveState('idle')
+    }
+  }
 
   async function handleSaveDraft() {
     if (!bs?.postId) return
     const envelope = useDocumentStore.getState().toEnvelope()
     if (!envelope) return
-    setSaving('saving')
+    setSaveState('saving-draft')
     try {
       await saveDraft(bs.postId, envelope)
       useDocumentStore.getState().markClean()
-      setSaving('idle')
+      setSaveState('saved')
     } catch {
-      setSaving('error')
+      setSaveState('error')
     }
   }
 
@@ -52,15 +47,24 @@ export function TopToolbar() {
     if (!bs?.postId) return
     const envelope = useDocumentStore.getState().toEnvelope()
     if (!envelope) return
-    setSaving('saving')
+    setSaveState('publishing')
     try {
       await publishDocument(bs.postId, envelope)
       useDocumentStore.getState().markClean()
-      setSaving('idle')
+      setSaveState('published')
     } catch {
-      setSaving('error')
+      setSaveState('error')
     }
   }
+
+  const feedback =
+    saveState === 'error'
+      ? 'Save failed'
+      : saveState === 'saved'
+        ? 'Draft saved'
+        : saveState === 'published'
+          ? 'Published'
+          : null
 
   return (
     <>
@@ -126,30 +130,51 @@ export function TopToolbar() {
           <Icon icon="tabler:border-style" width={14} height={14} />
           <span className="hidden sm:inline">Borders</span>
         </button>
-        {saving === 'error' && <span className="text-[11px] text-destructive">Save failed</span>}
+        <AutosaveIndicator />
+        {feedback && (
+          <span
+            className={cn(
+              'min-w-[4.75rem] text-right text-[11px]',
+              saveState === 'error' ? 'text-destructive' : 'text-muted-foreground',
+            )}
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {feedback}
+          </span>
+        )}
         <Button
           variant="ghost"
           size="sm"
           aria-label="Save draft"
-          disabled={saving === 'saving' || !isDirty}
+          disabled={busy || !isDirty}
           onClick={() => {
+            resetTransientState()
             void handleSaveDraft()
           }}
         >
-          {saving === 'saving' ? 'Saving…' : 'Save Draft'}
+          {saveState === 'saving-draft' ? 'Saving…' : 'Save Draft'}
         </Button>
-        <Button variant="ghost" size="sm" aria-label="Preview page">
-          Preview
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label={previewMode ? 'Exit preview' : 'Preview page'}
+          aria-pressed={previewMode}
+          disabled={busy}
+          onClick={() => useUiStore.getState().togglePreviewMode()}
+        >
+          {previewMode ? 'Exit Preview' : 'Preview'}
         </Button>
         <Button
           size="sm"
           aria-label="Publish page"
-          disabled={saving === 'saving'}
+          disabled={busy}
           onClick={() => {
+            resetTransientState()
             void handlePublish()
           }}
         >
-          Publish
+          {saveState === 'publishing' ? 'Publishing…' : 'Publish'}
         </Button>
       </div>
     </>

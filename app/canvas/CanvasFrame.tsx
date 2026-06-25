@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
-import { useUiStore, BREAKPOINT_WIDTHS } from '@/state/uiStore'
+import { useUiStore } from '@/state/uiStore'
 import { bootstrapIframe } from './iframe'
 import { CanvasRenderer } from './CanvasRenderer'
 import { useCanvasSelection } from './useCanvasSelection'
@@ -9,19 +9,21 @@ import { SelectionOverlay } from './overlay/SelectionOverlay'
 import { ElementBordersOverlay } from './overlay/ElementBordersOverlay'
 import { useDndEditor } from './dnd/DndProvider'
 import { CanvasDropOverlay } from './dnd/CanvasDropOverlay'
+import { getBreakpointLabelFromList, getBreakpointWidthFromList } from '@/breakpoints/config'
 
-const BREAKPOINT_LABEL: Record<string, string> = {
-  desktop: 'Desktop',
-  tablet: 'Tablet',
-  mobile: 'Mobile',
+interface CanvasFrameProps {
+  clean?: boolean
 }
 
-export function CanvasFrame() {
+export function CanvasFrame({ clean = false }: CanvasFrameProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const canvasRootRef = useRef<Root | null>(null)
+  const breakpoints = useUiStore((s) => s.breakpoints)
   const activeBreakpoint = useUiStore((s) => s.activeBreakpoint)
-  const frameWidth = BREAKPOINT_WIDTHS[activeBreakpoint]
+  const previewMode = useUiStore((s) => s.previewMode)
+  const frameWidth = getBreakpointWidthFromList(breakpoints, activeBreakpoint)
   const { isDragging } = useDndEditor()
+  const chromeHidden = clean || previewMode
 
   // Bootstrap the iframe HTML and mount the canvas React root inside it.
   useEffect(() => {
@@ -48,8 +50,8 @@ export function CanvasFrame() {
 
   // Wire pointer-event listeners for selection and hover.
   // Runs after the bootstrap effect due to React's sequential effect ordering.
-  useCanvasSelection(iframeRef)
-  useEditorKeyboard(iframeRef)
+  useCanvasSelection(iframeRef, !chromeHidden)
+  useEditorKeyboard(iframeRef, !chromeHidden)
 
   return (
     <div
@@ -57,14 +59,16 @@ export function CanvasFrame() {
       className="relative flex h-full w-full flex-col items-center overflow-auto pt-4"
     >
       {/* Breakpoint label */}
-      <p
-        data-testid="canvas-breakpoint-label"
-        className="mb-3 shrink-0 text-xs text-muted-foreground/70"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {BREAKPOINT_LABEL[activeBreakpoint]} · {frameWidth}px
-      </p>
+      {!chromeHidden && (
+        <p
+          data-testid="canvas-breakpoint-label"
+          className="mb-3 shrink-0 text-xs text-muted-foreground/70"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {getBreakpointLabelFromList(breakpoints, activeBreakpoint)} · {frameWidth}px
+        </p>
+      )}
 
       <iframe
         ref={iframeRef}
@@ -74,20 +78,20 @@ export function CanvasFrame() {
           width: `${String(frameWidth)}px`,
           maxWidth: '100%',
           // Disable iframe pointer capture during DnD so parent window receives events
-          pointerEvents: isDragging ? 'none' : 'auto',
+          pointerEvents: isDragging && !chromeHidden ? 'none' : 'auto',
         }}
         className="min-h-[640px] shrink-0 border-0 bg-white shadow-2xl"
         sandbox="allow-same-origin"
       />
 
       {/* Element borders overlay — shows colored dashed edit borders when enabled */}
-      <ElementBordersOverlay iframeRef={iframeRef} />
+      {!chromeHidden && <ElementBordersOverlay iframeRef={iframeRef} />}
 
       {/* Selection/hover overlay — position:fixed, tracks element rects in the iframe */}
-      <SelectionOverlay iframeRef={iframeRef} />
+      {!chromeHidden && <SelectionOverlay iframeRef={iframeRef} />}
 
       {/* Full-viewport drag capture overlay — only active while dragging */}
-      <CanvasDropOverlay iframeRef={iframeRef} />
+      {!chromeHidden && <CanvasDropOverlay iframeRef={iframeRef} />}
     </div>
   )
 }

@@ -2,14 +2,14 @@
 task: 007
 phase: 09
 title: Preview — In-Editor Clean View
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 007 — Preview — In-Editor Clean View
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** []
 > **Retry count:** 0
 
@@ -34,11 +34,11 @@ breakpoint — useful immediately and self-contained.
 
 ## Acceptance Criteria
 
-- [ ] Preview mode hides chrome + overlays; renders the canvas cleanly.
-- [ ] Honors the active breakpoint width.
-- [ ] Exit returns to editing with state preserved.
-- [ ] Read-only (no mutations).
-- [ ] Vitest covers toggle/visibility/state; lint/format/typecheck pass.
+- [x] Preview mode hides chrome + overlays; renders the canvas cleanly.
+- [x] Honors the active breakpoint width.
+- [x] Exit returns to editing with state preserved.
+- [x] Read-only (no mutations).
+- [x] Vitest covers toggle/visibility/state; lint/format/typecheck pass.
 
 ## Files to Create
 

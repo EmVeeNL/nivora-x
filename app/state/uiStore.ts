@@ -1,13 +1,12 @@
 import { create } from 'zustand'
+import {
+  getBreakpoints,
+  normalizeBreakpoints,
+  type BreakpointConfig,
+  type BreakpointId,
+} from '@/breakpoints/config'
 
-export type Breakpoint = 'desktop' | 'tablet' | 'mobile'
-
-/** Canvas iframe width for each breakpoint (px). */
-export const BREAKPOINT_WIDTHS: Record<Breakpoint, number> = {
-  desktop: 1440,
-  tablet: 768,
-  mobile: 375,
-}
+export type Breakpoint = BreakpointId
 
 export interface PendingDelete {
   nodeId: string
@@ -24,6 +23,8 @@ interface UiState {
   /** Which left-panel is open; null = sidebar collapsed. */
   activeLeftPanel: string | null
   rightPanelOpen: boolean
+  previewMode: boolean
+  breakpoints: BreakpointConfig[]
   activeBreakpoint: Breakpoint
   activeInspectorTab: string
   /** Keyed by section id — true = expanded. */
@@ -44,6 +45,9 @@ interface UiActions {
   /** Open a specific left panel, or pass null to collapse the sidebar. */
   setLeftPanel(this: void, panel: string | null): void
   toggleRightPanel(this: void): void
+  setPreviewMode(this: void, previewMode: boolean): void
+  togglePreviewMode(this: void): void
+  setBreakpoints(this: void, breakpoints: BreakpointConfig[]): void
   setBreakpoint(this: void, bp: Breakpoint): void
   setInspectorTab(this: void, tab: string): void
   toggleSection(this: void, id: string): void
@@ -55,11 +59,15 @@ interface UiActions {
   setPendingInsert(this: void, info: PendingInsert | null): void
 }
 
+const INITIAL_BREAKPOINTS = getBreakpoints()
+
 export const useUiStore = create<UiState & UiActions>()((set) => ({
   // ---- state ----
   activeLeftPanel: 'navigator',
   rightPanelOpen: true,
-  activeBreakpoint: 'desktop',
+  previewMode: false,
+  breakpoints: INITIAL_BREAKPOINTS,
+  activeBreakpoint: INITIAL_BREAKPOINTS[0]?.id ?? 'desktop',
   activeInspectorTab: 'inspector',
   hoveredId: null,
   navigatorCollapsed: {},
@@ -83,6 +91,29 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   // ---- actions ----
   setLeftPanel: (panel) => set({ activeLeftPanel: panel }),
   toggleRightPanel: () => set((s) => ({ rightPanelOpen: !s.rightPanelOpen })),
+  setPreviewMode: (previewMode) =>
+    set({
+      previewMode,
+      hoveredId: null,
+      pendingDelete: null,
+      pendingInsert: null,
+    }),
+  togglePreviewMode: () =>
+    set((s) => ({
+      previewMode: !s.previewMode,
+      hoveredId: null,
+      pendingDelete: null,
+      pendingInsert: null,
+    })),
+  setBreakpoints: (breakpoints) =>
+    set((s) => {
+      const next = normalizeBreakpoints(breakpoints)
+      const hasActive = next.some((breakpoint) => breakpoint.id === s.activeBreakpoint)
+      return {
+        breakpoints: next,
+        activeBreakpoint: hasActive ? s.activeBreakpoint : (next[0]?.id ?? 'desktop'),
+      }
+    }),
   setBreakpoint: (bp) => set({ activeBreakpoint: bp }),
   setInspectorTab: (tab) => set({ activeInspectorTab: tab }),
   toggleSection: (id) =>

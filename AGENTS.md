@@ -24,8 +24,8 @@ architectural challenge.
 
 - **Planning:** Phases 01–14 **Defined** with full task files (107 tasks); 15–21 **Staged**
   (provisional titles). See `plans/ROADMAP.md`.
-- **Build:** Phases 01–08 are implemented and marked Done. Phase 09 (Responsive
-  Breakpoints & Top Bar) is next.
+- **Build:** Phases 01–09 are implemented and marked Done. Phase 10 (Front-End
+  Rendering & CSS Engine) is next.
 - **Current editor shell:** left rail has Navigator and Elements panels. Elements groups are
   collapsible with only the first visible group open by default; Navigator supports live
   tree selection, collapse state, visibility/lock, rename, duplicate/delete, and tree
@@ -52,6 +52,19 @@ architectural challenge.
   (column count) use it. Extensible to any future element.
 - **Grid/Columns proper renders:** Grid uses CSS `display:grid; grid-template-columns:
   repeat(N, 1fr)`; Columns is a 2-column grid; both use their configured props.
+
+**Phase 09 scope (Done):**
+
+- **Responsive breakpoints:** site-wide configurable breakpoints (Desktop/Tablet/Mobile +
+  custom), persisted via plugin settings, exposed to the editor bootstrap, and used by the
+  breakpoint switcher/canvas width logic.
+- **Desktop-first responsive editing:** style controls write `base` on desktop and
+  breakpoint-specific overrides on narrower breakpoints; the canvas resolver honors the
+  configured cascade order.
+- **Inherited/overridden indicators:** non-desktop style controls show per-control
+  inherited/overridden state with explicit create-override and reset-to-inherited actions.
+- **Top bar workflow:** Save Draft, Publish, autosave status, and **Preview** (chrome-off,
+  read-only, active-breakpoint clean view) are all wired and tested.
 
 ## Key Architecture Decisions
 

@@ -33,8 +33,13 @@ function triggerDelete() {
  * Delete/Backspace → open delete confirmation dialog
  * Escape           → clear selection
  */
-export function useEditorKeyboard(iframeRef: RefObject<HTMLIFrameElement | null>): void {
+export function useEditorKeyboard(
+  iframeRef: RefObject<HTMLIFrameElement | null>,
+  enabled = true,
+): void {
   useEffect(() => {
+    if (!enabled) return
+
     function onKeyDown(e: KeyboardEvent) {
       if (isEditableTarget(document.activeElement)) return
       const meta = e.metaKey || e.ctrlKey
@@ -85,5 +90,5 @@ export function useEditorKeyboard(iframeRef: RefObject<HTMLIFrameElement | null>
     }
     // iframeRef is a stable ref — intentionally omitted from deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [enabled])
 }
