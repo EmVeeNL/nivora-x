@@ -49,14 +49,14 @@ describe('TokenManager', () => {
   it('opens the editor for a token when edit button is clicked', () => {
     render(<TokenManager />)
     const editBtns = screen.getAllByTitle('Edit token')
-    fireEvent.click(editBtns[0])
+    fireEvent.click(editBtns[0]!)
     expect(screen.getByPlaceholderText('Token name')).toBeTruthy()
   })
 
   it('closes the editor when cancel is clicked', () => {
     render(<TokenManager />)
     const editBtns = screen.getAllByTitle('Edit token')
-    fireEvent.click(editBtns[0])
+    fireEvent.click(editBtns[0]!)
     expect(screen.getByPlaceholderText('Token name')).toBeTruthy()
     fireEvent.click(screen.getByText('Cancel'))
     expect(screen.queryByPlaceholderText('Token name')).toBeNull()
@@ -65,7 +65,7 @@ describe('TokenManager', () => {
   it('updates the token when saved via the editor', () => {
     render(<TokenManager />)
     const editBtns = screen.getAllByTitle('Edit token')
-    fireEvent.click(editBtns[0])
+    fireEvent.click(editBtns[0]!)
     const nameInput = screen.getByPlaceholderText('Token name')
     fireEvent.change(nameInput, { target: { value: 'Renamed Token' } })
     fireEvent.click(screen.getByText('Update'))
@@ -76,14 +76,14 @@ describe('TokenManager', () => {
     render(<TokenManager />)
     const initialCount = useTokenStore.getState().tokens.length
     const deleteBtns = screen.getAllByTitle('Delete token')
-    fireEvent.click(deleteBtns[0])
+    fireEvent.click(deleteBtns[0]!)
     expect(useTokenStore.getState().tokens.length).toBe(initialCount - 1)
   })
 
   it('shows a create form when "Add color" is clicked', () => {
     render(<TokenManager />)
     const addBtns = screen.getAllByText(/^Add /)
-    fireEvent.click(addBtns[0])
+    fireEvent.click(addBtns[0]!)
     expect(screen.getByPlaceholderText('Token name')).toBeTruthy()
     expect(screen.getByText('Create')).toBeTruthy()
   })
@@ -91,7 +91,7 @@ describe('TokenManager', () => {
   it('creates a new token via the create form', () => {
     render(<TokenManager />)
     const addBtns = screen.getAllByText(/^Add /)
-    fireEvent.click(addBtns[0])
+    fireEvent.click(addBtns[0]!)
     fireEvent.change(screen.getByPlaceholderText('Token name'), {
       target: { value: 'Brand Blue' },
     })

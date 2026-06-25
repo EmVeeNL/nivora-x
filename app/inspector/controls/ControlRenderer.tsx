@@ -23,6 +23,8 @@ import {
   type UnitValue,
 } from './types'
 import { normalizeSpacingValue, normalizeUnitValue, spacingValue, unitValue } from './valueUnits'
+import { isTokenRef } from '@/tokens/model'
+import { TokenOrValue } from './TokenOrValue'
 
 interface ControlRendererProps {
   node: NxNode
@@ -753,85 +755,119 @@ function renderControl(
 
     case 'color': {
       const c = control as KnownControl & { type: 'color' }
-      const value = readProp(node, c, c.defaultValue ?? '', breakpoints, breakpoint)
-      const pickerValue = value !== '' ? value : '#ffffff'
+      const rawValue = readProp(node, c, c.defaultValue ?? '', breakpoints, breakpoint)
       return (
         <FieldRow control={control}>
-          <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-            <div style={{ position: 'relative', width: 24, height: 24, flexShrink: 0 }}>
-              {value === '' && (
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    inset: 2,
-                    borderRadius: 2,
-                    background:
-                      'linear-gradient(to bottom right, transparent calc(50% - 1px), #f87171 calc(50% - 1px), #f87171 calc(50% + 1px), transparent calc(50% + 1px))',
-                    pointerEvents: 'none',
-                  }}
-                />
-              )}
-              <input
-                type="color"
-                value={pickerValue}
-                disabled={dis}
-                style={{
-                  width: 24,
-                  height: 24,
-                  padding: 2,
-                  border: '1px solid #333',
-                  borderRadius: 3,
-                  background: '#252525',
-                  cursor: dis ? 'not-allowed' : 'pointer',
-                  opacity: dis ? 0.5 : 1,
-                }}
-                onChange={(e) => updateNode(node, c, e.target.value, breakpoint)}
-              />
-            </div>
-            <input
-              value={value}
-              placeholder="—"
-              disabled={dis}
-              style={{ ...INPUT_STYLE, flex: 1, minWidth: 0 }}
-              onChange={(e) => updateNode(node, c, e.target.value, breakpoint)}
-            />
-            {value !== '' && (
-              <button
-                type="button"
-                title="Clear"
-                disabled={dis}
-                style={{
-                  width: 22,
-                  height: 22,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'transparent',
-                  border: '1px solid #333',
-                  borderRadius: 3,
-                  color: '#666',
-                  cursor: 'pointer',
-                  fontSize: 13,
-                  flexShrink: 0,
-                  padding: 0,
-                }}
-                onClick={() => updateNode(node, c, '', breakpoint)}
-              >
-                ×
-              </button>
-            )}
-          </div>
+          <TokenOrValue
+            value={rawValue}
+            group="color"
+            disabled={dis}
+            onChange={(v) => updateNode(node, c, v, breakpoint)}
+          >
+            {(value, onRawChange, isDis) => {
+              const colorStr = typeof value === 'string' ? value : ''
+              const pickerValue = colorStr !== '' ? colorStr : '#ffffff'
+              return (
+                <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                  <div style={{ position: 'relative', width: 24, height: 24, flexShrink: 0 }}>
+                    {colorStr === '' && (
+                      <div
+                        aria-hidden="true"
+                        style={{
+                          position: 'absolute',
+                          inset: 2,
+                          borderRadius: 2,
+                          background:
+                            'linear-gradient(to bottom right, transparent calc(50% - 1px), #f87171 calc(50% - 1px), #f87171 calc(50% + 1px), transparent calc(50% + 1px))',
+                          pointerEvents: 'none',
+                        }}
+                      />
+                    )}
+                    <input
+                      type="color"
+                      value={pickerValue}
+                      disabled={isDis}
+                      style={{
+                        width: 24,
+                        height: 24,
+                        padding: 2,
+                        border: '1px solid #333',
+                        borderRadius: 3,
+                        background: '#252525',
+                        cursor: isDis ? 'not-allowed' : 'pointer',
+                        opacity: isDis ? 0.5 : 1,
+                      }}
+                      onChange={(e) => onRawChange(e.target.value)}
+                    />
+                  </div>
+                  <input
+                    value={colorStr}
+                    placeholder="—"
+                    disabled={isDis}
+                    style={{ ...INPUT_STYLE, flex: 1, minWidth: 0 }}
+                    onChange={(e) => onRawChange(e.target.value)}
+                  />
+                  {colorStr !== '' && (
+                    <button
+                      type="button"
+                      title="Clear"
+                      disabled={isDis}
+                      style={{
+                        width: 22,
+                        height: 22,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'transparent',
+                        border: '1px solid #333',
+                        borderRadius: 3,
+                        color: '#666',
+                        cursor: 'pointer',
+                        fontSize: 13,
+                        flexShrink: 0,
+                        padding: 0,
+                      }}
+                      onClick={() => onRawChange('')}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              )
+            }}
+          </TokenOrValue>
         </FieldRow>
       )
     }
 
     case 'unit': {
       const c = control as KnownControl & { type: 'unit' }
+      const rawProp = readProp(node, c, c.defaultValue, breakpoints, breakpoint)
       const value = normalizeUnitValue(
-        readProp(node, c, c.defaultValue, breakpoints, breakpoint),
+        isTokenRef(rawProp) ? c.defaultValue : rawProp,
         c.defaultValue ?? unitValue(),
       )
+      if (c.tokenGroup) {
+        return (
+          <FieldRow control={control}>
+            <TokenOrValue
+              value={rawProp}
+              group={c.tokenGroup}
+              disabled={dis}
+              onChange={(v) => updateNode(node, c, v, breakpoint)}
+            >
+              {(_, onRawChange, isDis) => (
+                <UnitInput
+                  value={value}
+                  disabled={isDis}
+                  {...unitInputProps(c)}
+                  onChange={(next) => onRawChange(next)}
+                />
+              )}
+            </TokenOrValue>
+          </FieldRow>
+        )
+      }
       return (
         <FieldRow control={control}>
           <UnitInput
