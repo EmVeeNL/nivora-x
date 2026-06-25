@@ -2,14 +2,14 @@
 task: 001
 phase: 11
 title: Token Model, Storage & Defaults
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Token Model, Storage & Defaults
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 
@@ -37,11 +37,11 @@ survive renames.
 
 ## Acceptance Criteria
 
-- [ ] Token model for Colors, Typography, Spacing, Effects with stable ids.
-- [ ] Site-wide storage + typed PHP + client accessors.
-- [ ] Seeded default token set.
-- [ ] Sanitized, capability-gated writes.
-- [ ] Pest + Vitest cover model/storage; all gates green.
+- [x] Token model for Colors, Typography, Spacing, Effects with stable ids.
+- [x] Site-wide storage + typed PHP + client accessors.
+- [x] Seeded default token set.
+- [x] Sanitized, capability-gated writes.
+- [x] Pest + Vitest cover model/storage; all gates green.
 
 ## Files to Create
 
