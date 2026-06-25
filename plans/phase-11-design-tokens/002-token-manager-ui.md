@@ -2,14 +2,14 @@
 task: 002
 phase: 11
 title: Token Manager UI
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 002 — Token Manager UI
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -34,10 +34,10 @@ it's the CRUD surface and presentation.
 
 ## Acceptance Criteria
 
-- [ ] Grouped token list (Colors/Typography/Spacing/Effects) with value previews.
-- [ ] Create/edit/delete persisting via the task-001 accessor.
-- [ ] Sensible presentation per token type (swatches, type samples, spacing values).
-- [ ] Vitest covers CRUD wiring; lint/format/typecheck pass.
+- [x] Grouped token list (Colors/Typography/Spacing/Effects) with value previews.
+- [x] Create/edit/delete persisting via the task-001 accessor.
+- [x] Sensible presentation per token type (swatches, type samples, spacing values).
+- [x] Vitest covers CRUD wiring; lint/format/typecheck pass.
 
 ## Files to Create
 

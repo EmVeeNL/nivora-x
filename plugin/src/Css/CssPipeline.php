@@ -6,6 +6,7 @@ namespace NivoraX\Css;
 
 use NivoraX\Settings\Breakpoints;
 use NivoraX\Storage\DocumentStore;
+use NivoraX\Tokens\Tokens;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -74,7 +75,8 @@ final class CssPipeline {
 		}
 
 		$breakpoints = Breakpoints::all();
-		$css         = $this->generator->generate( $tree, $breakpoints );
+		$tokens      = Tokens::all();
+		$css         = $this->generator->generate( $tree, $breakpoints, $tokens );
 		$this->store->store( $post_id, $css );
 	}
 

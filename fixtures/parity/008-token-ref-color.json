@@ -1,0 +1,23 @@
+{
+  "description": "A token reference on a color prop resolves to var(--nx-id) in the rule",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 9999, "direction": "max", "builtin": true }
+  ],
+  "tokens": [
+    { "id": "color-primary", "group": "color", "name": "Primary", "value": "#3b82f6" }
+  ],
+  "tree": {
+    "rootId": "root",
+    "nodes": {
+      "root": {
+        "id": "root",
+        "type": "section",
+        "props": { "color": { "__token": "color-primary" } },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ":root{--nx-color-primary:#3b82f6}.nivorax-root{color:var(--nx-color-primary)}"
+}

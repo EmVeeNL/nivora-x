@@ -1,3 +1,5 @@
+import type { TokenGroup } from '@/tokens/model'
+
 export const CSS_UNITS = ['px', '%', 'rem', 'em', 'vh', 'vw'] as const
 
 export type CssUnit = (typeof CSS_UNITS)[number]
@@ -75,6 +77,7 @@ export interface UnitControl extends BaseControl {
   max?: number
   step?: number
   units?: CssUnit[]
+  tokenGroup?: TokenGroup
 }
 
 export interface SpacingControl extends BaseControl {

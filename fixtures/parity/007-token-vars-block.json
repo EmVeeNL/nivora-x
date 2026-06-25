@@ -1,0 +1,24 @@
+{
+  "description": "Token list emits a :root variables block prepended to node CSS",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 9999, "direction": "max", "builtin": true }
+  ],
+  "tokens": [
+    { "id": "color-primary", "group": "color", "name": "Primary",   "value": "#3b82f6" },
+    { "id": "spacing-md",    "group": "spacing", "name": "Medium",  "value": { "value": 16, "unit": "px" } }
+  ],
+  "tree": {
+    "rootId": "root",
+    "nodes": {
+      "root": {
+        "id": "root",
+        "type": "section",
+        "props": { "backgroundColor": "#ffffff" },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ":root{--nx-color-primary:#3b82f6;--nx-spacing-md:16px}.nivorax-root{background-color:#ffffff}"
+}

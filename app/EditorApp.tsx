@@ -12,6 +12,7 @@ import { SCHEMA_VERSION } from './document/schema/constants'
 import { getBootstrapData } from './lib/bootstrap'
 import { createAutosave } from './document/autosave'
 import { saveDraft } from './document/persistence'
+import { loadTokens } from './tokens/store'
 
 // Register element types and left panels once at app init
 registerStarterElements()
@@ -58,6 +59,13 @@ function DocumentInit() {
   return null
 }
 
+function TokenInit() {
+  useEffect(() => {
+    void loadTokens()
+  }, [])
+  return null
+}
+
 function AutosaveSync() {
   const tree = useDocumentStore((s) => s.tree)
   const documentMeta = useDocumentStore((s) => s.documentMeta)
@@ -99,6 +107,7 @@ export function EditorApp() {
   return (
     <div className="nivorax-editor h-screen w-screen overflow-hidden bg-background text-foreground">
       <DocumentInit />
+      <TokenInit />
       <AutosaveSync />
       <DndProvider>
         <EditorLayout />

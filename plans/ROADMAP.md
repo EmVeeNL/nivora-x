@@ -32,7 +32,7 @@
 | #   | Phase                                | Definition | Status      |
 | --- | ------------------------------------ | ---------- | ----------- |
 | 10  | Front-End Rendering & CSS Engine     | Defined    | Done        |
-| 11  | Design Tokens                        | Defined    | Not Started |
+| 11  | Design Tokens                        | Defined    | Done        |
 | 12  | Full Styling Controls                | Defined    | Not Started |
 | 13  | Theme Builder                        | Defined    | Not Started |
 | 14  | Dynamic Content & CMS Mapping        | Defined    | Not Started |

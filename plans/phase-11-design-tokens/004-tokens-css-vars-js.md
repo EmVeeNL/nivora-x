@@ -2,14 +2,14 @@
 task: 004
 phase: 11
 title: Tokens → CSS Custom Properties (JS Generator)
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 004 — Tokens → CSS Custom Properties (JS Generator)
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -36,11 +36,11 @@ nodes live in the editor iframe.
 
 ## Acceptance Criteria
 
-- [ ] JS generator emits the token variables block.
-- [ ] Token references resolve to `var(--nx-<id>)`; raw values stay literal.
-- [ ] Editing a token cascades live via the variable (cheap propagation).
-- [ ] Deterministic output consistent with Phase 10 rules.
-- [ ] Vitest covers variable emission + reference resolution; lint/format/typecheck pass.
+- [x] JS generator emits the token variables block.
+- [x] Token references resolve to `var(--nx-<id>)`; raw values stay literal.
+- [x] Editing a token cascades live via the variable (cheap propagation).
+- [x] Deterministic output consistent with Phase 10 rules.
+- [x] Vitest covers variable emission + reference resolution; lint/format/typecheck pass.
 
 ## Files to Create
 

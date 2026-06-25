@@ -35,6 +35,7 @@ final class Plugin {
 		// Phase 04 — document REST API.
 		Rest\DocumentController::register();
 		Rest\SettingsController::register();
+		Rest\TokensController::register();
 		Admin\Menu::register();
 		Admin\Settings\SettingsPage::register();
 		Admin\Screen\EditorScreen::register();

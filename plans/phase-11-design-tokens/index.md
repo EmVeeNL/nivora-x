@@ -3,14 +3,14 @@ phase: 11
 slug: design-tokens
 title: Design Tokens
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 11 — Design Tokens
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -56,14 +56,14 @@ referenced. (Expanding the inspector to the full control set is the separate Pha
 
 ## Success Criteria
 
-- [ ] Token model + site-wide storage for Colors, Typography, Spacing, Effects; seeded defaults.
-- [ ] Token manager UI: create/edit/delete grouped tokens; persists and reloads.
-- [ ] Phase 08 controls can reference tokens or raw values; references stored by id.
-- [ ] Tokens emit CSS custom properties consumed by both JS + PHP CSS engines.
-- [ ] Editing a token cascades to referencing nodes live (editor) and on the front end.
-- [ ] Renaming/deleting a token handles references safely (guard/warn).
-- [ ] The parity harness covers token variables (JS == PHP).
-- [ ] Pest + Vitest cover CRUD/resolution/propagation; all gates green.
+- [x] Token model + site-wide storage for Colors, Typography, Spacing, Effects; seeded defaults.
+- [x] Token manager UI: create/edit/delete grouped tokens; persists and reloads.
+- [x] Phase 08 controls can reference tokens or raw values; references stored by id.
+- [x] Tokens emit CSS custom properties consumed by both JS + PHP CSS engines.
+- [x] Editing a token cascades to referencing nodes live (editor) and on the front end.
+- [x] Renaming/deleting a token handles references safely (guard/warn).
+- [x] The parity harness covers token variables (JS == PHP).
+- [x] Pest + Vitest cover CRUD/resolution/propagation; all gates green.
 
 ## Task Overview
 
@@ -71,13 +71,13 @@ referenced. (Expanding the inspector to the full control set is the separate Pha
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Token model + site-wide storage + seeded defaults (PHP accessor + client) | — | Not Started |
-| 002  | Token manager UI (Colors/Typography/Spacing/Effects; CRUD) | 001 | Not Started |
-| 003  | Token references in Phase 08 style controls (token-or-value) | 001 | Not Started |
-| 004  | Tokens → CSS custom properties in the JS generator (editor) | 001 | Not Started |
-| 005  | Tokens → CSS custom properties in the PHP generator + regen on token change | 001 | Not Started |
-| 006  | Reference integrity (rename/delete guards) + live propagation | 002, 003 | Not Started |
-| 007  | Parity fixtures for token variables + tests + polish | 004, 005 | Not Started |
+| 001  | Token model + site-wide storage + seeded defaults (PHP accessor + client) | — | Done |
+| 002  | Token manager UI (Colors/Typography/Spacing/Effects; CRUD) | 001 | Done |
+| 003  | Token references in Phase 08 style controls (token-or-value) | 001 | Done |
+| 004  | Tokens → CSS custom properties in the JS generator (editor) | 001 | Done |
+| 005  | Tokens → CSS custom properties in the PHP generator + regen on token change | 001 | Done |
+| 006  | Reference integrity (rename/delete guards) + live propagation | 002, 003 | Done |
+| 007  | Parity fixtures for token variables + tests + polish | 004, 005 | Done |
 
 ## Architectural Notes
 

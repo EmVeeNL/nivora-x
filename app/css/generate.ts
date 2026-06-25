@@ -9,7 +9,23 @@
 
 import type { DocumentTree, NxNode } from '@/document/schema/types'
 import type { BreakpointConfig } from '@/breakpoints/config'
+import type { DesignToken } from '@/tokens/model'
+import { isTokenRef } from '@/tokens/model'
 import { STYLE_PROP_ORDER, propToDeclarations } from './rules'
+import { tokensToCssVars } from '@/tokens/cssVars'
+
+// ---------------------------------------------------------------------------
+// Token reference resolution
+// ---------------------------------------------------------------------------
+
+/**
+ * Resolve a style prop value: if it is a TokenRef, return `var(--nx-{id})`.
+ * All other values are returned unchanged for normal CSS serialisation.
+ */
+function resolveTokenRef(value: unknown): unknown {
+  if (isTokenRef(value)) return `var(--nx-${value.__token})`
+  return value
+}
 
 // ---------------------------------------------------------------------------
 // Responsive value helpers
@@ -57,7 +73,7 @@ function nodeBaseDeclarations(node: NxNode): Array<[string, string]> {
   const declarations: Array<[string, string]> = []
   for (const prop of STYLE_PROP_ORDER) {
     const raw = node.props[prop]
-    const value = baseValue(raw)
+    const value = resolveTokenRef(baseValue(raw))
     declarations.push(...propToDeclarations(prop, value))
   }
   return declarations
@@ -75,7 +91,7 @@ function nodeOverrideDeclarations(node: NxNode, breakpointId: string): Array<[st
     const raw = node.props[prop]
     const value = overrideValue(raw, breakpointId)
     if (value !== undefined) {
-      declarations.push(...propToDeclarations(prop, value))
+      declarations.push(...propToDeclarations(prop, resolveTokenRef(value)))
     }
   }
 
@@ -85,7 +101,7 @@ function nodeOverrideDeclarations(node: NxNode, breakpointId: string): Array<[st
     for (const prop of STYLE_PROP_ORDER) {
       if (prop in bpOverrides) {
         const value = bpOverrides[prop]
-        declarations.push(...propToDeclarations(prop, value))
+        declarations.push(...propToDeclarations(prop, resolveTokenRef(value)))
       }
     }
   }
@@ -128,17 +144,30 @@ function generateNodeCss(node: NxNode, breakpoints: BreakpointConfig[]): Generat
 /**
  * Generate scoped, deterministic CSS for a full document tree.
  *
- * Output order (rule 4):
+ * When `tokens` is supplied, a `:root{--nx-*}` variables block is prepended
+ * so token references (`var(--nx-{id})`) cascade correctly.
+ *
+ * Output order:
+ *   0. Token variables block (`:root{…}`) — if tokens provided.
  *   1. Base (desktop) rules — all nodes, in tree depth-first order.
  *   2. Responsive overrides — one `@media (max-width)` block per
  *      breakpoint (narrowest-last so mobile overrides are most specific).
  */
-export function generateCss(tree: DocumentTree, breakpoints: BreakpointConfig[]): string {
+export function generateCss(
+  tree: DocumentTree,
+  breakpoints: BreakpointConfig[],
+  tokens?: DesignToken[],
+): string {
   if (Object.keys(tree.nodes).length === 0) return ''
 
   const nodeIds = Object.keys(tree.nodes)
   const parts: string[] = []
   const mediaBlocks = new Map<string, string[]>()
+
+  if (tokens && tokens.length > 0) {
+    const vars = tokensToCssVars(tokens)
+    if (vars) parts.push(vars)
+  }
 
   for (const nodeId of nodeIds) {
     const node = tree.nodes[nodeId]

@@ -18,10 +18,12 @@ import { describe, it, expect } from 'vitest'
 import { generateCss } from '@/css/generate'
 import type { DocumentTree } from '@/document/schema/types'
 import type { BreakpointConfig } from '@/breakpoints/config'
+import type { DesignToken } from '@/tokens/model'
 
 interface ParityFixture {
   description: string
   breakpoints: BreakpointConfig[]
+  tokens?: DesignToken[]
   tree: DocumentTree
   css: string
 }
@@ -43,7 +45,7 @@ describe('CSS generator parity — JS vs fixture', () => {
 
   for (const { name, fixture } of fixtures) {
     it(`${name}: ${fixture.description}`, () => {
-      const actual = generateCss(fixture.tree, fixture.breakpoints)
+      const actual = generateCss(fixture.tree, fixture.breakpoints, fixture.tokens)
       expect(actual).toBe(fixture.css)
     })
   }

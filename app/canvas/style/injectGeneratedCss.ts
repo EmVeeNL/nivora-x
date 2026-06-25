@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import type { RefObject } from 'react'
 import { useDocumentStore } from '@/document/store'
 import { useUiStore } from '@/state/uiStore'
+import { useTokenStore } from '@/tokens/store'
 import { generateCss } from '@/css/generate'
 
 const STYLE_TAG_ID = 'nivorax-generated-css'
@@ -16,6 +17,7 @@ const STYLE_TAG_ID = 'nivorax-generated-css'
 export function useInjectGeneratedCss(iframeRef: RefObject<HTMLIFrameElement | null>): void {
   const tree = useDocumentStore((s) => s.tree)
   const breakpoints = useUiStore((s) => s.breakpoints)
+  const tokens = useTokenStore((s) => s.tokens)
 
   useEffect(() => {
     const iframe = iframeRef.current
@@ -31,7 +33,7 @@ export function useInjectGeneratedCss(iframeRef: RefObject<HTMLIFrameElement | n
       doc.head.appendChild(styleTag)
     }
 
-    const css = tree ? generateCss(tree, breakpoints) : ''
+    const css = tree ? generateCss(tree, breakpoints, tokens) : ''
     styleTag.textContent = css
-  }, [tree, breakpoints, iframeRef])
+  }, [tree, breakpoints, tokens, iframeRef])
 }

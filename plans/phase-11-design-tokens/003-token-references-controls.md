@@ -2,14 +2,14 @@
 task: 003
 phase: 11
 title: Token References in Style Controls
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 003 — Token References in Style Controls
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -37,11 +37,11 @@ enter a raw value, and to show which is active.
 
 ## Acceptance Criteria
 
-- [ ] Color/spacing/typography/effect controls accept a token reference or raw value.
-- [ ] References stored by token id on style props.
-- [ ] Clear token-vs-raw indication in the control.
-- [ ] Token group filtered to the relevant control (colors for color, etc.).
-- [ ] Vitest covers token-or-value binding; lint/format/typecheck pass.
+- [x] Color/spacing/typography/effect controls accept a token reference or raw value.
+- [x] References stored by token id on style props.
+- [x] Clear token-vs-raw indication in the control.
+- [x] Token group filtered to the relevant control (colors for color, etc.).
+- [x] Vitest covers token-or-value binding; lint/format/typecheck pass.
 
 ## Files to Create
 

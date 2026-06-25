@@ -42,8 +42,11 @@ if ( false !== $parity_files ) {
 				$gen         = new CssGenerator();
 				$breakpoints = json_decode( (string) json_encode( $parity_fixture->breakpoints ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
 				$tree        = $parity_fixture->tree;
+				$tokens      = isset( $parity_fixture->tokens ) // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
+					? json_decode( (string) json_encode( $parity_fixture->tokens ), true ) // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
+					: [];
 
-				$actual = $gen->generate( $tree, $breakpoints );
+				$actual = $gen->generate( $tree, $breakpoints, $tokens );
 				expect( $actual )->toBe( $parity_fixture->css );
 			}
 		);
