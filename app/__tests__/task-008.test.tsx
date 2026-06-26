@@ -41,7 +41,7 @@ beforeEach(() => {
     activeInspectorTab: 'inspector',
     openSections: {
       layout: true,
-      spacing: true,
+      spacing: false,
       size: false,
       typography: false,
       position: false,

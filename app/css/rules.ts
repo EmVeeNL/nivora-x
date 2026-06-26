@@ -20,8 +20,23 @@
  * 8. Shadow values serialise as `{inset?} {offsetX} {offsetY} {blur} {spread} {color}`.
  */
 
-import type { CssUnit, UnitValue, SpacingValue, ShadowValue } from '@/inspector/controls/types'
-import { isUnitValue, isSpacingValue, unitToCss } from '@/inspector/controls/valueUnits'
+import type {
+  CornerUnitValue,
+  CssUnit,
+  SideColorValue,
+  SideUnitValue,
+  UnitValue,
+  SpacingValue,
+  ShadowValue,
+} from '@/inspector/controls/types'
+import {
+  isCornerUnitValue,
+  isSideColorValue,
+  isSideUnitValue,
+  isUnitValue,
+  isSpacingValue,
+  unitToCss,
+} from '@/inspector/controls/valueUnits'
 
 // ---------------------------------------------------------------------------
 // Style prop ordering (rule 4)
@@ -45,6 +60,10 @@ export const STYLE_PROP_ORDER = [
   'lineHeight',
   'color',
   'backgroundColor',
+  'backgroundImage',
+  'backgroundPosition',
+  'backgroundSize',
+  'backgroundRepeat',
   'borderStyle',
   'borderWidth',
   'borderColor',
@@ -82,12 +101,28 @@ export const CSS_PROP_MAP: Readonly<Record<string, string>> = {
   lineHeight: 'line-height',
   color: 'color',
   backgroundColor: 'background-color',
+  backgroundImage: 'background-image',
+  backgroundPosition: 'background-position',
+  backgroundSize: 'background-size',
+  backgroundRepeat: 'background-repeat',
   borderStyle: 'border-style',
   borderWidth: 'border-width',
   borderColor: 'border-color',
   borderRadius: 'border-radius',
   boxShadow: 'box-shadow',
 } as const
+
+function normalizeBackgroundImage(value: string): string {
+  const trimmed = value.trim()
+  if (trimmed === '') return trimmed
+
+  const cssFunctionPrefixes = ['url(', 'linear-gradient(', 'radial-gradient(', 'conic-gradient(']
+  if (cssFunctionPrefixes.some((prefix) => trimmed.startsWith(prefix))) {
+    return trimmed
+  }
+
+  return `url("${trimmed.replace(/"/g, '\\"')}")`
+}
 
 // ---------------------------------------------------------------------------
 // Value serialisation helpers (rules 6, 7, 8)
@@ -142,6 +177,34 @@ export function expandSpacing(prop: 'margin' | 'padding', value: unknown): Array
   ]
 }
 
+export function expandBorderSides(
+  prop: 'borderWidth' | 'borderColor',
+  value: unknown,
+): Array<[string, string]> {
+  if (prop === 'borderWidth') {
+    if (!isSideUnitValue(value)) return []
+    const sides: Array<keyof SideUnitValue> = ['top', 'right', 'bottom', 'left']
+    return sides.map((side) => [`border-${side}-width`, unitToCss(value[side])])
+  }
+
+  if (!isSideColorValue(value)) return []
+  const sides: Array<keyof SideColorValue> = ['top', 'right', 'bottom', 'left']
+  return sides.map((side) => [`border-${side}-color`, value[side]])
+}
+
+export function expandBorderRadius(value: unknown): Array<[string, string]> {
+  if (!isCornerUnitValue(value)) return []
+
+  const corners: Array<[keyof CornerUnitValue, string]> = [
+    ['topLeft', 'border-top-left-radius'],
+    ['topRight', 'border-top-right-radius'],
+    ['bottomRight', 'border-bottom-right-radius'],
+    ['bottomLeft', 'border-bottom-left-radius'],
+  ]
+
+  return corners.map(([corner, cssProp]) => [cssProp, unitToCss(value[corner])])
+}
+
 /**
  * Convert a single style prop + value to CSS declarations.
  * Handles spacing expansion (rule 6) and value serialisation (rules 7–8).
@@ -154,6 +217,23 @@ export function propToDeclarations(prop: StyleProp, value: unknown): Array<[stri
     const expanded = expandSpacing(prop, value)
     if (expanded.length) return expanded
     return []
+  }
+
+  if (prop === 'borderWidth' || prop === 'borderColor') {
+    const expanded = expandBorderSides(prop, value)
+    if (expanded.length) return expanded
+  }
+
+  if (prop === 'borderRadius') {
+    const expanded = expandBorderRadius(value)
+    if (expanded.length) return expanded
+  }
+
+  if (prop === 'backgroundImage') {
+    if (typeof value !== 'string' || value.trim() === '') return []
+    const cssProp = CSS_PROP_MAP[prop]
+    if (!cssProp) return []
+    return [[cssProp, normalizeBackgroundImage(value)]]
   }
 
   const cssValue = toCssString(value)

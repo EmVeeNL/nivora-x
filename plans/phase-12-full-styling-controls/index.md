@@ -3,14 +3,14 @@ phase: 12
 slug: full-styling-controls
 title: Full Styling Controls
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Progress # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
 # Phase 12 — Full Styling Controls
 
 > **Created:** 2026-06-24
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** In Progress <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Definition:** Defined — approved 2026-06-24.
 
 ## Objective
@@ -61,9 +61,9 @@ controls are declarative (Phase 08) and token-aware (Phase 11).
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | Style-prop state dimension (model + resolver: state × breakpoint) + inspector state switcher | — | Not Started |
-| 002  | Background controls (color/gradient/image) | 001 | Not Started |
-| 003  | Border & Box-shadow controls | 001 | Not Started |
+| 001  | Style-prop state dimension (model + resolver: state × breakpoint) + inspector state switcher | — | Done |
+| 002  | Background controls (color/gradient/image) | 001 | Done |
+| 003  | Border & Box-shadow controls | 001 | Done |
 | 004  | Position & Overflow controls | 001 | Not Started |
 | 005  | Advanced Layout controls (flex/grid) | 001 | Not Started |
 | 006  | Pseudo-class CSS emission for states in both generators (JS + PHP) | 001 | Not Started |
@@ -84,6 +84,10 @@ controls are declarative (Phase 08) and token-aware (Phase 11).
   show while editing, distinct from real pointer hover).
 - Extend the **Phase 10/11 parity harness** to states + new controls + custom CSS first, so
   JS == PHP stays enforced as the model grows.
+- Inspector polish in this phase keeps the standard right-panel shell intact while replacing
+  high-friction generic field groups with dedicated editors where needed (for example border
+  and spacing). Default inspector load state is intentionally conservative: **Layout** starts
+  open and the remaining sections start collapsed.
 
 ## Risks & Mitigations
 

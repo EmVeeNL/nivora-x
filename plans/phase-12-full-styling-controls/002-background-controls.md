@@ -2,14 +2,14 @@
 task: 002
 phase: 12
 title: Background Controls
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 002 — Background Controls
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -35,11 +35,11 @@ dimension (per-state backgrounds, e.g. hover background color).
 
 ## Acceptance Criteria
 
-- [ ] Background color, gradient, and image controls (declarative).
-- [ ] Token-aware color/gradient (Phase 11) and state-aware (Phase 12 task 001).
-- [ ] Image position/size/repeat options.
-- [ ] Reflected in canvas + generated CSS.
-- [ ] Vitest covers the controls; lint/format/typecheck pass.
+- [x] Background color, gradient, and image controls (declarative).
+- [x] Token-aware color/gradient (Phase 11) and state-aware (Phase 12 task 001).
+- [x] Image position/size/repeat options.
+- [x] Reflected in canvas + generated CSS.
+- [x] Vitest covers the controls; lint/format/typecheck pass.
 
 ## Files to Create
 

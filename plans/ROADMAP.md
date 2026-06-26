@@ -33,7 +33,7 @@
 | --- | ------------------------------------ | ---------- | ----------- |
 | 10  | Front-End Rendering & CSS Engine     | Defined    | Done        |
 | 11  | Design Tokens                        | Defined    | Done        |
-| 12  | Full Styling Controls                | Defined    | Not Started |
+| 12  | Full Styling Controls                | Defined    | In Progress |
 | 13  | Theme Builder                        | Defined    | Not Started |
 | 14  | Dynamic Content & CMS Mapping        | Defined    | Not Started |
 | 15  | Component & Pattern Library          | Staged     | Not Started |
@@ -44,6 +44,8 @@
 | 20  | Marketplace (Templates & Plugins)    | Staged     | Not Started |
 | 21  | Packaging, Release & Docs            | Staged     | Not Started |
 
-> The editor batch (04–09) order is settled; Phase 10 (rendering/parity) is defined.
+> Phases 10 and 11 are now complete; Phase 12 is the active implementation track, including
+> inspector UI polish such as custom border/spacing editors and layout-only default section
+> expansion on first load.
 > The later tail (12–21) is provisional staging driven by the reference screenshots —
 > add, remove, rename, or reorder freely as we get there.

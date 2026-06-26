@@ -13,6 +13,7 @@ import type { DesignToken } from '@/tokens/model'
 import { isTokenRef } from '@/tokens/model'
 import { STYLE_PROP_ORDER, propToDeclarations } from './rules'
 import { tokensToCssVars } from '@/tokens/cssVars'
+import { getStateValue, isResponsiveObject } from '@/breakpoints/resolveResponsive'
 
 // ---------------------------------------------------------------------------
 // Token reference resolution
@@ -27,21 +28,14 @@ function resolveTokenRef(value: unknown): unknown {
   return value
 }
 
-// ---------------------------------------------------------------------------
-// Responsive value helpers
-// ---------------------------------------------------------------------------
-
-function isResponsiveObject(value: unknown): value is Record<string, unknown> {
-  return Boolean(value && typeof value === 'object' && 'base' in value)
-}
-
 /**
  * Extract the base (desktop) concrete value from a prop.
- * Handles both plain values and responsive objects `{ base, ... }`.
+ * Handles legacy values, responsive objects, and Phase 12 stateful values.
  */
 function baseValue(raw: unknown): unknown {
-  if (isResponsiveObject(raw)) return raw['base'] ?? undefined
-  return raw
+  const defaultStateValue = getStateValue(raw, 'default')
+  if (isResponsiveObject(defaultStateValue)) return defaultStateValue['base'] ?? undefined
+  return defaultStateValue
 }
 
 /**
@@ -49,8 +43,9 @@ function baseValue(raw: unknown): unknown {
  * Returns undefined when no override is set for the given breakpoint.
  */
 function overrideValue(raw: unknown, breakpointId: string): unknown {
-  if (!isResponsiveObject(raw)) return undefined
-  return breakpointId in raw ? raw[breakpointId] : undefined
+  const defaultStateValue = getStateValue(raw, 'default')
+  if (!isResponsiveObject(defaultStateValue)) return undefined
+  return breakpointId in defaultStateValue ? defaultStateValue[breakpointId] : undefined
 }
 
 // ---------------------------------------------------------------------------

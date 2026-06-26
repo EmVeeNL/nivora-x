@@ -24,13 +24,24 @@ architectural challenge.
 
 - **Planning:** Phases 01–14 **Defined** with full task files (107 tasks); 15–21 **Staged**
   (provisional titles). See `plans/ROADMAP.md`.
-- **Build:** Phases 01–09 are implemented and marked Done. Phase 10 (Front-End
-  Rendering & CSS Engine) is next.
+- **Build:** Phases 01–11 are implemented and marked Done. **Phase 12 is in progress**:
+  task 001 (style state dimension + state switcher + editor state preview) is delivered.
 - **Current editor shell:** left rail has Navigator and Elements panels. Elements groups are
   collapsible with only the first visible group open by default; Navigator supports live
   tree selection, collapse state, visibility/lock, rename, duplicate/delete, and tree
-  reorder via the shared DnD/store pipeline. The right panel has functional **Style /
-  Settings / Page** tabs driven by declarative element control schemas.
+  reorder via the shared DnD/store pipeline. The right panel opens with only the
+  **Layout** section expanded by default; all other inspector sections start collapsed.
+  It has functional **Style /
+  Settings / Page** tabs driven by declarative element control schemas, plus a Style-tab
+  **state switcher** (Default / Hover / Focus / Active) that routes edits and previews the
+  active editing state on the canvas. Background controls now cover color plus a combined
+  **Image / Gradient** source and image position/size/repeat options, with plain URLs
+  normalized to `url(...)` and gradients accepted as raw CSS functions. Border controls now
+  support **per-side width/color**, radius supports **per-corner values**, and box-shadow is
+  token-linkable alongside border color/radius. Image-backed URL fields now expose a
+  **WordPress Media Library** picker powered by `wp.media` on the editor screen. Border and
+  spacing now use dedicated visual editors inside the inspector instead of generic stacked
+  field rows.
 
 **Phase 08 extended scope (all Done, delivered on top of the original tasks):**
 
@@ -75,11 +86,13 @@ architectural challenge.
 - **Coexist with Gutenberg via a per-page mode flag** — `_nivorax_edit_mode`
   (`nivorax` | `default`). One editor active at a time; switching preserves both sides
   with **no conversion and no live sync**. The mode flag decides what the front end renders.
-- **Editor-first build order.** The editor batch (Phases 04–09) renders the canvas in
-  React only; the **PHP renderer + CSS generation** (front-end output) is deferred to
-  **Phase 10**, where React↔PHP render parity is tackled.
+- **Editor-first build order.** The editor batch (Phases 04–09) shipped first; **Phase 10**
+  then added the PHP renderer + CSS generation path so React↔PHP render parity is now an
+  enforced implementation concern, not a future plan.
 - **Responsive values** are modeled per styleable prop as `{ base, <breakpoint>: value }`;
-  the breakpoint set is finalized in Phase 09.
+  **Phase 12 extends this with an optional state dimension**
+  `{ default|hover|focus|active -> responsive value }` while remaining backward-compatible
+  with the pre-state shape.
 - **Design tokens, full styling controls, theme-builder, dynamic content, forms,
   marketplace** are later phases (11–21), driven by reference screenshots in `images/`.
 

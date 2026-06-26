@@ -1,5 +1,17 @@
-import type { ControlSectionSchema, ShadowValue } from '@/inspector/controls/types'
-import { spacingValue, unitValue } from '@/inspector/controls/valueUnits'
+import type {
+  ControlSectionSchema,
+  ShadowValue,
+  SideColorValue,
+  SideUnitValue,
+  CornerUnitValue,
+} from '@/inspector/controls/types'
+import {
+  cornerUnitValue,
+  sideColorValue,
+  sideUnitValue,
+  spacingValue,
+  unitValue,
+} from '@/inspector/controls/valueUnits'
 import { SYSTEM_FONT_OPTIONS } from './fontFamilies'
 
 const DEFAULT_SHADOW: ShadowValue = {
@@ -10,6 +22,10 @@ const DEFAULT_SHADOW: ShadowValue = {
   color: 'rgba(0,0,0,0.2)',
   inset: false,
 }
+
+const DEFAULT_BORDER_WIDTH: SideUnitValue = sideUnitValue(unitValue(1))
+const DEFAULT_BORDER_COLOR: SideColorValue = sideColorValue('#000000')
+const DEFAULT_BORDER_RADIUS: CornerUnitValue = cornerUnitValue(unitValue(0))
 
 function styleSection(section: ControlSectionSchema): ControlSectionSchema {
   return {
@@ -192,6 +208,58 @@ export const backgroundStyleSection: ControlSectionSchema = styleSection({
       prop: 'backgroundColor',
       defaultValue: '',
     },
+    {
+      id: 'background-image',
+      type: 'textarea',
+      label: 'Image / Gradient',
+      prop: 'backgroundImage',
+      mediaType: 'image',
+      defaultValue: '',
+      placeholder: 'https://... or linear-gradient(...)',
+    },
+    {
+      id: 'background-position',
+      type: 'select',
+      label: 'Position',
+      prop: 'backgroundPosition',
+      defaultValue: 'center center',
+      options: [
+        { label: 'Center', value: 'center center' },
+        { label: 'Top Left', value: 'left top' },
+        { label: 'Top Center', value: 'center top' },
+        { label: 'Top Right', value: 'right top' },
+        { label: 'Center Left', value: 'left center' },
+        { label: 'Center Right', value: 'right center' },
+        { label: 'Bottom Left', value: 'left bottom' },
+        { label: 'Bottom Center', value: 'center bottom' },
+        { label: 'Bottom Right', value: 'right bottom' },
+      ],
+    },
+    {
+      id: 'background-size',
+      type: 'select',
+      label: 'Size',
+      prop: 'backgroundSize',
+      defaultValue: 'cover',
+      options: [
+        { label: 'Cover', value: 'cover' },
+        { label: 'Contain', value: 'contain' },
+        { label: 'Auto', value: 'auto' },
+      ],
+    },
+    {
+      id: 'background-repeat',
+      type: 'select',
+      label: 'Repeat',
+      prop: 'backgroundRepeat',
+      defaultValue: 'no-repeat',
+      options: [
+        { label: 'No Repeat', value: 'no-repeat' },
+        { label: 'Repeat', value: 'repeat' },
+        { label: 'Repeat X', value: 'repeat-x' },
+        { label: 'Repeat Y', value: 'repeat-y' },
+      ],
+    },
   ],
 })
 
@@ -215,27 +283,31 @@ export const borderStyleSection: ControlSectionSchema = styleSection({
     },
     {
       id: 'border-width',
-      type: 'unit',
+      type: 'unit-box',
       label: 'Width',
       prop: 'borderWidth',
-      defaultValue: unitValue(1),
+      defaultValue: DEFAULT_BORDER_WIDTH,
       min: 0,
+      mode: 'sides',
       coalesce: true,
     },
     {
       id: 'border-color',
-      type: 'color',
+      type: 'color-box',
       label: 'Color',
       prop: 'borderColor',
-      defaultValue: '#000000',
+      defaultValue: DEFAULT_BORDER_COLOR,
+      tokenGroup: 'color',
     },
     {
       id: 'border-radius',
-      type: 'unit',
+      type: 'unit-box',
       label: 'Radius',
       prop: 'borderRadius',
-      defaultValue: unitValue(0),
+      defaultValue: DEFAULT_BORDER_RADIUS,
       min: 0,
+      mode: 'corners',
+      tokenGroup: 'effect',
       coalesce: true,
     },
   ],
@@ -251,6 +323,7 @@ export const shadowStyleSection: ControlSectionSchema = styleSection({
       label: 'Box Shadow',
       prop: 'boxShadow',
       defaultValue: DEFAULT_SHADOW,
+      tokenGroup: 'effect',
     },
   ],
 })

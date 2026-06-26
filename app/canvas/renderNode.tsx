@@ -3,6 +3,7 @@ import { isHidden } from '@/document/canInteract'
 import { getElementDefinition } from '@/elements/registry'
 import { useUiStore } from '@/state/uiStore'
 import { isHiddenAtBreakpoint } from './style/applyStyles'
+import { resolveNodeStyles } from './style/resolveStyles'
 
 interface RenderNodeProps {
   nodeId: string
@@ -17,6 +18,8 @@ interface RenderNodeProps {
  */
 export function RenderNode({ nodeId, tree }: RenderNodeProps) {
   const activeBreakpoint = useUiStore((s) => s.activeBreakpoint)
+  const activeStyleState = useUiStore((s) => s.activeStyleState)
+  const breakpoints = useUiStore((s) => s.breakpoints)
   const node = tree.nodes[nodeId]
   if (!node) return null
 
@@ -27,13 +30,18 @@ export function RenderNode({ nodeId, tree }: RenderNodeProps) {
     <RenderNode key={childId} nodeId={childId} tree={tree} />
   ))
 
-  const rendered = (
-    <Render node={node} data-node-id={nodeId} className={`nivorax-${nodeId}`}>
+  const styledRendered = (
+    <Render
+      node={node}
+      data-node-id={nodeId}
+      className={`nivorax-${nodeId}`}
+      style={resolveNodeStyles(node, activeBreakpoint, breakpoints, activeStyleState)}
+    >
       {childNodes.length > 0 ? childNodes : undefined}
     </Render>
   )
 
-  if (isHiddenAtBreakpoint(node, activeBreakpoint)) {
+  if (isHiddenAtBreakpoint(node, activeBreakpoint, breakpoints, activeStyleState)) {
     return (
       <div style={{ position: 'relative', opacity: 0.25, pointerEvents: 'none' }}>
         <div
@@ -61,14 +69,14 @@ export function RenderNode({ nodeId, tree }: RenderNodeProps) {
             Hidden on {activeBreakpoint}
           </span>
         </div>
-        {rendered}
+        {styledRendered}
       </div>
     )
   }
 
   if (isHidden(node)) {
-    return <div style={{ opacity: 0.35, pointerEvents: 'none' }}>{rendered}</div>
+    return <div style={{ opacity: 0.35, pointerEvents: 'none' }}>{styledRendered}</div>
   }
 
-  return rendered
+  return styledRendered
 }

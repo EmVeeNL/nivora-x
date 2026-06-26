@@ -110,6 +110,7 @@ final class EditorScreen {
 
 		// Enqueue editor bundle (scripts registered in_footer, CSS in head).
 		AssetManager::enqueue_for_editor();
+		wp_enqueue_media();
 
 		// Pass bootstrap data to the app via window.nivoraxBootstrap.
 		wp_localize_script(
@@ -118,16 +119,20 @@ final class EditorScreen {
 			Bootstrap::data( $post_id, $mode )
 		);
 
+		global $wp_styles, $wp_scripts;
+		$allowed_style_handles  = array_values( $wp_styles->queue ?? [] );
+		$allowed_script_handles = array_values( $wp_scripts->queue ?? [] );
+
 		// Strip any non-NivoraX styles/scripts that WP may have queued early.
 		// Runs at priority 1 so it fires before WP actually prints the queues.
 		add_action(
 			'wp_head',
-			static function (): void {
+			static function () use ( $allowed_style_handles ): void {
 				global $wp_styles;
 				$wp_styles->queue = array_values(
 					array_filter(
 						$wp_styles->queue ?? [],
-						static fn( string $h ): bool => str_starts_with( $h, 'nivorax' )
+						static fn( string $h ): bool => str_starts_with( $h, 'nivorax' ) || in_array( $h, $allowed_style_handles, true )
 					)
 				);
 			},
@@ -135,12 +140,12 @@ final class EditorScreen {
 		);
 		add_action(
 			'wp_footer',
-			static function (): void {
+			static function () use ( $allowed_script_handles ): void {
 				global $wp_scripts;
 				$wp_scripts->queue = array_values(
 					array_filter(
 						$wp_scripts->queue ?? [],
-						static fn( string $h ): bool => str_starts_with( $h, 'nivorax' )
+						static fn( string $h ): bool => str_starts_with( $h, 'nivorax' ) || in_array( $h, $allowed_script_handles, true )
 					)
 				);
 			},

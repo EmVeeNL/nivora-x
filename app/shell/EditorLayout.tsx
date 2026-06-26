@@ -108,7 +108,7 @@ export function EditorLayout() {
               data-testid="region-right"
               className={[
                 'shrink-0 overflow-hidden border-l border-border bg-background',
-                rightOpen ? 'w-72' : 'w-10',
+                rightOpen ? 'w-100' : 'w-10',
               ].join(' ')}
             >
               <RightPanel />

@@ -7,6 +7,14 @@ import { useUiStore } from '@/state/uiStore'
 import type { ControlSectionSchema } from '@/inspector/controls/types'
 import type { DocumentTree, NxNode } from '@/document/schema/types'
 
+const openWordPressImagePicker = vi.fn()
+
+vi.mock('@/lib/wordpressMedia', () => ({
+  openWordPressImagePicker: (callback: (attachment: { url?: string }) => void) => {
+    openWordPressImagePicker(callback)
+  },
+}))
+
 function node(props: Record<string, unknown> = {}): NxNode {
   return { id: 'node', type: 'heading', props, children: [], overrides: {}, meta: {} }
 }
@@ -53,6 +61,14 @@ const schema: ControlSectionSchema[] = [
         defaultValue: unitValue(100, '%'),
       },
       {
+        id: 'image-src',
+        type: 'text',
+        label: 'Image',
+        prop: 'src',
+        mediaType: 'image',
+        defaultValue: '',
+      },
+      {
         id: 'opacity',
         type: 'slider',
         label: 'Opacity',
@@ -67,6 +83,7 @@ const schema: ControlSectionSchema[] = [
 ]
 
 beforeEach(() => {
+  openWordPressImagePicker.mockReset()
   useDocumentStore.setState({
     tree: tree(),
     documentMeta: {},
@@ -113,6 +130,24 @@ describe('ControlRenderer', () => {
 
     expect(useDocumentStore.getState().tree!.nodes['node']!.props['opacity']).toBe(60)
     expect(useDocumentStore.getState().past).toHaveLength(1)
+  })
+
+  it('opens the WordPress media picker for image-enabled text controls', () => {
+    render(<ControlRenderer node={node()} sections={schema} />)
+
+    fireEvent.click(screen.getByTitle('Choose from WordPress Media Library'))
+
+    expect(openWordPressImagePicker).toHaveBeenCalledTimes(1)
+
+    const callback = openWordPressImagePicker.mock.calls[0]?.[0] as
+      | ((attachment: { url?: string }) => void)
+      | undefined
+
+    callback?.({ url: 'https://example.com/media.jpg' })
+
+    expect(useDocumentStore.getState().tree!.nodes['node']!.props['src']).toBe(
+      'https://example.com/media.jpg',
+    )
   })
 
   it('skips unknown control types with a warning', () => {

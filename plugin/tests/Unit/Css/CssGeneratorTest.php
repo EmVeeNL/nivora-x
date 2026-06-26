@@ -162,6 +162,48 @@ describe(
 		);
 
 		it(
+			'serialises per-side border values and per-corner radius values',
+			function () use ( $breakpoints ) {
+				$uv = static fn( int $v ) => (object) [
+					'value' => $v,
+					'unit'  => 'px',
+				];
+
+				$tree = make_gen_tree(
+					[
+						'n1' => [
+							'props' => [
+								'borderWidth'  => (object) [
+									'top'    => $uv( 1 ),
+									'right'  => $uv( 2 ),
+									'bottom' => $uv( 3 ),
+									'left'   => $uv( 4 ),
+								],
+								'borderColor'  => (object) [
+									'top'    => '#111111',
+									'right'  => '#222222',
+									'bottom' => '#333333',
+									'left'   => '#444444',
+								],
+								'borderRadius' => (object) [
+									'topLeft'     => $uv( 8 ),
+									'topRight'    => $uv( 6 ),
+									'bottomRight' => $uv( 4 ),
+									'bottomLeft'  => $uv( 2 ),
+								],
+							],
+						],
+					]
+				);
+				$css  = $this->gen->generate( $tree, $breakpoints );
+
+				expect( $css )->toContain( 'border-top-width:1px' );
+				expect( $css )->toContain( 'border-left-color:#444444' );
+				expect( $css )->toContain( 'border-bottom-left-radius:2px' );
+			}
+		);
+
+		it(
 			'expands margin spacing to longhands',
 			function () use ( $breakpoints ) {
 				$uv = static fn( int $v ) => (object) [
@@ -203,6 +245,45 @@ describe(
 		);
 
 		it(
+			'normalizes plain background image urls when generating css',
+			function () use ( $breakpoints ) {
+				$tree = make_gen_tree(
+					[
+						'nx-bg' => [
+							'props' => [
+								'backgroundImage'    => 'https://example.com/hero.jpg',
+								'backgroundPosition' => 'center center',
+								'backgroundSize'     => 'cover',
+								'backgroundRepeat'   => 'no-repeat',
+							],
+						],
+					]
+				);
+				$css  = $this->gen->generate( $tree, $breakpoints );
+
+				expect( $css )->toContain( '.nivorax-nx-bg{background-image:url("https://example.com/hero.jpg");background-position:center center;background-size:cover;background-repeat:no-repeat}' );
+			}
+		);
+
+		it(
+			'keeps gradient background values unchanged when generating css',
+			function () use ( $breakpoints ) {
+				$tree = make_gen_tree(
+					[
+						'nx-gradient' => [
+							'props' => [
+								'backgroundImage' => 'linear-gradient(180deg, #111111 0%, #ffffff 100%)',
+							],
+						],
+					]
+				);
+				$css  = $this->gen->generate( $tree, $breakpoints );
+
+				expect( $css )->toContain( '.nivorax-nx-gradient{background-image:linear-gradient(180deg, #111111 0%, #ffffff 100%)}' );
+			}
+		);
+
+		it(
 			'generates @media rules for node.overrides',
 			function () use ( $breakpoints ) {
 				$tree = make_gen_tree(
@@ -216,6 +297,34 @@ describe(
 				$css  = $this->gen->generate( $tree, $breakpoints );
 
 				expect( $css )->toContain( '@media (max-width:768px){.nivorax-nx-ov{color:red}}' );
+			}
+		);
+
+		it(
+			'keeps default-state styles when a prop is wrapped for interaction states',
+			function () use ( $breakpoints ) {
+				$tree = make_gen_tree(
+					[
+						'nx-state' => [
+							'props' => [
+								'color' => [
+									'default' => [
+										'base'   => 'black',
+										'mobile' => 'green',
+									],
+									'hover'   => [
+										'base' => 'blue',
+									],
+								],
+							],
+						],
+					]
+				);
+				$css  = $this->gen->generate( $tree, $breakpoints );
+
+				expect( $css )->toContain( '.nivorax-nx-state{color:black}' );
+				expect( $css )->toContain( '@media (max-width:375px){.nivorax-nx-state{color:green}}' );
+				expect( $css )->not->toContain( ':hover' );
 			}
 		);
 

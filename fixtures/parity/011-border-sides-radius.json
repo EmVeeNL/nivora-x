@@ -1,0 +1,42 @@
+{
+  "description": "Per-side border widths/colors and per-corner radii serialize identically in JS and PHP",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet", "label": "Tablet", "width": 768, "direction": "max", "builtin": true },
+    { "id": "mobile", "label": "Mobile", "width": 375, "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "node-border",
+    "nodes": {
+      "node-border": {
+        "id": "node-border",
+        "type": "section",
+        "props": {
+          "borderStyle": "solid",
+          "borderWidth": {
+            "top": { "value": 1, "unit": "px" },
+            "right": { "value": 2, "unit": "px" },
+            "bottom": { "value": 3, "unit": "px" },
+            "left": { "value": 4, "unit": "px" }
+          },
+          "borderColor": {
+            "top": "#111111",
+            "right": "#222222",
+            "bottom": "#333333",
+            "left": "#444444"
+          },
+          "borderRadius": {
+            "topLeft": { "value": 8, "unit": "px" },
+            "topRight": { "value": 6, "unit": "px" },
+            "bottomRight": { "value": 4, "unit": "px" },
+            "bottomLeft": { "value": 2, "unit": "px" }
+          }
+        },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-node-border{border-style:solid;border-top-width:1px;border-right-width:2px;border-bottom-width:3px;border-left-width:4px;border-top-color:#111111;border-right-color:#222222;border-bottom-color:#333333;border-left-color:#444444;border-top-left-radius:8px;border-top-right-radius:6px;border-bottom-right-radius:4px;border-bottom-left-radius:2px}"
+}

@@ -2,14 +2,14 @@
 task: 003
 phase: 12
 title: Border & Box-shadow Controls
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
 
 # Task 003 — Border & Box-shadow Controls
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** 001
 > **Retry count:** 0
 
@@ -33,10 +33,10 @@ Effects tokens (Phase 11). All three honor the state dimension (e.g. hover shado
 
 ## Acceptance Criteria
 
-- [ ] Border (per-side width/style/color), border-radius (per-corner), box-shadow controls.
-- [ ] Token-aware (Effects/colors) + state-aware.
-- [ ] Reflected in canvas + generated CSS.
-- [ ] Vitest covers the controls; lint/format/typecheck pass.
+- [x] Border (per-side width/style/color), border-radius (per-corner), box-shadow controls.
+- [x] Token-aware (Effects/colors) + state-aware.
+- [x] Reflected in canvas + generated CSS.
+- [x] Vitest covers the controls; lint/format/typecheck pass.
 
 ## Files to Create
 
@@ -48,3 +48,6 @@ Effects tokens (Phase 11). All three honor the state dimension (e.g. hover shado
 
 - Support linked/unlinked per-side and per-corner editing (common builder UX).
 - Keep shadow + border value models serializable for both CSS generators.
+- The delivered inspector UI may use dedicated editors instead of generic field rows, but it
+  should still inherit the standard right-panel visual language and keep the section chrome
+  single-headered (no nested duplicate titles inside the section body).
