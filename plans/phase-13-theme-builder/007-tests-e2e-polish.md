@@ -2,7 +2,7 @@
 task: 007
 phase: 13
 title: Tests, E2E & Polish
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Review # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [003, 006]
 retry_count: 0
 ---

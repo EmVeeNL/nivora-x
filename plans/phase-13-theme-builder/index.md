@@ -67,7 +67,7 @@ field binding + custom queries are Phase 14; this phase provides the structural 
 | 004  | Conditional assignment rules + precedence resolver | 001 | In Review |
 | 005  | Structural elements: content slot (singles) + basic post loop (archives) | 001 | In Review |
 | 006  | Front-end template-hierarchy override + composition (header/content/footer) rendering | 002, 004, 005 | In Review |
-| 007  | Tests + E2E (publish header/footer/single → view on front end) + polish | 003, 006 | Not Started |
+| 007  | Tests + E2E (publish header/footer/single → view on front end) + polish | 003, 006 | In Review |
 
 ## Architectural Notes
 
