@@ -43,6 +43,9 @@ final class Plugin {
 		Integration\PostTypeIntegration::register();
 		FrontEnd\RenderSwitch::register();
 
+		// Phase 13 — theme builder templates.
+		Templates\TemplatePostType::register();
+
 		// Phase 10 — CSS pipeline.
 		( new Css\CssPipeline( new Css\CssGenerator(), new Css\CssStore() ) )->register();
 	}

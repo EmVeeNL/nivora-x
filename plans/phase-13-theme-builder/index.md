@@ -3,7 +3,7 @@ phase: 13
 slug: theme-builder
 title: Theme Builder
 created: 2026-06-24
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Progress # Not Started | In Progress | Blocked | In Review | Done
 definition: Defined # Staged | Draft (under review) | Defined
 ---
 
@@ -61,7 +61,7 @@ field binding + custom queries are Phase 14; this phase provides the structural 
 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
-| 001  | `nivorax_template` CPT + type + conditions metadata + template document model | — | Not Started |
+| 001  | `nivorax_template` CPT + type + conditions metadata + template document model | — | In Review |
 | 002  | Edit templates in the NivoraX editor (template-context mode) + All Templates screen | 001 | Not Started |
 | 003  | Reusable template parts (embed-by-reference element + cycle detection + propagation) | 001 | Not Started |
 | 004  | Conditional assignment rules + precedence resolver | 001 | Not Started |
