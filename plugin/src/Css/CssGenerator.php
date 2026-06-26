@@ -363,10 +363,7 @@ final class CssGenerator {
 				return [];
 			}
 
-			$css_prop = self::CSS_PROP_MAP[ $prop ] ?? null;
-			if ( null === $css_prop ) {
-				return [];
-			}
+			$css_prop = self::CSS_PROP_MAP['backgroundImage'];
 
 			return [ [ $css_prop, $background_image ] ];
 		}
