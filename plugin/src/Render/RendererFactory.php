@@ -6,6 +6,7 @@ namespace NivoraX\Render;
 
 use NivoraX\Render\Elements\ContainerRenderer;
 use NivoraX\Render\Elements\HeadingRenderer;
+use NivoraX\Render\Elements\PartRenderer;
 use NivoraX\Render\Elements\SectionRenderer;
 use NivoraX\Render\Elements\TextRenderer;
 
@@ -28,6 +29,7 @@ final class RendererFactory {
 		$registry->register( 'container', new ContainerRenderer() );
 		$registry->register( 'heading', new HeadingRenderer() );
 		$registry->register( 'text', new TextRenderer() );
+		$registry->register( 'part', new PartRenderer() );
 
 		return $registry;
 	}

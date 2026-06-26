@@ -56,6 +56,7 @@ import {
   errorMessageDefinition,
 } from './forms'
 import { collectionListDefinition, collectionItemDefinition, collectionPageDefinition } from './cms'
+import { partDefinition } from './part'
 import {
   navbarDefinition,
   dropdownDefinition,
@@ -128,6 +129,9 @@ export function registerStarterElements(): void {
   registerElement(collectionListDefinition)
   registerElement(collectionItemDefinition)
   registerElement(collectionPageDefinition)
+
+  // Theme builder
+  registerElement(partDefinition)
 
   // Components
   registerElement(navbarDefinition)
