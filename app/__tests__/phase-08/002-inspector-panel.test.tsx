@@ -7,6 +7,7 @@ import { useUiStore } from '@/state/uiStore'
 import { registerElement, _clearRegistry } from '@/elements/registry'
 import { headingDefinition } from '@/elements/definitions/heading'
 import type { DocumentTree } from '@/document/schema/types'
+import { unitValue } from '@/inspector/controls/valueUnits'
 
 function tree(locked = false): DocumentTree {
   return {
@@ -47,7 +48,7 @@ beforeEach(() => {
   })
   useUiStore.setState({
     activeInspectorTab: 'block',
-    openSections: { 'heading-content': true, typography: true },
+    openSections: { 'heading-content': true, typography: true, background: true },
   })
 })
 
@@ -94,6 +95,44 @@ describe('InspectorPanel', () => {
 
     expect(useDocumentStore.getState().tree!.nodes['heading']!.props['fontSize']).toEqual({
       base: { value: 32, unit: 'px' },
+    })
+  })
+
+  it('writes background image values through the style inspector', async () => {
+    render(<InspectorPanel />)
+    await userEvent.click(screen.getByRole('tab', { name: 'Style' }))
+
+    fireEvent.change(screen.getByPlaceholderText('https://... or linear-gradient(...)'), {
+      target: { value: 'https://example.com/hero.jpg' },
+    })
+
+    expect(useDocumentStore.getState().tree!.nodes['heading']!.props['backgroundImage']).toEqual({
+      base: 'https://example.com/hero.jpg',
+    })
+  })
+
+  it('writes selected spacing sides through the spacing editor', async () => {
+    useUiStore.setState({
+      openSections: { 'heading-content': true, typography: true, background: true, spacing: true },
+    })
+
+    render(<InspectorPanel />)
+    await userEvent.click(screen.getByRole('tab', { name: 'Style' }))
+
+    await userEvent.click(screen.getByLabelText('Toggle margin top'))
+
+    const spacingSlider = screen.getByTestId('spacing-slider').querySelector('[role="slider"]')!
+    for (let index = 0; index < 12; index += 1) {
+      fireEvent.keyDown(spacingSlider, { key: 'ArrowRight' })
+    }
+
+    expect(useDocumentStore.getState().tree!.nodes['heading']!.props['margin']).toEqual({
+      base: {
+        top: unitValue(12),
+        right: unitValue(0),
+        bottom: unitValue(0),
+        left: unitValue(0),
+      },
     })
   })
 })

@@ -5,6 +5,7 @@ import {
   type BreakpointConfig,
   type BreakpointId,
 } from '@/breakpoints/config'
+import type { StyleState } from '@/document/schema/types'
 
 export type Breakpoint = BreakpointId
 export type EditorTheme = 'dark' | 'light'
@@ -46,6 +47,7 @@ interface UiState {
   previewMode: boolean
   breakpoints: BreakpointConfig[]
   activeBreakpoint: Breakpoint
+  activeStyleState: StyleState
   activeInspectorTab: string
   /** Keyed by section id — true = expanded. */
   openSections: Record<string, boolean>
@@ -74,6 +76,7 @@ interface UiActions {
   togglePreviewMode(this: void): void
   setBreakpoints(this: void, breakpoints: BreakpointConfig[]): void
   setBreakpoint(this: void, bp: Breakpoint): void
+  setActiveStyleState(this: void, state: StyleState): void
   setInspectorTab(this: void, tab: string): void
   toggleSection(this: void, id: string): void
   setSectionOpen(this: void, id: string, open: boolean): void
@@ -100,6 +103,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   previewMode: false,
   breakpoints: INITIAL_BREAKPOINTS,
   activeBreakpoint: INITIAL_BREAKPOINTS[0]?.id ?? 'desktop',
+  activeStyleState: 'default',
   activeInspectorTab: 'inspector',
   hoveredId: null,
   navigatorCollapsed: {},
@@ -111,10 +115,10 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
   openSections: {
     identity: true,
     layout: true,
-    spacing: true,
-    size: true,
-    typography: true,
-    background: true,
+    spacing: false,
+    size: false,
+    typography: false,
+    background: false,
     border: false,
     shadow: false,
     visibility: false,
@@ -151,6 +155,7 @@ export const useUiStore = create<UiState & UiActions>()((set) => ({
       }
     }),
   setBreakpoint: (bp) => set({ activeBreakpoint: bp }),
+  setActiveStyleState: (activeStyleState) => set({ activeStyleState }),
   setInspectorTab: (tab) => set({ activeInspectorTab: tab }),
   toggleSection: (id) =>
     set((s) => ({

@@ -1,6 +1,11 @@
 /** Breakpoints that support responsive overrides (desktop/base is always the default). */
 export type ResponsiveBreakpoint = string
 
+/** Supported interaction states for style editing and CSS emission. */
+export const STYLE_STATES = ['default', 'hover', 'focus', 'active'] as const
+
+export type StyleState = (typeof STYLE_STATES)[number]
+
 /**
  * A typed value that can vary per breakpoint.
  * `base` is the desktop default; breakpoints are optional overrides.
@@ -8,6 +13,13 @@ export type ResponsiveBreakpoint = string
 export type ResponsiveValue<T> = { base: T } & {
   [K in ResponsiveBreakpoint]?: T
 }
+
+/**
+ * A style value can optionally branch by interaction state.
+ * The `default` state intentionally stays optional so legacy documents can keep
+ * the pre-Phase-12 shape and remain valid without migration.
+ */
+export type StatefulStyleValue<T> = Partial<Record<StyleState, ResponsiveValue<T> | T>>
 
 /** Authoring metadata attached to a node — not rendered on the front end. */
 export interface NodeMeta {

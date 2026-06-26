@@ -1,0 +1,27 @@
+{
+  "description": "Background image url + positioning props serialize identically in JS and PHP",
+  "breakpoints": [
+    { "id": "desktop", "label": "Desktop", "width": 1440, "direction": "max", "builtin": true },
+    { "id": "tablet", "label": "Tablet", "width": 768, "direction": "max", "builtin": true },
+    { "id": "mobile", "label": "Mobile", "width": 375, "direction": "max", "builtin": true }
+  ],
+  "tree": {
+    "rootId": "node-bg",
+    "nodes": {
+      "node-bg": {
+        "id": "node-bg",
+        "type": "section",
+        "props": {
+          "backgroundImage": "https://example.com/hero.jpg",
+          "backgroundPosition": "center center",
+          "backgroundSize": "cover",
+          "backgroundRepeat": "no-repeat"
+        },
+        "children": [],
+        "overrides": {},
+        "meta": {}
+      }
+    }
+  },
+  "css": ".nivorax-node-bg{background-image:url(\"https://example.com/hero.jpg\");background-position:center center;background-size:cover;background-repeat:no-repeat}"
+}

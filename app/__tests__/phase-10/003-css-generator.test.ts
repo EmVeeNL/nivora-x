@@ -1,6 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { generateCss, generateNodeCssString } from '@/css/generate'
-import { propToDeclarations, toCssString, expandSpacing } from '@/css/rules'
+import {
+  propToDeclarations,
+  toCssString,
+  expandBorderRadius,
+  expandBorderSides,
+  expandSpacing,
+} from '@/css/rules'
 import type { DocumentTree, NxNode } from '@/document/schema/types'
 import type { BreakpointConfig } from '@/breakpoints/config'
 
@@ -91,6 +97,38 @@ describe('expandSpacing', () => {
   })
 })
 
+describe('border expansion helpers', () => {
+  it('expands per-side border widths to longhands', () => {
+    const result = expandBorderSides('borderWidth', {
+      top: { value: 1, unit: 'px' as const },
+      right: { value: 2, unit: 'px' as const },
+      bottom: { value: 3, unit: 'px' as const },
+      left: { value: 4, unit: 'px' as const },
+    })
+    expect(result).toEqual([
+      ['border-top-width', '1px'],
+      ['border-right-width', '2px'],
+      ['border-bottom-width', '3px'],
+      ['border-left-width', '4px'],
+    ])
+  })
+
+  it('expands per-corner border radius values to longhands', () => {
+    const result = expandBorderRadius({
+      topLeft: { value: 8, unit: 'px' as const },
+      topRight: { value: 6, unit: 'px' as const },
+      bottomRight: { value: 4, unit: 'px' as const },
+      bottomLeft: { value: 2, unit: 'px' as const },
+    })
+    expect(result).toEqual([
+      ['border-top-left-radius', '8px'],
+      ['border-top-right-radius', '6px'],
+      ['border-bottom-right-radius', '4px'],
+      ['border-bottom-left-radius', '2px'],
+    ])
+  })
+})
+
 describe('propToDeclarations', () => {
   it('maps color to the color CSS property', () => {
     expect(propToDeclarations('color', 'red')).toEqual([['color', 'red']])
@@ -98,6 +136,21 @@ describe('propToDeclarations', () => {
 
   it('maps backgroundColor to background-color', () => {
     expect(propToDeclarations('backgroundColor', '#fff')).toEqual([['background-color', '#fff']])
+  })
+
+  it('expands per-side border colors to longhands', () => {
+    const result = propToDeclarations('borderColor', {
+      top: '#111111',
+      right: '#222222',
+      bottom: '#333333',
+      left: '#444444',
+    })
+    expect(result).toEqual([
+      ['border-top-color', '#111111'],
+      ['border-right-color', '#222222'],
+      ['border-bottom-color', '#333333'],
+      ['border-left-color', '#444444'],
+    ])
   })
 
   it('expands margin SpacingValue to longhands', () => {
@@ -142,6 +195,59 @@ describe('generateCss', () => {
     expect(css).toContain('@media (max-width:375px){.nivorax-nx-abc{color:green}}')
   })
 
+  it('normalizes plain background image urls when generating css', () => {
+    const node = makeNode('nx-bg', {
+      backgroundImage: 'https://example.com/hero.jpg',
+      backgroundPosition: 'center center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+    })
+    const css = generateCss(makeTree([node]), BREAKPOINTS)
+
+    expect(css).toContain(
+      '.nivorax-nx-bg{background-image:url("https://example.com/hero.jpg");background-position:center center;background-size:cover;background-repeat:no-repeat}',
+    )
+  })
+
+  it('keeps gradient background values unchanged when generating css', () => {
+    const node = makeNode('nx-gradient', {
+      backgroundImage: 'linear-gradient(180deg, #111111 0%, #ffffff 100%)',
+    })
+    const css = generateCss(makeTree([node]), BREAKPOINTS)
+
+    expect(css).toContain(
+      '.nivorax-nx-gradient{background-image:linear-gradient(180deg, #111111 0%, #ffffff 100%)}',
+    )
+  })
+
+  it('serializes per-side border values and per-corner radius values', () => {
+    const node = makeNode('nx-border', {
+      borderWidth: {
+        top: { value: 1, unit: 'px' as const },
+        right: { value: 2, unit: 'px' as const },
+        bottom: { value: 3, unit: 'px' as const },
+        left: { value: 4, unit: 'px' as const },
+      },
+      borderColor: {
+        top: '#111111',
+        right: '#222222',
+        bottom: '#333333',
+        left: '#444444',
+      },
+      borderRadius: {
+        topLeft: { value: 8, unit: 'px' as const },
+        topRight: { value: 6, unit: 'px' as const },
+        bottomRight: { value: 4, unit: 'px' as const },
+        bottomLeft: { value: 2, unit: 'px' as const },
+      },
+    })
+    const css = generateCss(makeTree([node]), BREAKPOINTS)
+
+    expect(css).toContain('border-top-width:1px')
+    expect(css).toContain('border-left-color:#444444')
+    expect(css).toContain('border-bottom-left-radius:2px')
+  })
+
   it('emits nothing for a node with no style props', () => {
     const node = makeNode('nx-empty', { text: 'Hello' })
     const css = generateCss(makeTree([node]), BREAKPOINTS)
@@ -180,6 +286,20 @@ describe('generateCss', () => {
     const css = generateCss(makeTree([node]), BREAKPOINTS)
 
     expect(css).toContain('@media (max-width:768px){.nivorax-nx-ov{color:red}}')
+  })
+
+  it('keeps default-state styles when a prop is wrapped for interaction states', () => {
+    const node = makeNode('nx-state', {
+      color: {
+        default: { base: 'black', mobile: 'green' },
+        hover: { base: 'blue' },
+      },
+    })
+    const css = generateCss(makeTree([node]), BREAKPOINTS)
+
+    expect(css).toContain('.nivorax-nx-state{color:black}')
+    expect(css).toContain('@media (max-width:375px){.nivorax-nx-state{color:green}}')
+    expect(css).not.toContain(':hover')
   })
 
   it('returns empty string for empty tree', () => {

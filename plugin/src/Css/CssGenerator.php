@@ -46,6 +46,10 @@ final class CssGenerator {
 		'lineHeight',
 		'color',
 		'backgroundColor',
+		'backgroundImage',
+		'backgroundPosition',
+		'backgroundSize',
+		'backgroundRepeat',
 		'borderStyle',
 		'borderWidth',
 		'borderColor',
@@ -59,34 +63,38 @@ final class CssGenerator {
 	 * @var array<string, string>
 	 */
 	private const CSS_PROP_MAP = [
-		'display'         => 'display',
-		'flexDirection'   => 'flex-direction',
-		'alignItems'      => 'align-items',
-		'justifyContent'  => 'justify-content',
-		'gap'             => 'gap',
-		'width'           => 'width',
-		'height'          => 'height',
-		'minHeight'       => 'min-height',
-		'maxWidth'        => 'max-width',
-		'marginTop'       => 'margin-top',
-		'marginRight'     => 'margin-right',
-		'marginBottom'    => 'margin-bottom',
-		'marginLeft'      => 'margin-left',
-		'paddingTop'      => 'padding-top',
-		'paddingRight'    => 'padding-right',
-		'paddingBottom'   => 'padding-bottom',
-		'paddingLeft'     => 'padding-left',
-		'fontFamily'      => 'font-family',
-		'fontSize'        => 'font-size',
-		'fontWeight'      => 'font-weight',
-		'lineHeight'      => 'line-height',
-		'color'           => 'color',
-		'backgroundColor' => 'background-color',
-		'borderStyle'     => 'border-style',
-		'borderWidth'     => 'border-width',
-		'borderColor'     => 'border-color',
-		'borderRadius'    => 'border-radius',
-		'boxShadow'       => 'box-shadow',
+		'display'            => 'display',
+		'flexDirection'      => 'flex-direction',
+		'alignItems'         => 'align-items',
+		'justifyContent'     => 'justify-content',
+		'gap'                => 'gap',
+		'width'              => 'width',
+		'height'             => 'height',
+		'minHeight'          => 'min-height',
+		'maxWidth'           => 'max-width',
+		'marginTop'          => 'margin-top',
+		'marginRight'        => 'margin-right',
+		'marginBottom'       => 'margin-bottom',
+		'marginLeft'         => 'margin-left',
+		'paddingTop'         => 'padding-top',
+		'paddingRight'       => 'padding-right',
+		'paddingBottom'      => 'padding-bottom',
+		'paddingLeft'        => 'padding-left',
+		'fontFamily'         => 'font-family',
+		'fontSize'           => 'font-size',
+		'fontWeight'         => 'font-weight',
+		'lineHeight'         => 'line-height',
+		'color'              => 'color',
+		'backgroundColor'    => 'background-color',
+		'backgroundImage'    => 'background-image',
+		'backgroundPosition' => 'background-position',
+		'backgroundSize'     => 'background-size',
+		'backgroundRepeat'   => 'background-repeat',
+		'borderStyle'        => 'border-style',
+		'borderWidth'        => 'border-width',
+		'borderColor'        => 'border-color',
+		'borderRadius'       => 'border-radius',
+		'boxShadow'          => 'box-shadow',
 	];
 
 	/**
@@ -269,10 +277,11 @@ final class CssGenerator {
 	 * @return mixed Concrete base value, or the raw value if not responsive.
 	 */
 	private function base_value( mixed $raw ): mixed {
-		if ( is_object( $raw ) && isset( $raw->base ) ) {
-			return $raw->base;
+		$default_state = $this->default_state_value( $raw );
+		if ( is_object( $default_state ) && isset( $default_state->base ) ) {
+			return $default_state->base;
 		}
-		return $raw;
+		return $default_state;
 	}
 
 	/**
@@ -283,10 +292,39 @@ final class CssGenerator {
 	 * @return mixed Override value, or null when not set.
 	 */
 	private function override_value( mixed $raw, string $bp_id ): mixed {
-		if ( ! is_object( $raw ) || ! isset( $raw->base ) ) {
+		$default_state = $this->default_state_value( $raw );
+		if ( ! is_object( $default_state ) || ! isset( $default_state->base ) ) {
 			return null;
 		}
-		return $raw->$bp_id ?? null;
+		return $default_state->$bp_id ?? null;
+	}
+
+	/**
+	 * Extract the Phase 12 default-state payload from a style value.
+	 *
+	 * Legacy values are returned unchanged so pre-Phase-12 documents stay valid.
+	 *
+	 * @param mixed $raw Raw prop value.
+	 * @return mixed Default-state value or the legacy raw value.
+	 */
+	private function default_state_value( mixed $raw ): mixed {
+		if ( ! is_object( $raw ) ) {
+			return $raw;
+		}
+
+		$keys = array_keys( get_object_vars( $raw ) );
+		if ( empty( $keys ) ) {
+			return $raw;
+		}
+
+		$state_keys = [ 'default', 'hover', 'focus', 'active' ];
+		foreach ( $keys as $key ) {
+			if ( ! in_array( $key, $state_keys, true ) ) {
+				return $raw;
+			}
+		}
+
+		return $raw->default ?? null;
 	}
 
 	/**
@@ -303,6 +341,31 @@ final class CssGenerator {
 
 		if ( 'margin' === $prop || 'padding' === $prop ) {
 			return $this->expand_spacing( $prop, $value );
+		}
+
+		if ( 'borderWidth' === $prop || 'borderColor' === $prop ) {
+			$expanded = $this->expand_border_sides( $prop, $value );
+			if ( ! empty( $expanded ) ) {
+				return $expanded;
+			}
+		}
+
+		if ( 'borderRadius' === $prop ) {
+			$expanded = $this->expand_border_radius( $value );
+			if ( ! empty( $expanded ) ) {
+				return $expanded;
+			}
+		}
+
+		if ( 'backgroundImage' === $prop ) {
+			$background_image = $this->normalize_background_image( $value );
+			if ( null === $background_image ) {
+				return [];
+			}
+
+			$css_prop = self::CSS_PROP_MAP['backgroundImage'];
+
+			return [ [ $css_prop, $background_image ] ];
 		}
 
 		$css_value = $this->to_css_string( $value );
@@ -343,6 +406,75 @@ final class CssGenerator {
 
 		// Only return if all four sides resolved (consistent with JS generator).
 		return count( $decls ) === 4 ? $decls : [];
+	}
+
+	/**
+	 * Expand per-side border width/color objects to longhand declarations.
+	 *
+	 * @param string $prop  borderWidth or borderColor.
+	 * @param mixed  $value Side object.
+	 * @return array<array{string, string}>
+	 */
+	private function expand_border_sides( string $prop, mixed $value ): array {
+		if ( ! is_object( $value ) ) {
+			return [];
+		}
+
+		$sides = [ 'top', 'right', 'bottom', 'left' ];
+		$decls = [];
+
+		foreach ( $sides as $side ) {
+			$side_value = $value->$side ?? null;
+
+			if ( 'borderWidth' === $prop ) {
+				$css_value = $this->unit_value_to_css( $side_value );
+				if ( null === $css_value ) {
+					return [];
+				}
+				$decls[] = [ "border-{$side}-width", $css_value ];
+				continue;
+			}
+
+			if ( ! is_string( $side_value ) ) {
+				return [];
+			}
+
+			$decls[] = [ "border-{$side}-color", $side_value ];
+		}
+
+		return $decls;
+	}
+
+	/**
+	 * Expand per-corner border radius objects to longhand declarations.
+	 *
+	 * @param mixed $value Corner object.
+	 * @return array<array{string, string}>
+	 */
+	private function expand_border_radius( mixed $value ): array {
+		if ( ! is_object( $value ) ) {
+			return [];
+		}
+
+		$corners = [
+			'topLeft'     => 'border-top-left-radius',
+			'topRight'    => 'border-top-right-radius',
+			'bottomRight' => 'border-bottom-right-radius',
+			'bottomLeft'  => 'border-bottom-left-radius',
+		];
+		$decls   = [];
+
+		foreach ( $corners as $corner => $css_prop ) {
+			$corner_value = $value->$corner ?? null;
+			$css_value    = $this->unit_value_to_css( $corner_value );
+			if ( null === $css_value ) {
+				return [];
+			}
+
+			$decls[] = [ $css_prop, $css_value ];
+		}
+
+		return $decls;
 	}
 
 	/**
@@ -445,5 +577,33 @@ final class CssGenerator {
 				$declarations
 			)
 		);
+	}
+
+	/**
+	 * Normalize background image input into valid CSS.
+	 *
+	 * Accepts raw CSS functions like `url(...)` or gradients directly; all other
+	 * non-empty strings are treated as plain URLs and wrapped in `url("...")`.
+	 *
+	 * @param mixed $value Candidate value.
+	 * @return string|null
+	 */
+	private function normalize_background_image( mixed $value ): ?string {
+		if ( ! is_string( $value ) ) {
+			return null;
+		}
+
+		$trimmed = trim( $value );
+		if ( '' === $trimmed ) {
+			return null;
+		}
+
+		foreach ( [ 'url(', 'linear-gradient(', 'radial-gradient(', 'conic-gradient(' ] as $prefix ) {
+			if ( str_starts_with( $trimmed, $prefix ) ) {
+				return $trimmed;
+			}
+		}
+
+		return 'url("' . str_replace( '"', '\"', $trimmed ) . '")';
 	}
 }

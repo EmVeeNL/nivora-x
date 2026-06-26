@@ -7,6 +7,7 @@ import { useDocumentStore } from '@/document/store'
 import { getElementDefinition, hasElement } from '@/elements/registry'
 import { useUiStore } from '@/state/uiStore'
 import { InspectorTabs } from '@/shell/InspectorTabs'
+import { StateSwitcher } from './StateSwitcher'
 
 /** Shared identity section prepended to every element's Block (Settings) tab. */
 const IDENTITY_SECTION: ControlSectionSchema = {
@@ -112,6 +113,7 @@ export function InspectorPanel() {
         (node && definition ? (
           <div className="flex-1 overflow-y-auto">
             {locked && <LockedBanner />}
+            <StateSwitcher />
             <ControlRenderer
               node={node}
               sections={definition.controlSchema?.inspector ?? []}

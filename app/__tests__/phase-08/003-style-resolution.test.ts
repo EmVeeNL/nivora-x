@@ -1,6 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { resolveNodeStyles } from '@/canvas/style/resolveStyles'
-import { spacingValue, unitValue } from '@/inspector/controls/valueUnits'
+import {
+  cornerUnitValue,
+  sideColorValue,
+  sideUnitValue,
+  spacingValue,
+  unitValue,
+} from '@/inspector/controls/valueUnits'
 import type { NxNode } from '@/document/schema/types'
 
 function node(props: Record<string, unknown>): NxNode {
@@ -33,5 +39,36 @@ describe('resolveNodeStyles', () => {
       'mobile',
     )
     expect(styles.fontSize).toBe('14px')
+  })
+
+  it('normalizes plain background image URLs into css url(...) values', () => {
+    const styles = resolveNodeStyles(node({ backgroundImage: 'https://example.com/hero.jpg' }))
+    expect(styles.backgroundImage).toBe('url("https://example.com/hero.jpg")')
+  })
+
+  it('keeps gradient background images as raw css functions', () => {
+    const styles = resolveNodeStyles(
+      node({ backgroundImage: 'linear-gradient(180deg, #111111 0%, #ffffff 100%)' }),
+    )
+    expect(styles.backgroundImage).toBe('linear-gradient(180deg, #111111 0%, #ffffff 100%)')
+  })
+
+  it('expands per-side border widths and colors', () => {
+    const styles = resolveNodeStyles(
+      node({
+        borderWidth: sideUnitValue(unitValue(2)),
+        borderColor: sideColorValue('#111111'),
+      }),
+    )
+    expect(styles.borderTopWidth).toBe('2px')
+    expect(styles.borderLeftColor).toBe('#111111')
+  })
+
+  it('expands per-corner border radius values', () => {
+    const corners = cornerUnitValue(unitValue(0))
+    corners.topLeft = unitValue(12)
+    const styles = resolveNodeStyles(node({ borderRadius: corners }))
+    expect(styles.borderTopLeftRadius).toBe('12px')
+    expect(styles.borderBottomRightRadius).toBe('0px')
   })
 })

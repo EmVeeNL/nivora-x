@@ -2,14 +2,14 @@
 task: 001
 phase: 12
 title: Style-Prop State Dimension & State Switcher
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: Done # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---
 
 # Task 001 — Style-Prop State Dimension & State Switcher
 
-> **Status:** Not Started <!-- Not Started | In Progress | Blocked | In Review | Done -->
+> **Status:** Done <!-- Not Started | In Progress | Blocked | In Review | Done -->
 > **Depends on:** none
 > **Retry count:** 0
 
@@ -38,11 +38,11 @@ lets users edit a specific state; the canvas previews it.
 
 ## Acceptance Criteria
 
-- [ ] Style-prop model extended with state (default/hover/focus/active), backward-compatible.
-- [ ] Resolver composes state × breakpoint with one canonical order.
-- [ ] Inspector state switcher routing edits to the active state.
-- [ ] Editor previews the active editing-state (distinct from pointer hover).
-- [ ] Vitest covers model/resolver/switcher; lint/format/typecheck pass.
+- [x] Style-prop model extended with state (default/hover/focus/active), backward-compatible.
+- [x] Resolver composes state × breakpoint with one canonical order.
+- [x] Inspector state switcher routing edits to the active state.
+- [x] Editor previews the active editing-state (distinct from pointer hover).
+- [x] Vitest covers model/resolver/switcher; lint/format/typecheck pass.
 
 ## Files to Create
 

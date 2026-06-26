@@ -120,7 +120,14 @@ export const imageDefinition: ElementDefinition = {
         id: 'image-content',
         title: 'Image',
         controls: [
-          { id: 'src', type: 'text', label: 'Source URL', prop: 'src', placeholder: 'https://...' },
+          {
+            id: 'src',
+            type: 'text',
+            label: 'Source URL',
+            prop: 'src',
+            mediaType: 'image',
+            placeholder: 'https://...',
+          },
           {
             id: 'alt',
             type: 'text',

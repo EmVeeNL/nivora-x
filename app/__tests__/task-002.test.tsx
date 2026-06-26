@@ -22,7 +22,7 @@ beforeEach(() => {
     activeInspectorTab: 'style',
     openSections: {
       layout: true,
-      spacing: true,
+      spacing: false,
       size: false,
       typography: false,
       position: false,
@@ -51,9 +51,9 @@ describe('EditorLayout', () => {
     expect(screen.getByTestId('region-left').className).toContain('w-52')
   })
 
-  it('right panel is open (w-72) by default', () => {
+  it('right panel is open (w-100) by default', () => {
     renderLayout()
-    expect(screen.getByTestId('region-right').className).toContain('w-72')
+    expect(screen.getByTestId('region-right').className).toContain('w-100')
   })
 
   it('left panel collapses to w-0 when activeLeftPanel is null', () => {
@@ -102,10 +102,10 @@ describe('uiStore defaults', () => {
     expect(useUiStore.getState().activeInspectorTab).toBe('style')
   })
 
-  it('initialises layout and spacing sections as open', () => {
+  it('initialises only the layout section as open', () => {
     const { openSections } = useUiStore.getState()
     expect(openSections['layout']).toBe(true)
-    expect(openSections['spacing']).toBe(true)
+    expect(openSections['spacing']).toBe(false)
   })
 
   it('initialises remaining sections as closed', () => {
