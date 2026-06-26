@@ -46,6 +46,7 @@ final class Plugin {
 		// Phase 13 — theme builder templates.
 		Templates\TemplatePostType::register();
 		Admin\Screen\TemplatesScreen::register();
+		Rest\TemplatesController::register();
 
 		// Phase 10 — CSS pipeline.
 		( new Css\CssPipeline( new Css\CssGenerator(), new Css\CssStore() ) )->register();

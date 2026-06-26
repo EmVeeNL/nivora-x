@@ -16,6 +16,26 @@ export const TEMPLATE_TYPES: readonly TemplateType[] = [
   'search',
 ]
 
+/** Human-facing labels for each template type, in display order. */
+export const TEMPLATE_TYPE_LABELS: Record<TemplateType, string> = {
+  header: 'Header',
+  footer: 'Footer',
+  single: 'Single',
+  archive: 'Archive',
+  '404': '404',
+  search: 'Search',
+}
+
+/** Iconify icon per template type for the Theme Builder panel. */
+export const TEMPLATE_TYPE_ICONS: Record<TemplateType, string> = {
+  header: 'tabler:layout-navbar',
+  footer: 'tabler:layout-bottombar',
+  single: 'tabler:article',
+  archive: 'tabler:list-details',
+  '404': 'tabler:error-404',
+  search: 'tabler:search',
+}
+
 export interface TemplateContext {
   /** Whether the current document is a theme-builder template. */
   isTemplate: boolean

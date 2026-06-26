@@ -2,6 +2,7 @@ import { registerLeftPanel } from './leftPanelRegistry'
 import { ElementLibraryPanel } from './library/ElementLibraryPanel'
 import { NavigatorPanel } from './navigator/NavigatorPanel'
 import { AppearancePanel } from './AppearancePanel'
+import { ThemeBuilderPanel } from './themebuilder/ThemeBuilderPanel'
 
 /**
  * Register all built-in left panels in order.
@@ -21,6 +22,12 @@ export function registerEditorPanels(): void {
     label: 'Elements',
     icon: 'tabler:layout-grid',
     component: ElementLibraryPanel,
+  })
+  registerLeftPanel({
+    id: 'theme-builder',
+    label: 'Theme Builder',
+    icon: 'tabler:layout-board',
+    component: ThemeBuilderPanel,
   })
   registerLeftPanel({
     id: 'appearance',
