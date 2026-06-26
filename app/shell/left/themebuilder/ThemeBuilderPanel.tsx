@@ -4,11 +4,13 @@ import { cn } from '@/lib/utils'
 import { getBootstrapData } from '@/lib/bootstrap'
 import { useTemplateStore } from '@/templates/store'
 import {
+  getTemplateContext,
   TEMPLATE_TYPES,
   TEMPLATE_TYPE_ICONS,
   TEMPLATE_TYPE_LABELS,
   type TemplateType,
 } from '@/templates/TemplateEditorContext'
+import { ConditionsEditor } from '@/templates/conditions/ConditionsEditor'
 import type { TemplateSummary } from '@/templates/api'
 
 /**
@@ -29,9 +31,16 @@ export function ThemeBuilderPanel() {
   }, [])
 
   const currentPostId = getBootstrapData()?.postId ?? 0
+  const editingTemplate = getTemplateContext().isTemplate && currentPostId > 0
 
   return (
     <div className="flex flex-col gap-3 px-2 py-3 text-xs">
+      {editingTemplate && (
+        <div className="rounded border border-border/60 bg-accent/30 p-2">
+          <ConditionsEditor templateId={currentPostId} />
+        </div>
+      )}
+
       <div className="flex items-center justify-between px-1">
         <span className="font-medium text-foreground">Templates</span>
         <button

@@ -73,6 +73,23 @@ final class TemplatesController {
 				],
 			]
 		);
+
+		register_rest_route(
+			self::NAMESPACE,
+			self::ROUTE . '/(?P<id>\d+)/conditions',
+			[
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ self::class, 'get_conditions' ],
+					'permission_callback' => [ self::class, 'check_permission' ],
+				],
+				[
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => [ self::class, 'save_conditions' ],
+					'permission_callback' => [ self::class, 'check_permission' ],
+				],
+			]
+		);
 	}
 
 	/** All template management requires editor-level access. */
@@ -164,6 +181,44 @@ final class TemplatesController {
 		wp_delete_post( $id, true );
 
 		return rest_ensure_response( [ 'deleted' => true ] );
+	}
+
+	/**
+	 * Return a template's normalized display conditions.
+	 *
+	 * @param \WP_REST_Request $request Incoming request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public static function get_conditions( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+		$id = (int) $request['id'];
+		if ( TemplatePostType::POST_TYPE !== get_post_type( $id ) ) {
+			return new \WP_Error( 'not_found', 'Template not found.', [ 'status' => 404 ] );
+		}
+
+		return rest_ensure_response( [ 'conditions' => TemplateModel::get_conditions( $id ) ] );
+	}
+
+	/**
+	 * Persist a template's display conditions (normalized server-side).
+	 *
+	 * @param \WP_REST_Request $request Incoming request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public static function save_conditions( \WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+		$id = (int) $request['id'];
+		if ( TemplatePostType::POST_TYPE !== get_post_type( $id ) ) {
+			return new \WP_Error( 'not_found', 'Template not found.', [ 'status' => 404 ] );
+		}
+		if ( ! Capabilities::user_can_edit_post( $id ) ) {
+			return new \WP_Error( 'forbidden', 'You cannot edit this template.', [ 'status' => 403 ] );
+		}
+
+		$params     = $request->get_json_params();
+		$conditions = is_array( $params ) && isset( $params['conditions'] ) ? $params['conditions'] : [];
+
+		TemplateModel::set_conditions( $id, $conditions );
+
+		return rest_ensure_response( [ 'conditions' => TemplateModel::get_conditions( $id ) ] );
 	}
 
 	/**

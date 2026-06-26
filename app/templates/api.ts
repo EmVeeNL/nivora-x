@@ -1,5 +1,6 @@
 import { getBootstrapData } from '@/lib/bootstrap'
 import type { TemplateType } from './TemplateEditorContext'
+import type { ConditionRule } from './conditions/types'
 
 /** A template as summarized by the REST controller. */
 export interface TemplateSummary {
@@ -71,4 +72,44 @@ export async function deleteTemplate(id: number): Promise<void> {
   if (!res.ok) {
     throw new Error(`Failed to delete template (${res.status})`)
   }
+}
+
+/** Fetch a template's display conditions. */
+export async function fetchConditions(id: number): Promise<ConditionRule[]> {
+  const rest = restBase()
+  if (!rest) return []
+
+  const res = await fetch(`${rest.root}${ROUTE}/${id}/conditions`, {
+    headers: { 'X-WP-Nonce': rest.nonce },
+  })
+  if (!res.ok) {
+    throw new Error(`Failed to load conditions (${res.status})`)
+  }
+  const data = (await res.json()) as { conditions?: ConditionRule[] }
+  return Array.isArray(data.conditions) ? data.conditions : []
+}
+
+/** Persist a template's display conditions; resolves to the normalized rules. */
+export async function saveConditions(
+  id: number,
+  conditions: ConditionRule[],
+): Promise<ConditionRule[]> {
+  const rest = restBase()
+  if (!rest) {
+    throw new Error('Editor REST context unavailable')
+  }
+
+  const res = await fetch(`${rest.root}${ROUTE}/${id}/conditions`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': rest.nonce,
+    },
+    body: JSON.stringify({ conditions }),
+  })
+  if (!res.ok) {
+    throw new Error(`Failed to save conditions (${res.status})`)
+  }
+  const data = (await res.json()) as { conditions?: ConditionRule[] }
+  return Array.isArray(data.conditions) ? data.conditions : []
 }
