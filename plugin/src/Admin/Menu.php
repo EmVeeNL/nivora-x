@@ -13,11 +13,10 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Menu {
 
-	public const SLUG_ROOT      = 'nivorax';
-	public const SLUG_ALL       = 'nivorax-all-pages';
-	public const SLUG_NEW       = 'nivorax-new-page';
-	public const SLUG_TEMPLATES = 'nivorax-templates';
-	public const SLUG_SETTINGS  = 'nivorax-settings';
+	public const SLUG_ROOT     = 'nivorax';
+	public const SLUG_ALL      = 'nivorax-all-pages';
+	public const SLUG_NEW      = 'nivorax-new-page';
+	public const SLUG_SETTINGS = 'nivorax-settings';
 
 	/** Hooks admin_menu to register the menu tree. */
 	public static function register(): void {
@@ -52,15 +51,6 @@ final class Menu {
 			Capabilities::EDIT_CAP,
 			self::SLUG_NEW,
 			[ Screen\NewPageScreen::class, 'render' ]
-		);
-
-		add_submenu_page(
-			self::SLUG_ROOT,
-			__( 'Templates — NivoraX', 'nivorax' ),
-			__( 'Templates', 'nivorax' ),
-			Capabilities::EDIT_CAP,
-			self::SLUG_TEMPLATES,
-			[ Screen\TemplatesScreen::class, 'render' ]
 		);
 
 		add_submenu_page(

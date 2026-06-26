@@ -14,7 +14,6 @@ describe(
 				expect( Menu::SLUG_ROOT )->toBe( 'nivorax' )
 				->and( Menu::SLUG_ALL )->toBe( 'nivorax-all-pages' )
 				->and( Menu::SLUG_NEW )->toBe( 'nivorax-new-page' )
-				->and( Menu::SLUG_TEMPLATES )->toBe( 'nivorax-templates' )
 				->and( Menu::SLUG_SETTINGS )->toBe( 'nivorax-settings' );
 			}
 		);
