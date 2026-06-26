@@ -5,7 +5,10 @@ declare( strict_types=1 );
 namespace NivoraX\Render;
 
 use NivoraX\Render\Elements\ContainerRenderer;
+use NivoraX\Render\Elements\ContentSlotRenderer;
 use NivoraX\Render\Elements\HeadingRenderer;
+use NivoraX\Render\Elements\PartRenderer;
+use NivoraX\Render\Elements\PostLoopRenderer;
 use NivoraX\Render\Elements\SectionRenderer;
 use NivoraX\Render\Elements\TextRenderer;
 
@@ -28,6 +31,9 @@ final class RendererFactory {
 		$registry->register( 'container', new ContainerRenderer() );
 		$registry->register( 'heading', new HeadingRenderer() );
 		$registry->register( 'text', new TextRenderer() );
+		$registry->register( 'part', new PartRenderer() );
+		$registry->register( 'content-slot', new ContentSlotRenderer() );
+		$registry->register( 'post-loop', new PostLoopRenderer() );
 
 		return $registry;
 	}

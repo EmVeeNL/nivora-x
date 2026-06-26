@@ -1,0 +1,82 @@
+import { getBootstrapData } from '../lib/bootstrap'
+
+/**
+ * The supported template types, mirroring the PHP `TemplateModel` constants.
+ * A `null` context means the editor is editing regular page content, not a
+ * theme-builder template.
+ */
+export type TemplateType = 'header' | 'footer' | 'single' | 'archive' | '404' | 'search'
+
+export const TEMPLATE_TYPES: readonly TemplateType[] = [
+  'header',
+  'footer',
+  'single',
+  'archive',
+  '404',
+  'search',
+]
+
+/** Human-facing labels for each template type, in display order. */
+export const TEMPLATE_TYPE_LABELS: Record<TemplateType, string> = {
+  header: 'Header',
+  footer: 'Footer',
+  single: 'Single',
+  archive: 'Archive',
+  '404': '404',
+  search: 'Search',
+}
+
+/** Iconify icon per template type for the Theme Builder panel. */
+export const TEMPLATE_TYPE_ICONS: Record<TemplateType, string> = {
+  header: 'tabler:layout-navbar',
+  footer: 'tabler:layout-bottombar',
+  single: 'tabler:article',
+  archive: 'tabler:list-details',
+  '404': 'tabler:error-404',
+  search: 'tabler:search',
+}
+
+export interface TemplateContext {
+  /** Whether the current document is a theme-builder template. */
+  isTemplate: boolean
+  /** The template type, or null when editing page content. */
+  type: TemplateType | null
+}
+
+const PAGE_CONTEXT: TemplateContext = { isTemplate: false, type: null }
+
+function isTemplateType(value: unknown): value is TemplateType {
+  return typeof value === 'string' && (TEMPLATE_TYPES as readonly string[]).includes(value)
+}
+
+/**
+ * Reads the template editing context from the editor bootstrap. Falls back to
+ * the page context when the bootstrap has no `template` payload (e.g. editing a
+ * regular page) or when the data is unavailable (tests/SSR).
+ */
+export function getTemplateContext(): TemplateContext {
+  const template = getBootstrapData()?.template
+  if (!template) {
+    return PAGE_CONTEXT
+  }
+  return {
+    isTemplate: true,
+    type: isTemplateType(template.type) ? template.type : null,
+  }
+}
+
+/**
+ * Whether the given template type should expose the single-post content slot.
+ * Only single templates wrap the current post's body.
+ */
+export function supportsContentSlot(type: TemplateType | null): boolean {
+  return type === 'single'
+}
+
+/**
+ * Whether the given template type should expose the archive post loop.
+ * Archives and search-results templates iterate the query's posts.
+ */
+export function supportsPostLoop(type: TemplateType | null): boolean {
+  return type === 'archive' || type === 'search'
+}

@@ -2,7 +2,7 @@
 task: 005
 phase: 13
 title: Content Slot & Basic Post Loop
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Review # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---

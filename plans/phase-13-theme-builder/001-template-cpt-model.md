@@ -2,7 +2,7 @@
 task: 001
 phase: 13
 title: Template CPT, Type & Conditions Model
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Review # Not Started | In Progress | Blocked | In Review | Done
 depends_on: []
 retry_count: 0
 ---

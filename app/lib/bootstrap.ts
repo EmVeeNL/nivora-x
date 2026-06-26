@@ -6,9 +6,14 @@ export interface BootstrapBreakpoint {
   builtin: boolean
 }
 
+export interface BootstrapTemplate {
+  type: string
+}
+
 export interface NivoraXBootstrap {
   postId: number
   mode: string
+  template?: BootstrapTemplate | null
   restRoot: string
   restNonce: string
   adminUrl: string

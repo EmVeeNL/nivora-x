@@ -27,6 +27,14 @@ export default defineConfig(({ mode }) => {
       manifest: true,
       rollupOptions: {
         input: resolve(__dirname, 'app/main.tsx'),
+        output: {
+          // Split large, rarely-changing vendor code out of the app bundle so
+          // each chunk stays under the warning limit and caches independently.
+          manualChunks: {
+            dndkit: ['@dnd-kit/core', '@dnd-kit/utilities'],
+            icons: ['@iconify/react'],
+          },
+        },
       },
     },
 

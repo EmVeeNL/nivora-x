@@ -2,7 +2,7 @@
 task: 002
 phase: 13
 title: Template Editing & All-Templates Screen
-status: Not Started # Not Started | In Progress | Blocked | In Review | Done
+status: In Review # Not Started | In Progress | Blocked | In Review | Done
 depends_on: [001]
 retry_count: 0
 ---
