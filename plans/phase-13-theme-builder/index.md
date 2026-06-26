@@ -62,7 +62,7 @@ field binding + custom queries are Phase 14; this phase provides the structural 
 | Task | Description | Depends On | Status |
 | ---- | ----------- | ---------- | ------ |
 | 001  | `nivorax_template` CPT + type + conditions metadata + template document model | — | In Review |
-| 002  | Edit templates in the NivoraX editor (template-context mode) + All Templates screen | 001 | Not Started |
+| 002  | Edit templates in the NivoraX editor (template-context mode) + All Templates screen | 001 | In Review |
 | 003  | Reusable template parts (embed-by-reference element + cycle detection + propagation) | 001 | Not Started |
 | 004  | Conditional assignment rules + precedence resolver | 001 | Not Started |
 | 005  | Structural elements: content slot (singles) + basic post loop (archives) | 001 | Not Started |
