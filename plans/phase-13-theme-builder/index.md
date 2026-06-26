@@ -65,7 +65,7 @@ field binding + custom queries are Phase 14; this phase provides the structural 
 | 002  | Edit templates in the NivoraX editor (template-context mode) + All Templates screen | 001 | In Review |
 | 003  | Reusable template parts (embed-by-reference element + cycle detection + propagation) | 001 | In Review |
 | 004  | Conditional assignment rules + precedence resolver | 001 | In Review |
-| 005  | Structural elements: content slot (singles) + basic post loop (archives) | 001 | Not Started |
+| 005  | Structural elements: content slot (singles) + basic post loop (archives) | 001 | In Review |
 | 006  | Front-end template-hierarchy override + composition (header/content/footer) rendering | 002, 004, 005 | Not Started |
 | 007  | Tests + E2E (publish header/footer/single → view on front end) + polish | 003, 006 | Not Started |
 

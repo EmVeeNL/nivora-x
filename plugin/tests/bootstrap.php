@@ -16,3 +16,31 @@ if ( ! defined( 'NIVORAX_VERSION' ) ) {
 	define( 'NIVORAX_PLUGIN_DIR', dirname( __DIR__ ) . '/' );
 	define( 'NIVORAX_PLUGIN_URL', 'http://localhost/wp-content/plugins/nivorax/' );
 }
+
+// Minimal WP_Post stub so renderers that type-check against it work in unit
+// tests (WordPress core is not loaded). Only the properties NivoraX reads.
+// phpcs:disable Squiz.Commenting.VariableComment.Missing, Squiz.Commenting.ClassComment.Missing, Generic.Formatting.MultipleStatementAlignment.NotSameWarning
+if ( ! class_exists( 'WP_Post' ) ) {
+	/** Lightweight WP_Post stand-in for unit tests. */
+	class WP_Post {
+		public int $ID = 0;
+		public string $post_content = '';
+		public string $post_title = '';
+		public string $post_type = 'post';
+		public string $post_status = 'publish';
+
+		/**
+		 * Seed properties from an associative array.
+		 *
+		 * @param array<string, mixed> $props Property values.
+		 */
+		public function __construct( array $props = [] ) {
+			foreach ( $props as $key => $value ) {
+				if ( property_exists( $this, $key ) ) {
+					$this->$key = $value;
+				}
+			}
+		}
+	}
+}
+// phpcs:enable Squiz.Commenting.VariableComment.Missing, Squiz.Commenting.ClassComment.Missing, Generic.Formatting.MultipleStatementAlignment.NotSameWarning

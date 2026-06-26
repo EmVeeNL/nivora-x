@@ -57,6 +57,8 @@ import {
 } from './forms'
 import { collectionListDefinition, collectionItemDefinition, collectionPageDefinition } from './cms'
 import { partDefinition } from './part'
+import { contentSlotDefinition } from './content-slot'
+import { postLoopDefinition } from './post-loop'
 import {
   navbarDefinition,
   dropdownDefinition,
@@ -132,6 +134,8 @@ export function registerStarterElements(): void {
 
   // Theme builder
   registerElement(partDefinition)
+  registerElement(contentSlotDefinition)
+  registerElement(postLoopDefinition)
 
   // Components
   registerElement(navbarDefinition)
